@@ -20,31 +20,30 @@ public class Metrhsh {
         if (kilovatora<= 13){
             image = R.drawable.yes;
         }
-        else {
-            image=R.drawable.not;
         }
 
-    }
-
-    public double getKilovatora(){
+        public double getKilovatora(){
         return kilovatora;
     }
 
-    public String getHmera(){
+        public String getHmera(){
         return hmera;
     }
 
 
-    public int getImage(){
+        public int getImage(){
         return image;
     }
 
-    public void setHmera(String Hmera){
-    this.hmera = Hmera;
+        public void setHmera(String Hmera){
+        this.hmera = Hmera;
     }
-    public void setKilovatora(double kilovatora)
-    {
-        this.kilovatora=kilovatora;
+        public void setKilovatora(double kilovatora)
+        {
+            this.kilovatora=kilovatora;
+        }
     }
 
-}
+
+
+
