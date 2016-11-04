@@ -137,6 +137,9 @@ public class MainActivity extends AppCompatActivity {
         theDates.add("23 December");
         theDates.add("24 December");
 
+
+
+
         // Εδω βάζω τις τιμές απο την λίστα metrhshes στο γράφημα
 
         ArrayList<String> theDays = new ArrayList<>();
