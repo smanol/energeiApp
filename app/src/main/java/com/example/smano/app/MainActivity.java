@@ -99,17 +99,19 @@ public class MainActivity extends AppCompatActivity {
 
         // εδω χρείάζεται να γίνει με for loop για να μπαίνουν αυτόματα όλες οι τιμές της λίστας metrhshes
 
-        float ttt;
-        for(int i =0;i<metrhshes.size();i++)
+        float t1;
+
+        for(int i=0;i<metrhshes.size();i++)
         {
-        ttt= (float) metrhshes.get(i).getKilovatora();
+
+            t1= (float) metrhshes.get(i).getKilovatora();
+            Entries.add(new BarEntry(t1,i));
         }
 
 
-        for(int i =0;i<metrhshes.size();i++)
-        {
-            Entries.add(new BarEntry(7 ,i ));
-        }
+
+
+
 
         // Τοποθέτηση δεδομένων στο barchar
 
@@ -124,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         barEntries.add(new BarEntry(91f, 5));
 
 
-        BarDataSet barDataSet = new BarDataSet(barEntries, "Dates");
+        BarDataSet barDataSet = new BarDataSet(Entries, "Dates");
 
         //η δοκιμαστική λίστα με τις μέρες
         ArrayList<String> theDates = new ArrayList<>();
