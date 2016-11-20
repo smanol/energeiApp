@@ -32,114 +32,99 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    BarChart barChar;
-
+    View footer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Firebase.setAndroidContext(this);
+
+        System.out.println("point1");
+
         // Connect to the Firebase database
-        Firebase myDB = new Firebase("https://energieapp-6e34c.firebaseio.com/");
+        Firebase myDB = new Firebase("https://energieapp-6e34c.firebaseio.com/Users/");
+
+        System.out.println("point1.5");
         // Writing data to the database
         //myDB.child("AgnostosAgnostou").setValue("Do you have data? You'll love Firebase.");
-        myDB.child("AgnostosAgnostou").addValueEventListener(new com.firebase.client.ValueEventListener() {
+        myDB.child("George Manoliadis").addValueEventListener(new com.firebase.client.ValueEventListener() {
+
             @Override
             public void onDataChange(com.firebase.client.DataSnapshot dataSnapshot) {
-                System.out.println("Athena's data: "+dataSnapshot.getValue());
+
+                final ArrayList<Metrhsh> metrhshes = new ArrayList<>();
+                System.out.println("point2");
+                System.out.println("There are " + dataSnapshot.getChildrenCount() + " posts");
+                for (com.firebase.client.DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    System.out.println("key " + postSnapshot.getKey());
+                    System.out.println("value " + Double.parseDouble(postSnapshot.getValue().toString()));
+                    Metrhsh metrhsh = new Metrhsh(postSnapshot.getKey(), Double.parseDouble(postSnapshot.getValue().toString()));
+                    System.out.println("kilovatora " + metrhsh.getKilovatora());
+                    System.out.println("hmera " + metrhsh.getHmera());
+                    metrhshes.add(metrhsh);
+                }
+
+                System.out.println("POINT1"+metrhshes.size());
+                createDisplay(metrhshes);
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
             }
         });
+    }
+    
+    public void createDisplay(ArrayList<Metrhsh> metrhshes) {
+        //Adding footer on the ListView
 
+        footer = getLayoutInflater().inflate(R.layout.footer, null);
 
-        ArrayList<Metrhsh> metrhshes = new ArrayList<>();
-        metrhshes.add(new Metrhsh("13 Noemvriou", 14));
-        metrhshes.add(new Metrhsh("14 Noemvriou", 4));
-        metrhshes.add(new Metrhsh("15 Noemvriou", 3));
-        metrhshes.add(new Metrhsh("16 Noemvriou", 0.1));
-        metrhshes.add(new Metrhsh("17 Noemvriou", 14));
-        metrhshes.add(new Metrhsh("18 Noemvriou", 4));
-
-
-
-
-        //Α ρε adapter...
-        ArrayAdapter<Metrhsh> adapter = new MetrhshArrayAdapter(this, 0, metrhshes);
-
-
-
-        ListView lv;
-        lv = (ListView)findViewById(R.id.lv);
-        View footer = ((LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer, null, false);
-
-
-        lv.addFooterView(footer, null, false);
-        lv.setAdapter(adapter);
-
-
-        barChar= (BarChart) footer.findViewById(R.id.bargraph);
-
+        System.out.println("display footer"+footer.toString());
         // Εδω βάζω τις τιμές απο την λίστα metrhshes στο γράφημα
-
-        ArrayList<BarEntry> Entries = new ArrayList<>();
-
-
         // εδω χρείάζεται να γίνει με for loop για να μπαίνουν αυτόματα όλες οι τιμές της λίστας metrhshes
-
+        ArrayList<BarEntry> Entries = new ArrayList<>();
         float t1;
-
-        for(int i=0;i<metrhshes.size();i++)
-        {
-
-            t1= (float) metrhshes.get(i).getKilovatora();
+        for (int i = 0; i < metrhshes.size(); i++) {
+            t1 = (float) metrhshes.get(i).getKilovatora();
             Entries.add(new BarEntry(t1,i));
         }
-
-
-
-
-
-
-        // Τοποθέτηση δεδομένων στο barchar
-
-
-        //οι δοκιμαστικές τιμές για το γράφημα
-        ArrayList<BarEntry> barEntries = new ArrayList<>();
-        barEntries.add(new BarEntry(44f, 0));
-        barEntries.add(new BarEntry(88f, 1));
-        barEntries.add(new BarEntry(66f, 2));
-        barEntries.add(new BarEntry(12f, 3));
-        barEntries.add(new BarEntry(19f, 4));
-        barEntries.add(new BarEntry(91f, 5));
-
+        System.out.println("Size of Entries: "+ Entries.size());
 
         BarDataSet barDataSet = new BarDataSet(Entries, "Dates");
 
         // Εδω βάζω τις τιμές απο την λίστα metrhshes στο γράφημα
         ArrayList<String> theDays = new ArrayList<>();
         // εδω χρείάζεται να γίνει με for loop για να μπαίνουν αυτόματα όλες οι τιμές της λίστας metrhshes
-        for(int i =0;i<metrhshes.size();i++)
-        {
+        for(int i = 0; i < metrhshes.size(); i++) {
             theDays.add(metrhshes.get(i).getHmera());
         }
 
         // Τοποθέτηση δεδομένων στο barchar
-
         BarData theData = new BarData(theDays, barDataSet);
+        BarChart barChar = (BarChart) footer.findViewById(R.id.bargraph);
+        barChar.notifyDataSetChanged();
+        barChar.invalidate();
         barChar.setData(theData);
+        System.out.println( "barChar: " + barChar.toString());
+        System.out.println( "theData: " + theData.toString());
 
+        System.out.println("place");
         //διάφορες άλλες επιλογές
         barChar.setDragEnabled(true);
         barChar.setScaleEnabled(true);
         barChar.setTouchEnabled(true);
         barChar.setNoDataText("Description that you want");
 
-
+        ListView lv;
+        lv = (ListView)findViewById(R.id.lv);
+        lv.addFooterView(footer, null, false);
+        lv.setAdapter(new MetrhshArrayAdapter(this, 0, metrhshes));
         //ένα δοκιμαστικό textView που είναι στο footer layout μαζί με το barchar
-        TextView t =(TextView) findViewById(R.id.hello);
-        t.setText("hi");
+        //TextView t =(TextView) findViewById(R.id.hello);
+        //t.setText("hi");
     }
-}
 
+
+
+     //TODO: implement a function that will translate the kilovatores to KilovatoresDifferences
+}
