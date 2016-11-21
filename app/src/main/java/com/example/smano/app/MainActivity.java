@@ -28,24 +28,34 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     View footer;
+    ArrayList<BarEntry> Entries = new ArrayList<>();
+    BarDataSet barDataSet;
+    ArrayList<String> theDays = new ArrayList<>();
+    BarData theData;
+    BarChart barChar;
+    ListView lv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        init();
 
         Firebase.setAndroidContext(this);
-
-        System.out.println("point1");
 
         // Connect to the Firebase database
         Firebase myDB = new Firebase("https://energieapp-6e34c.firebaseio.com/Users/");
 
-        System.out.println("point1.5");
         // Writing data to the database
         //myDB.child("AgnostosAgnostou").setValue("Do you have data? You'll love Firebase.");
         myDB.child("George Manoliadis").addValueEventListener(new com.firebase.client.ValueEventListener() {
@@ -54,18 +64,10 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(com.firebase.client.DataSnapshot dataSnapshot) {
 
                 final ArrayList<Metrhsh> metrhshes = new ArrayList<>();
-                System.out.println("point2");
-                System.out.println("There are " + dataSnapshot.getChildrenCount() + " posts");
                 for (com.firebase.client.DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    System.out.println("key " + postSnapshot.getKey());
-                    System.out.println("value " + Double.parseDouble(postSnapshot.getValue().toString()));
                     Metrhsh metrhsh = new Metrhsh(postSnapshot.getKey(), Double.parseDouble(postSnapshot.getValue().toString()));
-                    System.out.println("kilovatora " + metrhsh.getKilovatora());
-                    System.out.println("hmera " + metrhsh.getHmera());
                     metrhshes.add(metrhsh);
                 }
-
-                System.out.println("POINT1"+metrhshes.size());
                 createDisplay(metrhshes);
             }
             @Override
@@ -73,58 +75,85 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    
+
+    private void init() {
+        footer = getLayoutInflater().inflate(R.layout.footer, null);
+        barChar = (BarChart) footer.findViewById(R.id.bargraph);
+        lv = (ListView)findViewById(R.id.lv);
+        lv.addFooterView(footer, null, false);
+    }
+
     public void createDisplay(ArrayList<Metrhsh> metrhshes) {
         //Adding footer on the ListView
-
-        footer = getLayoutInflater().inflate(R.layout.footer, null);
-
-        System.out.println("display footer"+footer.toString());
+        metrhshes = transformArraylistsDatesToWords(metrhshes);
         // Εδω βάζω τις τιμές απο την λίστα metrhshes στο γράφημα
         // εδω χρείάζεται να γίνει με for loop για να μπαίνουν αυτόματα όλες οι τιμές της λίστας metrhshes
-        ArrayList<BarEntry> Entries = new ArrayList<>();
+        Entries.clear();
         float t1;
         for (int i = 0; i < metrhshes.size(); i++) {
             t1 = (float) metrhshes.get(i).getKilovatora();
             Entries.add(new BarEntry(t1,i));
         }
-        System.out.println("Size of Entries: "+ Entries.size());
 
-        BarDataSet barDataSet = new BarDataSet(Entries, "Dates");
-
+        barDataSet = new BarDataSet(Entries, "Dates");
+        barDataSet.notifyDataSetChanged();
         // Εδω βάζω τις τιμές απο την λίστα metrhshes στο γράφημα
-        ArrayList<String> theDays = new ArrayList<>();
         // εδω χρείάζεται να γίνει με for loop για να μπαίνουν αυτόματα όλες οι τιμές της λίστας metrhshes
+        theDays.clear();
         for(int i = 0; i < metrhshes.size(); i++) {
             theDays.add(metrhshes.get(i).getHmera());
         }
-
         // Τοποθέτηση δεδομένων στο barchar
-        BarData theData = new BarData(theDays, barDataSet);
-        BarChart barChar = (BarChart) footer.findViewById(R.id.bargraph);
+        theData = new BarData(theDays, barDataSet);
+        theData.notifyDataChanged();
+
+        //barChar.clear();
+        barChar.setData(theData);
         barChar.notifyDataSetChanged();
         barChar.invalidate();
-        barChar.setData(theData);
-        System.out.println( "barChar: " + barChar.toString());
-        System.out.println( "theData: " + theData.toString());
 
-        System.out.println("place");
         //διάφορες άλλες επιλογές
         barChar.setDragEnabled(true);
         barChar.setScaleEnabled(true);
         barChar.setTouchEnabled(true);
         barChar.setNoDataText("Description that you want");
 
-        ListView lv;
-        lv = (ListView)findViewById(R.id.lv);
-        lv.addFooterView(footer, null, false);
         lv.setAdapter(new MetrhshArrayAdapter(this, 0, metrhshes));
         //ένα δοκιμαστικό textView που είναι στο footer layout μαζί με το barchar
         //TextView t =(TextView) findViewById(R.id.hello);
         //t.setText("hi");
     }
 
+    private ArrayList<Metrhsh> transformArraylistsDatesToWords(ArrayList<Metrhsh> metrhshes) {
+        String newDate;
+        double kilovatora;
+        for (int i = 0; i < metrhshes.size(); i++) {
+            newDate = transformDateToWords(metrhshes.get(i).getHmera());
+            kilovatora = metrhshes.get(i).getKilovatora();
+            if (newDate != null) {
+                metrhshes.set(i, new Metrhsh(newDate,kilovatora));
+            }
+        }
+        return metrhshes;
+    }
+
+    private String transformDateToWords(String inputDate) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        try {
+            date = df.parse(inputDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+        DateFormat targetFormat = new SimpleDateFormat("dd MMMM", new Locale("el", "GR"));
+        return targetFormat.format(date);
+    }
 
 
-     //TODO: implement a function that will translate the kilovatores to KilovatoresDifferences
+    //TODO: Configuration to GitHub
+    //TODO: Authentication on startup
+    //TODO: Πολυκατοικία charts
+    //Done! Display dates in order
+    //TODO: implement a function that will translate the kilovatores to KilovatoresDifferences
 }
