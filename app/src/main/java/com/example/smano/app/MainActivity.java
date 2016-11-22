@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     BarChart barChar;
+    BarChart barChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
 
         lv.addFooterView(footer, null, false);
 
-
         lv.setAdapter(adapter);
 
 //
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+        barChart= (BarChart) footer.findViewById(R.id.bargraph2);
         barChar= (BarChart) footer.findViewById(R.id.bargraph);
 
         // Εδω βάζω τις τιμές απο την λίστα metrhshes στο γράφημα
@@ -166,6 +166,27 @@ public class MainActivity extends AppCompatActivity {
         //ένα δοκιμαστικό textView που είναι στο footer layout μαζί με το barchar
         TextView t =(TextView) findViewById(R.id.hello);
         t.setText("hi");
+
+
+        ArrayList<String> theDate = new ArrayList<>();
+        theDate.add("Πολυκατοικία Α");
+        theDate.add("Πολυκατοικία Β");
+        ArrayList<BarEntry> Entries2 =new ArrayList<>();
+        Entries2.add(new BarEntry(2200f ,0));
+        Entries2.add(new BarEntry(1800f ,1));
+
+
+        BarDataSet barDataSet2 = new BarDataSet(Entries2, "Dates");
+        BarData theData2 = new BarData(theDate, barDataSet2);
+        barChart.setData(theData2);
+
+        barChart.setNoDataText("Description that you want");
+
+        barChart.getAxisLeft().setStartAtZero(true);
+
+        View header = ((LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.header, null, false);
+
+        lv.addHeaderView(header, null, false);
 
 
 
