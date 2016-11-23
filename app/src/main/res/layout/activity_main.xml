@@ -3,6 +3,8 @@
 
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/activity_main"
         android:layout_width="match_parent"
@@ -16,17 +18,16 @@
         tools:context="com.example.smano.app.MainActivity">
 
 
-        <ListView
+    <ListView
             android:id="@+id/lv"
             android:layout_width="match_parent"
-            android:layout_height="300dp"></ListView>
+            android:layout_height="match_parent"></ListView>
 
 
-
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/bargraph"
-            android:layout_width="match_parent"
-            android:layout_height="400dp"></com.github.mikephil.charting.charts.BarChart>
+    <!--<com.github.mikephil.charting.charts.BarChart-->
+            <!--android:id="@+id/bargraph"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="400dp"></com.github.mikephil.charting.charts.BarChart>-->
 
 
     </LinearLayout>
