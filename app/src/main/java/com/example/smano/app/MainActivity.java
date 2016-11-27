@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> theDays = new ArrayList<>();
     BarData theData;
     BarChart barChar;
+    BarChart barChart;
     ListView lv;
 
     @Override
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         footer = getLayoutInflater().inflate(R.layout.footer, null);
+        barChart= (BarChart) footer.findViewById(R.id.bargraph2);
         barChar = (BarChart) footer.findViewById(R.id.bargraph);
         lv = (ListView)findViewById(R.id.lv);
         lv.addFooterView(footer, null, false);
@@ -116,9 +118,26 @@ public class MainActivity extends AppCompatActivity {
         barChar.setDragEnabled(true);
         barChar.setScaleEnabled(true);
         barChar.setTouchEnabled(true);
+        barChar.getAxisLeft().setStartAtZero(true);
         barChar.setNoDataText("Description that you want");
 
         lv.setAdapter(new MetrhshArrayAdapter(this, 0, metrhshes));
+
+
+        ArrayList<String> theDate = new ArrayList<>();
+        theDate.add("Πολυκατοικία Α");
+        theDate.add("Πολυκατοικία Β");
+        ArrayList<BarEntry> Entries2 = new ArrayList<>();
+        Entries2.add(new BarEntry(2200f ,0));
+        Entries2.add(new BarEntry(1800f ,1));
+        BarDataSet barDataSet2 = new BarDataSet(Entries2, "Dates");
+        BarData theData2 = new BarData(theDate, barDataSet2);
+        barChart.setData(theData2);
+        barChart.setNoDataText("Description that you want");
+        barChart.getAxisLeft().setStartAtZero(true);
+        View header = ((LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.header, null, false);
+        lv.addHeaderView(header, null, false);
+
         //ένα δοκιμαστικό textView που είναι στο footer layout μαζί με το barchar
         //TextView t =(TextView) findViewById(R.id.hello);
         //t.setText("hi");
@@ -151,9 +170,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //TODO: Configuration to GitHub
     //TODO: Authentication on startup
     //TODO: Πολυκατοικία charts
-    //Done! Display dates in order
     //TODO: implement a function that will translate the kilovatores to KilovatoresDifferences
 }
