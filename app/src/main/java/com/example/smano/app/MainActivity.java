@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Connect to the Firebase database
         Firebase myDB = new Firebase("https://energieapp-6e34c.firebaseio.com/Users/");
-
+        Firebase myDBForBlocks = new Firebase("https://energieapp-6e34c.firebaseio.com/Blocks/");
         // Writing data to the database
         //myDB.child("AgnostosAgnostou").setValue("Do you have data? You'll love Firebase.");
         myDB.child("George Manoliadis").addValueEventListener(new com.firebase.client.ValueEventListener() {
@@ -75,6 +75,33 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(FirebaseError firebaseError) {
             }
         });
+
+        /*final float block1;
+        myDBForBlocks.child("Block1").addValueEventListener(new com.firebase.client.ValueEventListener() {
+            @Override
+            public void onDataChange(com.firebase.client.DataSnapshot dataSnapshot) {
+                block1 = Float.parseFloat(float.parsefloatdataSnapshot.getValue().toString());
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+            }
+        });
+        */
+        final float block2;
+        myDBForBlocks.addValueEventListener(new com.firebase.client.ValueEventListener() {
+            @Override
+            public void onDataChange(com.firebase.client.DataSnapshot dataSnapshot) {
+                float block1 = Float.parseFloat(dataSnapshot.child("Block1").getValue().toString());
+                float block2 = Float.parseFloat(dataSnapshot.child("Block2").getValue().toString());
+
+
+                createBlockBarchart(block1, block2);
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+            }
+        });
+
     }
 
     private void init() {
@@ -83,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
         barChar = (BarChart) footer.findViewById(R.id.bargraph);
         lv = (ListView)findViewById(R.id.lv);
         lv.addFooterView(footer, null, false);
+        View header = ((LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.header, null, false);
+        lv.addHeaderView(header, null, false);
     }
 
     public void createDisplay(ArrayList<Metrhsh> metrhshes) {
@@ -122,26 +151,24 @@ public class MainActivity extends AppCompatActivity {
         barChar.setNoDataText("Description that you want");
 
         lv.setAdapter(new MetrhshArrayAdapter(this, 0, metrhshes));
-
-
+        //ένα δοκιμαστικό textView που είναι στο footer layout μαζί με το barchar
+        //TextView t =(TextView) findViewById(R.id.hello);
+        //t.setText("hi");
+    }
+    private void createBlockBarchart(float block1, float block2) {
         ArrayList<String> theDate = new ArrayList<>();
         theDate.add("Πολυκατοικία Α");
         theDate.add("Πολυκατοικία Β");
         ArrayList<BarEntry> Entries2 = new ArrayList<>();
-        Entries2.add(new BarEntry(2200f ,0));
-        Entries2.add(new BarEntry(1800f ,1));
+        Entries2.add(new BarEntry(block1, 0));
+        Entries2.add(new BarEntry(block2, 1));
         BarDataSet barDataSet2 = new BarDataSet(Entries2, "Dates");
         BarData theData2 = new BarData(theDate, barDataSet2);
         barChart.setData(theData2);
         barChart.setNoDataText("Description that you want");
         barChart.getAxisLeft().setStartAtZero(true);
-        View header = ((LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.header, null, false);
-        lv.addHeaderView(header, null, false);
-
-        //ένα δοκιμαστικό textView που είναι στο footer layout μαζί με το barchar
-        //TextView t =(TextView) findViewById(R.id.hello);
-        //t.setText("hi");
     }
+
 
     private ArrayList<Metrhsh> transformArraylistsDatesToWords(ArrayList<Metrhsh> metrhshes) {
         String newDate;
