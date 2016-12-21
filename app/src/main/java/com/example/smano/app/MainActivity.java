@@ -3,6 +3,7 @@ package com.example.smano.app;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,18 +12,23 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.google.firebase.database.ChildEventListener;
+import com.firebase.ui.auth.AuthUI;
+
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.database.Query;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -32,11 +38,15 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+//import static com.firebase.ui.auth.ui.AcquireEmailHelper.RC_SIGN_IN;
 
+
+public class MainActivity extends AppCompatActivity {
+    String username;
     View footer;
     ArrayList<BarEntry> Entries = new ArrayList<>();
     BarDataSet barDataSet;
@@ -45,63 +55,59 @@ public class MainActivity extends AppCompatActivity {
     BarChart barChar;
     BarChart barChart;
     ListView lv;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+    public static final int RC_SIGN_IN = 1;
+    public static final String ANONYMOUS = "anonymous";
+    private ValueEventListener valueEventListener;
+    private ValueEventListener valueEventListenerForBlocks;
+    private DatabaseReference myDB;
+    private MetrhshArrayAdapter metrhshArrayAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //username = ANONYMOUS;
+
         init();
 
-        Firebase.setAndroidContext(this);
+        //Firebase.setAndroidContext(this);
+        //FirebaseApp.initializeApp(this);
 
         // Connect to the Firebase database
-        Firebase myDB = new Firebase("https://energieapp-6e34c.firebaseio.com/Users/");
-        Firebase myDBForBlocks = new Firebase("https://energieapp-6e34c.firebaseio.com/Blocks/");
+        myDB = FirebaseDatabase.getInstance().getReferenceFromUrl("https://energieapp-6e34c.firebaseio.com/");
+        mFirebaseAuth = FirebaseAuth.getInstance();
         // Writing data to the database
         //myDB.child("AgnostosAgnostou").setValue("Do you have data? You'll love Firebase.");
-        myDB.child("George Manoliadis").addValueEventListener(new com.firebase.client.ValueEventListener() {
 
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
-            public void onDataChange(com.firebase.client.DataSnapshot dataSnapshot) {
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null){
+                    //user is signed in
+                    Toast.makeText(MainActivity.this, "You're signed in. Welcome to EnergieApp", Toast.LENGTH_SHORT).show();
+                    username = getUsernameFromFireBaseUser(user);
 
-                final ArrayList<Metrhsh> metrhshes = new ArrayList<>();
-                for (com.firebase.client.DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    Metrhsh metrhsh = new Metrhsh(postSnapshot.getKey(), Double.parseDouble(postSnapshot.getValue().toString()));
-                    metrhshes.add(metrhsh);
+                    onSignedInInitialize();
+                } else {
+                    //user is signed out
+                    onSignedOutCleanup();
+                    startActivityForResult(
+                            AuthUI.getInstance()
+                                    .createSignInIntentBuilder()
+                                    .setIsSmartLockEnabled(false)
+                                    .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+                                            new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+                                    .build(),
+                            RC_SIGN_IN);
+
+                    registerUserOnDB(firebaseAuth.getCurrentUser());
                 }
-                createDisplay(metrhshes);
             }
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-            }
-        });
-
-        /*final float block1;
-        myDBForBlocks.child("Block1").addValueEventListener(new com.firebase.client.ValueEventListener() {
-            @Override
-            public void onDataChange(com.firebase.client.DataSnapshot dataSnapshot) {
-                block1 = Float.parseFloat(float.parsefloatdataSnapshot.getValue().toString());
-            }
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-            }
-        });
-        */
-        final float block2;
-        myDBForBlocks.addValueEventListener(new com.firebase.client.ValueEventListener() {
-            @Override
-            public void onDataChange(com.firebase.client.DataSnapshot dataSnapshot) {
-                float block1 = Float.parseFloat(dataSnapshot.child("Block1").getValue().toString());
-                float block2 = Float.parseFloat(dataSnapshot.child("Block2").getValue().toString());
-
-
-                createBlockBarchart(block1, block2);
-            }
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-            }
-        });
-
+        };
     }
 
     private void init() {
@@ -149,8 +155,8 @@ public class MainActivity extends AppCompatActivity {
         barChar.setTouchEnabled(true);
         barChar.getAxisLeft().setStartAtZero(true);
         barChar.setNoDataText("Description that you want");
-
-        lv.setAdapter(new MetrhshArrayAdapter(this, 0, metrhshes));
+        metrhshArrayAdapter = new MetrhshArrayAdapter(this, 0, metrhshes);
+        lv.setAdapter(metrhshArrayAdapter);
         //ένα δοκιμαστικό textView που είναι στο footer layout μαζί με το barchar
         //TextView t =(TextView) findViewById(R.id.hello);
         //t.setText("hi");
@@ -196,8 +202,115 @@ public class MainActivity extends AppCompatActivity {
         return targetFormat.format(date);
     }
 
+    //Activity on the foreground
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
 
-    //TODO: Authentication on startup
-    //TODO: Πολυκατοικία charts
+    //Activity no longer on the foreground
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mAuthStateListener != null) {
+            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+        }
+        if (metrhshArrayAdapter != null) {
+            metrhshArrayAdapter.clear();
+        }
+        detachDatabaseReadListener();
+    }
+
+    private void onSignedInInitialize() {
+        attachDatabaseReadListener();
+    }
+
+    private void onSignedOutCleanup() {
+        username = ANONYMOUS;
+        if (metrhshArrayAdapter != null) {
+            metrhshArrayAdapter.clear();
+        }
+        detachDatabaseReadListener();
+    }
+
+    private void attachDatabaseReadListener() {
+        if (username != null && !ANONYMOUS.equals(username)) {
+            if (valueEventListener == null) {
+                valueEventListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        final ArrayList<Metrhsh> metrhshes = new ArrayList<>();
+                        for (com.google.firebase.database.DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                            Metrhsh metrhsh = new Metrhsh(postSnapshot.getKey(), Double.parseDouble(postSnapshot.getValue().toString()));
+                            metrhshes.add(metrhsh);
+                        }
+                        createDisplay(metrhshes);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                };
+                myDB.child("Users").child(username).addValueEventListener(valueEventListener);
+            }
+        }
+        if (valueEventListenerForBlocks == null) {
+            valueEventListenerForBlocks = new ValueEventListener() {
+
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    float block1 = Float.parseFloat(dataSnapshot.child("Block1").getValue().toString());
+                    float block2 = Float.parseFloat(dataSnapshot.child("Block2").getValue().toString());
+                    createBlockBarchart(block1, block2);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            };
+            myDB.child("Blocks").addValueEventListener(valueEventListenerForBlocks);
+        }
+    }
+
+    private void detachDatabaseReadListener() {
+        if (valueEventListener != null) {
+            myDB.child("Users").child(username).removeEventListener(valueEventListener);
+            valueEventListener = null;
+        }
+        if (valueEventListenerForBlocks != null) {
+            myDB.child("Blocks").removeEventListener(valueEventListenerForBlocks);
+            valueEventListenerForBlocks = null;
+        }
+    }
+
+    private void registerUserOnDB(FirebaseUser user) {
+        if (user != null){
+            String username = usernameFromEmail(user.getEmail());
+
+            // Write new user
+            writeNewUser(username);
+        }
+    }
+
+    private String getUsernameFromFireBaseUser(FirebaseUser user) {
+        return usernameFromEmail(user.getEmail());
+    }
+
+    private String usernameFromEmail(String email) {
+        if (email.contains("@")) {
+            return email.split("@")[0];
+        } else {
+            return email;
+        }
+    }
+
+    private void writeNewUser(String name) {
+        User user = new User("2000-01-01", "");
+
+        myDB.child("Users").child(name).setValue(user);
+    }
+
     //TODO: implement a function that will translate the kilovatores to KilovatoresDifferences
 }
