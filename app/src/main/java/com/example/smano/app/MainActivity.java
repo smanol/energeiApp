@@ -241,9 +241,16 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         final ArrayList<Metrhsh> metrhshes = new ArrayList<>();
+                        double previous = -1;
+                        double subtractedKilovatora = -1;
                         for (com.google.firebase.database.DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                            Metrhsh metrhsh = new Metrhsh(postSnapshot.getKey(), Double.parseDouble(postSnapshot.getValue().toString()));
-                            metrhshes.add(metrhsh);
+                            double current = Double.parseDouble(postSnapshot.getValue().toString());
+                            if (previous != -1) {
+                                subtractedKilovatora = current - previous;
+                                Metrhsh metrhsh = new Metrhsh(postSnapshot.getKey(), subtractedKilovatora);
+                                metrhshes.add(metrhsh);
+                            }
+                            previous = current;
                         }
                         createDisplay(metrhshes);
                     }
