@@ -10,9 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -86,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null){
+                if (user != null) {
                     //user is signed in
                     Toast.makeText(MainActivity.this, "You're signed in. Welcome to EnergieApp", Toast.LENGTH_SHORT).show();
                     username = getUsernameFromFireBaseUser(user);
@@ -109,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
             }
         };
     }
+
+
 
     private void init() {
         footer = getLayoutInflater().inflate(R.layout.footer, null);
@@ -161,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
         //TextView t =(TextView) findViewById(R.id.hello);
         //t.setText("hi");
     }
+
     private void createBlockBarchart(float block1, float block2) {
         ArrayList<String> theDate = new ArrayList<>();
         theDate.add("Πολυκατοικία Α");
@@ -174,7 +180,6 @@ public class MainActivity extends AppCompatActivity {
         barChart.setNoDataText("Description that you want");
         barChart.getAxisLeft().setStartAtZero(true);
     }
-
 
     private ArrayList<Metrhsh> transformArraylistsDatesToWords(ArrayList<Metrhsh> metrhshes) {
         String newDate;
@@ -224,13 +229,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void onSignedInInitialize() {
         attachDatabaseReadListener();
+        measurementButtonListener();
     }
 
     private void onSignedOutCleanup() {
         username = ANONYMOUS;
         if (metrhshArrayAdapter != null) {
             metrhshArrayAdapter.clear();
-        }
+    }
         detachDatabaseReadListener();
     }
 
@@ -279,6 +285,26 @@ public class MainActivity extends AppCompatActivity {
             };
             myDB.child("Blocks").addValueEventListener(valueEventListenerForBlocks);
         }
+    }
+
+    private void measurementButtonListener() {
+        final Button button = (Button) findViewById(R.id.input_button);
+        final EditText editText = (EditText) findViewById(R.id.editText);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String measurement = editText.getText().toString();
+                String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                Tuple t = new Tuple(measurement, date);
+                myDB.child("Users").child(username).child(date).setValue(measurement);
+                removeMeasurementBoxLinearLayout();
+            }
+        });
+    }
+
+    private void removeMeasurementBoxLinearLayout() {
+        LinearLayout parent = (LinearLayout) findViewById(R.id.mainLinearLayout);
+        LinearLayout child = (LinearLayout) findViewById(R.id.measurementBox);
+        parent.removeView(child);
     }
 
     private void detachDatabaseReadListener() {
