@@ -259,6 +259,8 @@ public class MainActivity extends AppCompatActivity {
                             previous = current;
                         }
                         createDisplay(metrhshes);
+
+                        checkForMeasurementBoxRemoval(metrhshes);
                     }
 
                     @Override
@@ -294,7 +296,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String measurement = editText.getText().toString();
                 String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                Tuple t = new Tuple(measurement, date);
                 myDB.child("Users").child(username).child(date).setValue(measurement);
                 removeMeasurementBoxLinearLayout();
             }
@@ -305,6 +306,17 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout parent = (LinearLayout) findViewById(R.id.mainLinearLayout);
         LinearLayout child = (LinearLayout) findViewById(R.id.measurementBox);
         parent.removeView(child);
+    }
+
+    private void checkForMeasurementBoxRemoval(ArrayList<Metrhsh> metrhshes) {
+        if (metrhshes != null && !metrhshes.isEmpty()) {
+            Metrhsh lastItem = metrhshes.get(metrhshes.size()-1);
+            String lastDatabaseDate = lastItem.getHmera();
+            String today = new SimpleDateFormat("dd MMMM", new Locale("el", "GR")).format(new Date());
+            if (lastDatabaseDate.equals(today)) {
+                removeMeasurementBoxLinearLayout();
+            }
+        }
     }
 
     private void detachDatabaseReadListener() {
@@ -344,6 +356,8 @@ public class MainActivity extends AppCompatActivity {
 
         myDB.child("Users").child(name).setValue(user);
     }
+
+
 
     //TODO: implement a function that will translate the kilovatores to KilovatoresDifferences
 }
