@@ -228,8 +228,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onSignedInInitialize() {
-        attachDatabaseReadListener();
-        measurementButtonListener();
+        ArrayList<Metrhsh> m = attachDatabaseReadListener();
+        measurementButtonListener(m);
     }
 
     private void onSignedOutCleanup() {
@@ -240,13 +240,13 @@ public class MainActivity extends AppCompatActivity {
         detachDatabaseReadListener();
     }
 
-    private void attachDatabaseReadListener() {
+    private ArrayList<Metrhsh> attachDatabaseReadListener() {
+        final ArrayList<Metrhsh> metrhshes = new ArrayList<>();
         if (username != null && !ANONYMOUS.equals(username)) {
             if (valueEventListener == null) {
                 valueEventListener = new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        final ArrayList<Metrhsh> metrhshes = new ArrayList<>();
                         double previous = -1;
                         double subtractedKilovatora = -1;
                         for (com.google.firebase.database.DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
@@ -287,14 +287,16 @@ public class MainActivity extends AppCompatActivity {
             };
             myDB.child("Blocks").addValueEventListener(valueEventListenerForBlocks);
         }
+        return metrhshes;
     }
 
-    private void measurementButtonListener() {
+    private void measurementButtonListener(final ArrayList<Metrhsh> metrhshes) {
         final Button button = (Button) findViewById(R.id.input_button);
         final EditText editText = (EditText) findViewById(R.id.editText);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String measurement = editText.getText().toString();
+                //checkInvalidMeasurement(measurement, metrhshes);
                 String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
                 myDB.child("Users").child(username).child(date).setValue(measurement);
                 removeMeasurementBoxLinearLayout();
@@ -316,6 +318,18 @@ public class MainActivity extends AppCompatActivity {
             if (lastDatabaseDate.equals(today)) {
                 removeMeasurementBoxLinearLayout();
             }
+        }
+    }
+
+    private void checkInvalidMeasurement(String measurement, ArrayList<Metrhsh> metrhshes) {
+        double GREATEST_ALLOWED_KILOVAT_PER_DAY = 40;
+        double lastDatabaseValue = metrhshes.get(metrhshes.size()-1).getKilovatora();
+        double measure = Double.parseDouble(measurement);
+        double diff = measure - lastDatabaseValue;
+        if (diff > GREATEST_ALLOWED_KILOVAT_PER_DAY) {
+
+        } else if (diff <= 0) {
+
         }
     }
 
