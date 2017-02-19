@@ -51,7 +51,11 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
 
 
         //set price and rental attributes
-        kwh.setText("Kwh: " + metrhsh.getSumKilovatora());
+        //τώρα μπορεί να κάνει και πρόσθεση
+        double totalBillCost = CostEstimate.calculateCostDay(metrhsh.getDayKilovatora()) + CostEstimate.calculateCostNight(metrhsh.getNightKilovatora());
+        double costOfDay = CostEstimate.round(totalBillCost/60D, 2);
+        kwh.setText("Κόστος: " + costOfDay + "\u20ac" + " " +"\n" + "Κατανάλωση: " + metrhsh.getSumKilovatora()+"kWh" + "\n" + "Λογαριασμός: " + totalBillCost + "\u20ac" );
+
 
         //get the image associated with this property
 

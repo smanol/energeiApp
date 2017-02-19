@@ -5,21 +5,6 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
-<TextView
-        android:text="18 Νοεμβρίου 2016"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:id="@+id/textView1"
-        android:textSize="16sp"
-
-        />
-
     <TextView
         android:text="Κατανάλωση σπιτιού 10 Kwh"
         android:layout_width="wrap_content"
@@ -42,6 +27,17 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"/>
+
+    <TextView
+            android:text="18 Νοεμβρίου 2016"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+        android:id="@+id/textView1"
+            android:textSize="16sp"
+
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>

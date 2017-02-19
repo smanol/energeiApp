@@ -1,8 +1,7 @@
 package com.example.smano.app;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 /**
  * Created by Georgios.Manoliadis on 20/2/2017.
  */
@@ -132,7 +131,12 @@ public class CostEstimate {
     }
 
 
-    private static double calculateCostNight(double kilovatorNight){
+    public static double calculateCostNight(double kilovatorNight){
+
+       // Συνθήκη για να μην προστίθεται το πάγιο του νυχτερινού στο σύνολο όταν δεν υπάρχει
+        if (kilovatorNight == 0) {
+            return 0;
+        }
 
         //Βοηθητικές Μεταβλητές
 
