@@ -1,12 +1,15 @@
 package com.example.smano.app;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
 /**
  * Created by Georgios.Manoliadis on 20/2/2017.
  */
 
 public class CostEstimate {
 
-    public static double calculateCostDay(Double kilovat){
+    public static String calculateCostDay(Double kilovat){
 
         double a,b,c,d,e,f,g,h,i,j,k,l ;
         double meresMhna = 30 ;
@@ -116,12 +119,19 @@ public class CostEstimate {
 
 
         double posoPlerwmhs = a+b+c+d+f+g+h+i+k+l+j;
-        return posoPlerwmhs;
+
+        return roundToTwoDecimals(posoPlerwmhs);
+    }
+
+    private static String roundToTwoDecimals(double input) {
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.HALF_UP);
+        String cost = df.format(input);
+        return cost;
     }
 
 
-
-    private static double calculateCostNight(double kilovatorNight){
+    private static String calculateCostNight(double kilovatorNight){
 
         //Βοηθητικές Μεταβλητές
 
@@ -174,6 +184,6 @@ public class CostEstimate {
         double FPACostNight = FPA * (jn+in+hn+ an +bn+cn );
         dn=FPACostNight;
         double totalCost=  an+bn+cn+dn+en+jn+in+hn;
-        return totalCost;
+        return roundToTwoDecimals(totalCost);
     }
 }
