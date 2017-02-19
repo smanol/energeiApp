@@ -46,12 +46,12 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
 
 
         //set address and description
-        String hmeromhnias = metrhsh.getHmera();
+        String hmeromhnias = metrhsh.getDay();
         hmeromhnia.setText(hmeromhnias);
 
 
         //set price and rental attributes
-        kwh.setText("Kwh: " + metrhsh.getKilovatora());
+        kwh.setText("Kwh: " + metrhsh.getSumKilovatora());
 
         //get the image associated with this property
 

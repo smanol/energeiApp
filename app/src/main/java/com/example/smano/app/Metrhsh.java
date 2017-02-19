@@ -6,44 +6,49 @@ package com.example.smano.app;
 
 public class Metrhsh {
 
-    private String hmera;
+    private String day;
+    private Kilovatora kilo = new Kilovatora();
+    private int image;
 
-    private double kilovatora;
-    private int image ;
+    public Metrhsh (String day, double dayKilovatora, double nightKilovatora) {
+        this.day = day;
+        kilo.setDayKilovatora(dayKilovatora);
+        kilo.setNightKilovatora(nightKilovatora);
 
-
-
-    public Metrhsh (String hmera, double kilovatora)
-    {
-        this.hmera=hmera;
-        this.kilovatora=kilovatora;
-        if (kilovatora<= 13){
+        if (dayKilovatora + nightKilovatora <= 13) {
             image = R.drawable.yes;
         }
-        }
-
-        public double getKilovatora(){
-        return kilovatora;
     }
 
-        public String getHmera(){
-        return hmera;
+    public double getSumKilovatora() {
+        return kilo.getDayKilovatora() + kilo.getNightKilovatora();
     }
 
+    public double getDayKilovatora() {
+        return kilo.getDayKilovatora();
+    }
 
-        public int getImage(){
+    public double getNightKilovatora() {
+        return kilo.getNightKilovatora();
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public int getImage(){
         return image;
     }
 
-        public void setHmera(String Hmera){
-        this.hmera = Hmera;
-    }
-        public void setKilovatora(double kilovatora)
-        {
-            this.kilovatora=kilovatora;
-        }
+    public void setDay(String day) {
+        this.day = day;
     }
 
+    public void setDayKilovatora(double kilovatora) {
+        kilo.setDayKilovatora (kilovatora);
+    }
 
-
-
+    public void setNightKilovatora(double kilovatora) {
+        kilo.setNightKilovatora (kilovatora);
+    }
+}

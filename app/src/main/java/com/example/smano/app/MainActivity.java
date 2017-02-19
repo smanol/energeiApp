@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -11,19 +13,23 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 
 import com.firebase.ui.auth.AuthUI;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -79,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     //user is signed in
-                    Toast.makeText(MainActivity.this, "You're signed in. Welcome to EnergieApp", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "You're signed in. Welcome to EnergieApp", Toast.LENGTH_SHORT).show();
                     username = getUsernameFromFireBaseUser(user);
 
                     onSignedInInitialize();
@@ -90,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
                                     .setIsSmartLockEnabled(false)
-                                    .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                                            new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+                                    .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build()/*,
+                                            new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()*/))
                                     .build(),
                             RC_SIGN_IN);
 
@@ -100,8 +106,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
     }
-
-
 
     private void init() {
         footer = getLayoutInflater().inflate(R.layout.footer, null);
@@ -121,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         Entries.clear();
         float t1;
         for (int i = 0; i < metrhshes.size(); i++) {
-            t1 = (float) metrhshes.get(i).getKilovatora();
+            t1 = (float) metrhshes.get(i).getSumKilovatora();
             Entries.add(new BarEntry(t1,i));
         }
 
@@ -131,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         // εδω χρείάζεται να γίνει με for loop για να μπαίνουν αυτόματα όλες οι τιμές της λίστας metrhshes
         theDays.clear();
         for(int i = 0; i < metrhshes.size(); i++) {
-            theDays.add(metrhshes.get(i).getHmera());
+            theDays.add(metrhshes.get(i).getDay());
         }
         // Τοποθέτηση δεδομένων στο barchar
         theData = new BarData(theDays, barDataSet);
@@ -171,12 +175,10 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Metrhsh> transformArraylistsDatesToWords(ArrayList<Metrhsh> metrhshes) {
         String newDate;
-        double kilovatora;
         for (int i = 0; i < metrhshes.size(); i++) {
-            newDate = transformDateToWords(metrhshes.get(i).getHmera());
-            kilovatora = metrhshes.get(i).getKilovatora();
+            newDate = transformDateToWords(metrhshes.get(i).getDay());
             if (newDate != null) {
-                metrhshes.set(i, new Metrhsh(newDate,kilovatora));
+                metrhshes.get(i).setDay(newDate);
             }
         }
         return metrhshes;
@@ -216,38 +218,61 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onSignedInInitialize() {
-        ArrayList<Metrhsh> m = attachDatabaseReadListener();
-        measurementButtonListener(m);
+        attachDatabaseReadListener();
+        dayOnlyMeasurementButtonListener();
+        dayNightMeasurementButtonListener();
+        buttonValidator();
     }
 
     private void onSignedOutCleanup() {
         username = ANONYMOUS;
         if (metrhshArrayAdapter != null) {
             metrhshArrayAdapter.clear();
-    }
+        }
         detachDatabaseReadListener();
     }
 
-    private ArrayList<Metrhsh> attachDatabaseReadListener() {
-        final ArrayList<Metrhsh> metrhshes = new ArrayList<>();
+    private void attachDatabaseReadListener() {
         if (username != null && !ANONYMOUS.equals(username)) {
             if (valueEventListener == null) {
                 valueEventListener = new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        double previous = -1;
-                        double subtractedKilovatora = -1;
+                        final ArrayList<Metrhsh> metrhshes = new ArrayList<>();
+                        double dayKilovatora = -1;
+                        double nightKilovatora = -1;
+                        double subtractedDayKilovatora = -1;
+                        double subtractedNightKilovatora = -1;
+                        double previousNight = -1;
+                        double previousDay = -1;
                         for (com.google.firebase.database.DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                            double current = Double.parseDouble(postSnapshot.getValue().toString());
-                            if (previous != -1) {
-                                subtractedKilovatora = current - previous;
-                                Metrhsh metrhsh = new Metrhsh(postSnapshot.getKey(), subtractedKilovatora);
-                                metrhshes.add(metrhsh);
+                            try {
+                                dayKilovatora = -1;
+                                nightKilovatora = -1;
+                                dayKilovatora = Double.parseDouble(postSnapshot.child("Day").getValue().toString());
+                                nightKilovatora = Double.parseDouble(postSnapshot.child("Night").getValue().toString());
+                            } catch (NullPointerException npe) {
+                                ;
                             }
-                            previous = current;
+                            if (previousDay != -1 && dayKilovatora != -1) {
+                                Metrhsh met;
+                                subtractedDayKilovatora = dayKilovatora - previousDay;
+                                if (previousNight != -1 && nightKilovatora != -1) {
+                                    subtractedNightKilovatora = nightKilovatora - previousNight;
+                                    met = new Metrhsh(postSnapshot.getKey(), subtractedDayKilovatora, subtractedNightKilovatora);
+                                    metrhshes.add(met);
+                                } else {
+                                    met = new Metrhsh(postSnapshot.getKey(), subtractedDayKilovatora, 0);
+                                    metrhshes.add(met);
+                                }
+                            }
+                            previousDay = dayKilovatora;
+
+                            if (nightKilovatora != -1) {
+                                previousNight = nightKilovatora;
+                            }
                         }
                         createDisplay(metrhshes);
-
                         checkForMeasurementBoxRemoval(metrhshes);
                     }
 
@@ -275,10 +300,9 @@ public class MainActivity extends AppCompatActivity {
             };
             myDB.child("Blocks").addValueEventListener(valueEventListenerForBlocks);
         }
-        return metrhshes;
     }
 
-    private void measurementButtonListener(final ArrayList<Metrhsh> metrhshes) {
+    private void dayOnlyMeasurementButtonListener() {
         final Button button = (Button) findViewById(R.id.input_button);
         final EditText editText = (EditText) findViewById(R.id.editText);
         button.setOnClickListener(new View.OnClickListener() {
@@ -286,35 +310,59 @@ public class MainActivity extends AppCompatActivity {
                 String measurement = editText.getText().toString();
                 //checkInvalidMeasurement(measurement, metrhshes);
                 String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                myDB.child("Users").child(username).child(date).setValue(measurement);
-                removeMeasurementBoxLinearLayout();
+                myDB.child("Users").child(username).child(date).child("Day").setValue(measurement);
+                removeDayOnlyMeasurementBoxLinearLayout();
             }
         });
     }
 
-    private void removeMeasurementBoxLinearLayout() {
+    private void dayNightMeasurementButtonListener() {
+        final Button button = (Button) findViewById(R.id.input_buttonNight);
+        final EditText editTextDay = (EditText) findViewById(R.id.editTextDay);
+        final EditText editTextNight = (EditText) findViewById(R.id.editTextNight);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String measurementDay = editTextDay.getText().toString();
+                String measurementNight = editTextNight.getText().toString();
+                //checkInvalidMeasurement(measurement, metrhshes);
+                String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                myDB.child("Users").child(username).child(date).child("Day").setValue(measurementDay);
+                myDB.child("Users").child(username).child(date).child("Night").setValue(measurementNight);
+                removeDayNightMeasurementBoxLinearLayout();
+            }
+        });
+    }
+
+    private void removeDayOnlyMeasurementBoxLinearLayout() {
         LinearLayout parent = (LinearLayout) findViewById(R.id.mainLinearLayout);
         LinearLayout child = (LinearLayout) findViewById(R.id.measurementBox);
+        parent.removeView(child);
+    }
+
+    private void removeDayNightMeasurementBoxLinearLayout() {
+        LinearLayout parent = (LinearLayout) findViewById(R.id.mainLinearLayout);
+        LinearLayout child = (LinearLayout) findViewById(R.id.measurementBoxNight);
         parent.removeView(child);
     }
 
     private void checkForMeasurementBoxRemoval(ArrayList<Metrhsh> metrhshes) {
         if (metrhshes != null && !metrhshes.isEmpty()) {
             Metrhsh lastItem = metrhshes.get(metrhshes.size()-1);
-            String lastDatabaseDate = lastItem.getHmera();
+            String lastDatabaseDate = lastItem.getDay();
             String today = new SimpleDateFormat("dd MMMM", new Locale("el", "GR")).format(new Date());
             if (lastDatabaseDate.equals(today)) {
-                removeMeasurementBoxLinearLayout();
+                removeDayOnlyMeasurementBoxLinearLayout();
+                removeDayNightMeasurementBoxLinearLayout();
             }
         }
     }
 
     private void checkInvalidMeasurement(String measurement, ArrayList<Metrhsh> metrhshes) {
-        double GREATEST_ALLOWED_KILOVAT_PER_DAY = 40;
-        double lastDatabaseValue = metrhshes.get(metrhshes.size()-1).getKilovatora();
+        double MAX_ALLOWED_KILOVAT_PER_DAY = 40;
+        double lastDatabaseValue = metrhshes.get(metrhshes.size()-1).getSumKilovatora();
         double measure = Double.parseDouble(measurement);
         double diff = measure - lastDatabaseValue;
-        if (diff > GREATEST_ALLOWED_KILOVAT_PER_DAY) {
+        if (diff > MAX_ALLOWED_KILOVAT_PER_DAY) {
 
         } else if (diff <= 0) {
 
@@ -330,6 +378,35 @@ public class MainActivity extends AppCompatActivity {
             myDB.child("Blocks").removeEventListener(valueEventListenerForBlocks);
             valueEventListenerForBlocks = null;
         }
+    }
+
+    private void buttonValidator() {
+        TextWatcher tw = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                updateButtonState();
+            }
+        };
+
+        final EditText editTextDay = (EditText) findViewById(R.id.editTextDay);
+        final EditText editTextNight = (EditText) findViewById(R.id.editTextNight);
+        editTextDay.addTextChangedListener(tw);
+        editTextNight.addTextChangedListener(tw);
+    }
+
+    private void updateButtonState() {
+        Button b = (Button) findViewById(R.id.input_buttonNight);
+        final EditText editTextDay = (EditText) findViewById(R.id.editTextDay);
+        final EditText editTextNight = (EditText) findViewById(R.id.editTextNight);
+        String s1 = editTextDay.getText().toString();
+        String s2 = editTextNight.getText().toString();
+        b.setEnabled(!s1.trim().isEmpty() && !s2.trim().isEmpty());
     }
 
     private void registerUserOnDB(FirebaseUser user) {
@@ -358,6 +435,25 @@ public class MainActivity extends AppCompatActivity {
 
         myDB.child("Users").child(name).setValue(user);
     }
+    /*
+    private void popupMessage(String message) {
+        new AlertDialog.Builder(context)
+                .setTitle("Delete entry")
+                .setMessage("Are you sure you want to delete this entry?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+    */
 
     public void calculateCost(Double kilovat){
 
@@ -382,7 +478,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             xrewshPromhthias=0.0946;
-             }
+        }
 
         double xrewshPromhthiasCost = xrewshPromhthias * anhgmenhKatanalwshMhna;
 
@@ -520,7 +616,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Ειδικό Τέλος
         double eidikoTelos= 0.005;
-        double eidikoTelosCostNight= eidikoTelos*(jn-in+hn+ an +bn+cn)
+        double eidikoTelosCostNight= eidikoTelos*(jn-in+hn+ an +bn+cn);
         en=eidikoTelosCostNight;
         // ΦΠΑ: (Χρεώσεις Προμήθειας ΔΕΗ + Ρυθμιζόμενες + ΕΦΚ) x 13%
         double FPA = 0.13;
@@ -528,6 +624,4 @@ public class MainActivity extends AppCompatActivity {
         dn=FPACostNight;
         double totalCost=  an+bn+cn+dn+en+jn+in+hn;
     }
-
-    //TODO: implement a function that will translate the kilovatores to KilovatoresDifferences
 }
