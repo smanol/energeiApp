@@ -2,14 +2,14 @@ package com.example.smano.app;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-
+import java.math.BigDecimal;
 /**
  * Created by Georgios.Manoliadis on 20/2/2017.
  */
 
 public class CostEstimate {
 
-    public static String calculateCostDay(Double kilovat){
+    public static double calculateCostDay(Double kilovat){
 
         double a,b,c,d,e,f,g,h,i,j,k,l ;
         double meresMhna = 30 ;
@@ -120,18 +120,19 @@ public class CostEstimate {
 
         double posoPlerwmhs = a+b+c+d+f+g+h+i+k+l+j;
 
-        return roundToTwoDecimals(posoPlerwmhs);
+        return round(posoPlerwmhs, 2);
     }
 
-    private static String roundToTwoDecimals(double input) {
-        DecimalFormat df = new DecimalFormat("#.##");
-        df.setRoundingMode(RoundingMode.HALF_UP);
-        String cost = df.format(input);
-        return cost;
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
 
-    private static String calculateCostNight(double kilovatorNight){
+    private static double calculateCostNight(double kilovatorNight){
 
         //Βοηθητικές Μεταβλητές
 
@@ -184,6 +185,6 @@ public class CostEstimate {
         double FPACostNight = FPA * (jn+in+hn+ an +bn+cn );
         dn=FPACostNight;
         double totalCost=  an+bn+cn+dn+en+jn+in+hn;
-        return roundToTwoDecimals(totalCost);
+        return round(totalCost, 2);
     }
 }
