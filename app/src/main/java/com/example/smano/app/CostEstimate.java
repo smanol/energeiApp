@@ -11,9 +11,9 @@ public class CostEstimate {
     public static double calculateCostDay(Double kilovat){
 
         double a,b,c,d,e,f,g,h,i,j,k,l ;
-        double meresMhna = 30 ;
+        double meresDimhnou = 60 ;
         final double meresEtous = 365;
-        double anhgmenhKatanalwshMhna = kilovat * meresMhna;
+        double anhgmenhKatanalwshMhna = kilovat * meresDimhnou;
 
 
         double pagio = 1.52;
@@ -63,7 +63,7 @@ public class CostEstimate {
 
         double isxysSysthmatosMetaforas = 0.13;
 
-        double isxysSysthmatosMetaforasCost = isxysSysthmatosMetaforas * kVA * meresMhna / meresEtous ;
+        double isxysSysthmatosMetaforasCost = isxysSysthmatosMetaforas * kVA * meresDimhnou / meresEtous ;
         d = isxysSysthmatosMetaforasCost;
 
 
@@ -75,7 +75,7 @@ public class CostEstimate {
         //Δίκτυο Μεταφοράς
 
         double isxysDiktyouDianomhs = 0.54;
-        double isxysDiktyouDianomhsCost = isxysDiktyouDianomhs * kVA * meresMhna / meresEtous ;
+        double isxysDiktyouDianomhsCost = isxysDiktyouDianomhs * kVA * meresDimhnou / meresEtous ;
 
         f= isxysDiktyouDianomhsCost;
 
@@ -141,19 +141,19 @@ public class CostEstimate {
         //Βοηθητικές Μεταβλητές
 
         double an,bn,cn,dn,en,fn,hn,in,jn;
-
-        // Ανηγμένη Κατανάλωση Μήνα
-        double anhgmenhKatanalwshMhnaNight = kilovatorNight*30 ;
+        double meresDimhnou= 60;
+        // Ανηγμένη Κατανάλωση Δίμηνου
+        double anhgmenhKatanalwshDimhnouNight = kilovatorNight*meresDimhnou ;
         // Πάγιο Νύχτα
         double pagioNight = 2.00;
         an=pagioNight;
         //Χρέωση Προμήθειας Νύχτας
         double xrewshPromhthiasNight = 0.06610;
-        double xrewshPromhthiasNightCost= xrewshPromhthiasNight * anhgmenhKatanalwshMhnaNight;
+        double xrewshPromhthiasNightCost= xrewshPromhthiasNight * anhgmenhKatanalwshDimhnouNight;
         bn=xrewshPromhthiasNightCost;
         //Υπηρεσίες Κοινής Οφέλειας Χρέωση Νύχτας
         double YKWNight = 0.00889;
-        double YKWNightCost= YKWNight * anhgmenhKatanalwshMhnaNight;
+        double YKWNightCost= YKWNight * anhgmenhKatanalwshDimhnouNight;
         cn = YKWNightCost;
 
 
@@ -161,14 +161,14 @@ public class CostEstimate {
         //Λοιπές Χρεώσεις
 
         double loipesXrewseisNight = 0.00007 ;
-        double loipesXrewseisCostNight = loipesXrewseisNight *anhgmenhKatanalwshMhnaNight;
+        double loipesXrewseisCostNight = loipesXrewseisNight *anhgmenhKatanalwshDimhnouNight;
         hn =loipesXrewseisCostNight;
 
 
         //Ειδικό Τέλος Μείωσης Εκπομπών Αεων Ρύπων Χρέωση Νύχτας
         double ETMEARNight = 0.02477;
 
-        double ETMEARCostNight = ETMEARNight * anhgmenhKatanalwshMhnaNight;
+        double ETMEARCostNight = ETMEARNight * anhgmenhKatanalwshDimhnouNight;
 
         in = ETMEARCostNight;
 
@@ -176,7 +176,7 @@ public class CostEstimate {
 
         double EFKNight = 0.0022;
 
-        double EFKCostNihgt = EFKNight* anhgmenhKatanalwshMhnaNight;
+        double EFKCostNihgt = EFKNight* anhgmenhKatanalwshDimhnouNight;
 
         jn = EFKCostNihgt;
 
