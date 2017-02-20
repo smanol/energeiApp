@@ -25,7 +25,7 @@ public class CostEstimate {
         //Χρέωση Προμήθειας
 
         double xrewshPromhthias;
-        if (kilovat*30>2000)
+        if (anhgmenhKatanalwshMhna>2000)
         {
             xrewshPromhthias=0.10252;
         }
@@ -40,15 +40,15 @@ public class CostEstimate {
         //Υπηρεσίες Κοινής Ωφέλειας
         double YKW;
 
-        if(kilovat<1600)
+        if(anhgmenhKatanalwshMhna<1600)
         {
             YKW=0.00699;
         }
-        else if(1601<kilovat && kilovat<2000)
+        else if(1601<anhgmenhKatanalwshMhna && anhgmenhKatanalwshMhna<2000)
         {
             YKW=0.0157;
         }
-        else if(2001<kilovat && kilovat<3000)
+        else if(2001<anhgmenhKatanalwshMhna && anhgmenhKatanalwshMhna<3000)
         {
             YKW=0.03987;
         }
