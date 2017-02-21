@@ -11,8 +11,8 @@ public class CostEstimate {
     public static double calculateCostDay(Double kilovat){
 
         double a,b,c,d,e,f,g,h,i,j,k,l ;
-        double meresDimhnou = 60 ;
-        final double meresEtous = 365;
+        double meresDimhnou = 60.0 ;
+        final double meresEtous = 365.0;
         double anhgmenhKatanalwshMhna = kilovat * meresDimhnou;
 
 
@@ -36,6 +36,13 @@ public class CostEstimate {
         double xrewshPromhthiasCost = xrewshPromhthias * anhgmenhKatanalwshMhna;
 
         b=xrewshPromhthiasCost;
+
+
+
+
+        //Ρυθμιζόμενες Χρεώσεις
+
+
 
         //Υπηρεσίες Κοινής Ωφέλειας
         double YKW;
@@ -80,7 +87,7 @@ public class CostEstimate {
         f= isxysDiktyouDianomhsCost;
 
         double energeiaDiktyouDianomhs = 0.0213;
-        double energeiaDiktyouDianomhsCost = energeiaSysthmatosMetaforas * anhgmenhKatanalwshMhna;
+        double energeiaDiktyouDianomhsCost = energeiaDiktyouDianomhs * anhgmenhKatanalwshMhna;
         g = energeiaDiktyouDianomhsCost;
         //Λοιπές Χρεώσεις
 
@@ -96,6 +103,11 @@ public class CostEstimate {
 
         i = ETMEARCost;
 
+
+
+        double rythmizomenes = c+d+e+f+g+h+i;
+
+
         //Ειδικός Φόρος Κατανάλωσης
 
         double EFK = 0.0022;
@@ -106,18 +118,18 @@ public class CostEstimate {
 
         //Ειδικό Τέλος
 
-        double eidikoTelos = 0.0005;
-        double eidikoTelosCost = eidikoTelos * (a+b+c+d+f+g+h+i-k);
+        double eidikoTelos = 0.005;
+        double eidikoTelosCost = eidikoTelos * (a+b+c+e+d+f+g+h+k);
 
         l=eidikoTelosCost;
         //ΦΠΑ
         double fpa = 0.13;
-        double fpaCost = fpa *(a+b+c+d+f+g+h+k);
+        double fpaCost = fpa *(a+b+rythmizomenes+k);
         j=fpaCost;
 
 
 
-        double posoPlerwmhs = a+b+c+d+f+g+h+i+k+l+j;
+        double posoPlerwmhs = a+b+c+d+e+f+g+h+i+k+l+j;
 
         return round(posoPlerwmhs, 2);
     }
