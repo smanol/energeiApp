@@ -246,7 +246,9 @@ public class MainActivity extends AppCompatActivity {
                         double subtractedNightKilovatora = -1;
                         double previousNight = -1;
                         double previousDay = -1;
+                        String day = "";
                         for (com.google.firebase.database.DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                            day = postSnapshot.getKey();
                             try {
                                 dayKilovatora = -1;
                                 nightKilovatora = -1;
@@ -261,13 +263,14 @@ public class MainActivity extends AppCompatActivity {
                                 if (previousNight != -1 && nightKilovatora != -1) {
                                     subtractedNightKilovatora = nightKilovatora - previousNight;
                                     met = new Metrhsh(postSnapshot.getKey(), subtractedDayKilovatora, subtractedNightKilovatora);
+                                    day = postSnapshot.getKey();
                                     metrhshes.add(met);
                                 } else {
                                     met = new Metrhsh(postSnapshot.getKey(), subtractedDayKilovatora, 0);
                                     metrhshes.add(met);
                                 }
                             }
-                            if (dayKilovatora != 1) {
+                            if (dayKilovatora != -1) {
                                 previousDay = dayKilovatora;
                                 hasNightMeasurements = 1;
                             }
@@ -277,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                         createDisplay(metrhshes);
-                        checkForMeasurementBoxRemoval(metrhshes);
+                        checkForMeasurementBoxRemoval(day);
                     }
 
                     @Override
@@ -349,12 +352,18 @@ public class MainActivity extends AppCompatActivity {
         parent.removeView(child);
     }
 
-    private void checkForMeasurementBoxRemoval(ArrayList<Metrhsh> metrhshes) {
-        if (metrhshes != null && !metrhshes.isEmpty()) {
-            Metrhsh lastItem = metrhshes.get(metrhshes.size()-1);
-            String lastDatabaseDate = lastItem.getDay();
+    private void checkForMeasurementBoxRemoval(String day) {
+        if (!day.isEmpty()) {
+            //Metrhsh lastItem = metrhshes.get(metrhshes.size()-1);
+            //String lastDatabaseDate = lastItem.getDay();
             String today = new SimpleDateFormat("dd MMMM", new Locale("el", "GR")).format(new Date());
-            if (lastDatabaseDate.equals(today)) {
+            String formattedDay = "";
+            try {
+                formattedDay = transformDateToWords(day);
+            } catch (Exception e) {
+                return;
+            }
+            if (formattedDay != null && formattedDay.equals(today)) {
                 removeDayOnlyMeasurementBoxLinearLayout();
                 removeDayNightMeasurementBoxLinearLayout();
             } else if (hasNightMeasurements == 1) {
