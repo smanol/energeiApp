@@ -4,6 +4,36 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/mainLinearLayout">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:id="@+id/eisagwgiko"
+        android:text="Καλώς ήρθατε στην εφαρμογή ΕνέργειApp! Για δύο εβδομάδες θα παρακολουθήσουμε την οικιακή κατανάλωση ρεύματος. Απαραίτητη είναι η καθημερινή εισαγωγή στο κατάλληλο πλαίσιο της ένδειξης του ρολογιού της ΔΕΗ μια καθορισμένη ώρα. Αν έχετε γενικό οικιακό τιμολόγιο εισάγετε την ένδειξη του μετρητή στο πλαίσιο γενικού οικιακού τιμολογίου με τη μονή θέση εισαγωγής. Αν έχετε νυχτερινό νυχτερινό τιμολόγιο εισάγετε την μέτρηση στο πλαίσιο νυχτερινού με τις με τις δύο θέσεις εισαγωγής, για τη κανονική και την μειωμένη τιμολόγηση. Στη συνέχεια η διαφορά στην κατανάλωση και το εκτιμώμενο κόστος θα υπολογίζεται αυτόματα. Τα πρώτα δεδομένα θα είναι διαθέσιμα μετά τη δεύτερη καταχώρηση."/>
+
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Εισάγετε τη σημερινή μέτρηση: "
+        android:textSize="20sp"
+        android:background="#4DB6AC"
+        android:id="@+id/eisageteThShmerinh"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Για γενικό οικιακό τιμολόγιο: "
+        android:textSize="20sp"
+        android:background="#80CBC4"
+        android:id="@+id/exeteGeniko"
+
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,13 +43,7 @@
         android:id="@+id/measurementBox"
         >
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="Εισάγετε τη σημερινή μέτρηση: "
-            android:textSize="20sp"
-            />
+
 
 
         <LinearLayout
@@ -53,6 +77,16 @@
         </LinearLayout>
 
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text=" Ή για Νυχτερινό Τιμολόγιο: "
+        android:textSize="20sp"
+        android:background="#80CBC4"
+        android:id="@+id/exeteNyxterino"
+
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -62,13 +96,6 @@
         android:id="@+id/measurementBoxNight"
         >
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="Εισάγετε τη σημερινή μέτρηση: "
-            android:textSize="20sp"
-            />
 
 
         <LinearLayout
