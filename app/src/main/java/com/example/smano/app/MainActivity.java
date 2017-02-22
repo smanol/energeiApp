@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference myDB;
     private MetrhshArrayAdapter metrhshArrayAdapter;
     private int hasNightMeasurements = 0;
-
+    private TextView measurementsLegend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
                         double previousNight = -1;
                         double previousDay = -1;
                         String day = "";
+                        int counter = 0;
                         for (com.google.firebase.database.DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                             day = postSnapshot.getKey();
                             try {
@@ -278,9 +280,11 @@ public class MainActivity extends AppCompatActivity {
                                 previousNight = nightKilovatora;
                                 hasNightMeasurements = 2;
                             }
+                            counter++;
                         }
                         createDisplay(metrhshes);
                         checkForMeasurementBoxRemoval(day);
+                        checkLayout(counter);//over 1.5   //under 2.5
                     }
 
                     @Override
@@ -340,6 +344,54 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void showGraphs() {
+        footer.setVisibility(View.VISIBLE);
+    }
+
+    private void removeGraphLinearLayout() {
+        //lv.removeFooterView(footer);
+        footer.setVisibility(View.GONE);
+    }
+
+    private void removeMeasurementsLegend() {
+        LinearLayout parent = (LinearLayout) findViewById(R.id.measurementLegendLL);
+        TextView child = (TextView) findViewById(R.id.measurementsLegend);
+        if (child != null) {
+            measurementsLegend = child;
+        }
+        parent.removeView(child);
+    }
+
+    private void addMeasurementsLegend() {
+        LinearLayout parent = (LinearLayout) findViewById(R.id.measurementLegendLL);
+        if (measurementsLegend == null) {
+            measurementsLegend = (TextView) findViewById(R.id.measurementsLegend);
+        }
+        if (measurementsLegend != null && measurementsLegend.getParent() == null && parent != null) {
+            parent.addView(measurementsLegend);
+        }
+    }
+
+    private void removeInstructionsLinearLayout() {
+        LinearLayout parent = (LinearLayout) findViewById(R.id.mainLinearLayout);
+        TextView child = (TextView) findViewById(R.id.eisagwgiko);
+        parent.removeView(child);
+    }
+
+    private void removeDayNightInvoiceLegends() {
+        LinearLayout parent = (LinearLayout) findViewById(R.id.mainLinearLayout);
+        TextView child = (TextView) findViewById(R.id.exeteGeniko);
+        TextView childNight = (TextView) findViewById(R.id.exeteNyxterino);
+        parent.removeView(child);
+        parent.removeView(childNight);
+    }
+
+    private void removeInputLegend() {
+        LinearLayout parent = (LinearLayout) findViewById(R.id.mainLinearLayout);
+        TextView child = (TextView) findViewById(R.id.eisageteThShmerinh);
+        parent.removeView(child);
+    }
+
     private void removeDayOnlyMeasurementBoxLinearLayout() {
         LinearLayout parent = (LinearLayout) findViewById(R.id.mainLinearLayout);
         LinearLayout child = (LinearLayout) findViewById(R.id.measurementBox);
@@ -364,6 +416,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             if (formattedDay != null && formattedDay.equals(today)) {
+                removeInputLegend();
                 removeDayOnlyMeasurementBoxLinearLayout();
                 removeDayNightMeasurementBoxLinearLayout();
             } else if (hasNightMeasurements == 1) {
@@ -373,6 +426,28 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void checkLayout(int c) {
+        if (c >= 2){
+            removeInstructionsLinearLayout();
+        }
+        if (c <= 2){
+            removeGraphLinearLayout();
+        }
+        if (c >= 1){
+            removeDayNightInvoiceLegends();
+        }
+        if (c <= 1){
+            removeMeasurementsLegend();
+        } else {
+            addMeasurementsLegend();
+        }
+        if (c >= 3){
+            showGraphs();
+        }
+    }
+
+
 
     private void checkInvalidMeasurement(String measurement, ArrayList<Metrhsh> metrhshes) {
         double MAX_ALLOWED_KILOVAT_PER_DAY = 40;
