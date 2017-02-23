@@ -28,11 +28,13 @@
 
 
 
-    <!--<TextView
-        android:id="@+id/hello"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="hello"/>-->
+    <!--<TextView-->
+        <!--android:background="#BA68C8"-->
+        <!--android:id="@+id/hello"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Έχετε εξοικονομήσει συνολικά "/>-->
 
 
 </LinearLayout>
+

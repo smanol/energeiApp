@@ -60,6 +60,7 @@
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
             android:id="@+id/editText"
+            
             android:hint=" Ένδειξη μετρητή"
             android:padding="10dp"
             android:layout_weight="4"

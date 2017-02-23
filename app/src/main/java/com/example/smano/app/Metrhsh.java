@@ -10,13 +10,14 @@ public class Metrhsh {
     private Kilovatora kilo = new Kilovatora();
     private int image;
 
-    public Metrhsh (String day, double dayKilovatora, double nightKilovatora) {
+    public Metrhsh (String day, double dayKilovatora, double nightKilovatora, double average) {
         this.day = day;
         kilo.setDayKilovatora(dayKilovatora);
         kilo.setNightKilovatora(nightKilovatora);
 
-        if (dayKilovatora + nightKilovatora <= 13) {
+        if (dayKilovatora + nightKilovatora < average ) {
             image = R.drawable.yes;
+
         }
     }
 

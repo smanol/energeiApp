@@ -13,24 +13,19 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 
 import com.firebase.ui.auth.AuthUI;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -247,6 +242,7 @@ public class MainActivity extends AppCompatActivity {
                         double subtractedNightKilovatora = -1;
                         double previousNight = -1;
                         double previousDay = -1;
+                        double average=-1;
                         String day = "";
                         int counter = 0;
                         for (com.google.firebase.database.DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
@@ -262,13 +258,16 @@ public class MainActivity extends AppCompatActivity {
                             if (previousDay != -1 && dayKilovatora != -1) {
                                 Metrhsh met;
                                 subtractedDayKilovatora = dayKilovatora - previousDay;
+
+                                average=averageConsumption(metrhshes);
+
                                 if (previousNight != -1 && nightKilovatora != -1) {
                                     subtractedNightKilovatora = nightKilovatora - previousNight;
-                                    met = new Metrhsh(postSnapshot.getKey(), subtractedDayKilovatora, subtractedNightKilovatora);
+                                    met = new Metrhsh(postSnapshot.getKey(), subtractedDayKilovatora, subtractedNightKilovatora,average);
                                     day = postSnapshot.getKey();
                                     metrhshes.add(met);
                                 } else {
-                                    met = new Metrhsh(postSnapshot.getKey(), subtractedDayKilovatora, 0);
+                                    met = new Metrhsh(postSnapshot.getKey(), subtractedDayKilovatora, 0, average);
                                     metrhshes.add(met);
                                 }
                             }
@@ -547,5 +546,21 @@ public class MainActivity extends AppCompatActivity {
     }
     */
 
+    public static double averageConsumption(ArrayList<Metrhsh> metrhshes){
+        double sumMetrhseis =0;
+        double averageMerthsh =0;
+        if (metrhshes.size()== 0)
+        {
+            return -1;
+        }
+
+        for (int i = 0; i <= metrhshes.size() ; i++){
+            sumMetrhseis = metrhshes.get(i).getSumKilovatora();
+
+        }
+        averageMerthsh = sumMetrhseis/metrhshes.size();
+        return averageMerthsh;
+    }
 
 }
+
