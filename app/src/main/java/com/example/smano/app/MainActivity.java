@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.github.mikephil.charting.charts.BarChart;
@@ -35,7 +36,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-//import static com.firebase.ui.auth.ui.AcquireEmailHelper.RC_SIGN_IN;
+import org.apache.commons.lang3.StringUtils;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private MetrhshArrayAdapter metrhshArrayAdapter;
     private int hasNightMeasurements = 0;
     private TextView measurementsLegend;
+    private ArrayList<Metrhsh> wholeValuesMetrhseis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     //user is signed in
-                    //Toast.makeText(MainActivity.this, "You're signed in. Welcome to EnergieApp", Toast.LENGTH_SHORT).show();
                     username = getUsernameFromFireBaseUser(user);
 
                     onSignedInInitialize();
@@ -235,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
                 valueEventListener = new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        wholeValuesMetrhseis = new ArrayList<>();
                         final ArrayList<Metrhsh> metrhshes = new ArrayList<>();
                         double dayKilovatora = -1;
                         double nightKilovatora = -1;
@@ -242,9 +244,10 @@ public class MainActivity extends AppCompatActivity {
                         double subtractedNightKilovatora = -1;
                         double previousNight = -1;
                         double previousDay = -1;
-                        double average=-1;
+                        double average = -1;
                         String day = "";
                         int counter = 0;
+                        Metrhsh wholeMetrhsh;
                         for (com.google.firebase.database.DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                             day = postSnapshot.getKey();
                             try {
@@ -259,11 +262,11 @@ public class MainActivity extends AppCompatActivity {
                                 Metrhsh met;
                                 subtractedDayKilovatora = dayKilovatora - previousDay;
 
-                                average=averageConsumption(metrhshes);
+                                average = averageConsumption(metrhshes);
 
                                 if (previousNight != -1 && nightKilovatora != -1) {
                                     subtractedNightKilovatora = nightKilovatora - previousNight;
-                                    met = new Metrhsh(postSnapshot.getKey(), subtractedDayKilovatora, subtractedNightKilovatora,average);
+                                    met = new Metrhsh(postSnapshot.getKey(), subtractedDayKilovatora, subtractedNightKilovatora, average);
                                     day = postSnapshot.getKey();
                                     metrhshes.add(met);
                                 } else {
@@ -279,6 +282,17 @@ public class MainActivity extends AppCompatActivity {
                                 previousNight = nightKilovatora;
                                 hasNightMeasurements = 2;
                             }
+
+                            if (dayKilovatora != -1 && nightKilovatora != -1) {
+                                wholeMetrhsh = new Metrhsh(postSnapshot.getKey(), dayKilovatora, nightKilovatora);
+                                if (wholeMetrhsh != null) {
+                                    wholeValuesMetrhseis.add(wholeMetrhsh);
+                                }
+                            } else if (dayKilovatora != -1) {
+                                wholeMetrhsh = new Metrhsh(postSnapshot.getKey(), dayKilovatora, 0);
+                                wholeValuesMetrhseis.add(wholeMetrhsh);
+                            }
+
                             counter++;
                         }
                         createDisplay(metrhshes);
@@ -317,11 +331,18 @@ public class MainActivity extends AppCompatActivity {
         final EditText editText = (EditText) findViewById(R.id.editText);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                String EMPTY_TEXT_BOX = "Δεν είναι δυνατή η αποστολή της μέτρησης. Παρακαλώ εισάγετε έγκυρη τιμή στο κουτί μέτρησεων.";
                 String measurement = editText.getText().toString();
-                //checkInvalidMeasurement(measurement, metrhshes);
-                String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                myDB.child("Users").child(username).child(date).child("Day").setValue(measurement);
-                removeDayOnlyMeasurementBoxLinearLayout();
+                if (StringUtils.isBlank(measurement)) {
+                    Toast.makeText(MainActivity.this, EMPTY_TEXT_BOX, Toast.LENGTH_LONG).show();
+                } else {
+                    boolean bool = checkInvalidMeasurement(measurement, "0");
+                    if (bool) {
+                        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                        myDB.child("Users").child(username).child(date).child("Day").setValue(measurement);
+                        removeDayOnlyMeasurementBoxLinearLayout();
+                    }
+                }
             }
         });
     }
@@ -332,13 +353,20 @@ public class MainActivity extends AppCompatActivity {
         final EditText editTextNight = (EditText) findViewById(R.id.editTextNight);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                String EMPTY_TEXT_BOX = "Δεν είναι δυνατή η αποστολή της μέτρησης. Παρακαλώ εισάγετε έγκυρες τιμές στο κουτί μέτρησεων.";
                 String measurementDay = editTextDay.getText().toString();
                 String measurementNight = editTextNight.getText().toString();
-                //checkInvalidMeasurement(measurement, metrhshes);
-                String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                myDB.child("Users").child(username).child(date).child("Day").setValue(measurementDay);
-                myDB.child("Users").child(username).child(date).child("Night").setValue(measurementNight);
-                removeDayNightMeasurementBoxLinearLayout();
+                if (StringUtils.isBlank(measurementDay) || StringUtils.isBlank(measurementNight)) {
+                    Toast.makeText(MainActivity.this, EMPTY_TEXT_BOX, Toast.LENGTH_LONG).show();
+                } else {
+                    boolean bool = checkInvalidMeasurement(measurementDay, measurementNight);
+                    if (bool) {
+                        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                        myDB.child("Users").child(username).child(date).child("Day").setValue(measurementDay);
+                        myDB.child("Users").child(username).child(date).child("Night").setValue(measurementNight);
+                        removeDayNightMeasurementBoxLinearLayout();
+                    }
+                }
             }
         });
     }
@@ -448,15 +476,32 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void checkInvalidMeasurement(String measurement, ArrayList<Metrhsh> metrhshes) {
-        double MAX_ALLOWED_KILOVAT_PER_DAY = 40;
-        double lastDatabaseValue = metrhshes.get(metrhshes.size()-1).getSumKilovatora();
-        double measure = Double.parseDouble(measurement);
+    private boolean checkInvalidMeasurement(String measurementDay, String measurementNight) {
+        final String largerThan40Message = "Η μέτρηση είναι πολυ μεγάλη αναλογικά με τις προηγούμενες τιμές που έχετε εισάγει.";
+        final String smallerThanPreviousMessage = "Η μέτρηση που εισάγατε είναι μικρότερη απο την τελευταία μέτρηση που εισάγατε.";
+        final String correctMessage = "Η μέτρηση που εισάγατε καταχωρήθηκε επιτυχώς.";
+        final double MAX_ALLOWED_KILOVAT_PER_DAY = 40;
+
+        double lastDatabaseValue = wholeValuesMetrhseis.get(wholeValuesMetrhseis.size()-1).getDayKilovatora();
+        double measure = Double.parseDouble(measurementDay);
         double diff = measure - lastDatabaseValue;
-        if (diff > MAX_ALLOWED_KILOVAT_PER_DAY) {
 
-        } else if (diff <= 0) {
+        double diffNight = 0;
+        double measureNight = Double.parseDouble(measurementNight);
+        if (measureNight != 0) {
+            double lastDatabaseValueNight = wholeValuesMetrhseis.get(wholeValuesMetrhseis.size()-1).getNightKilovatora();
+            diffNight = measure - lastDatabaseValueNight;
+        }
 
+        if (diff > MAX_ALLOWED_KILOVAT_PER_DAY || diffNight > MAX_ALLOWED_KILOVAT_PER_DAY) {
+            popupMessage(largerThan40Message);
+            return false;
+        } else if (diff <= 0 || diffNight <= 0 ) {
+            popupMessage(smallerThanPreviousMessage);
+            return false;
+        } else {
+            popupMessage(correctMessage);
+            return true;
         }
     }
 
@@ -526,9 +571,11 @@ public class MainActivity extends AppCompatActivity {
 
         myDB.child("Users").child(name).setValue(user);
     }
-    /*
+
     private void popupMessage(String message) {
-        new AlertDialog.Builder(context)
+        Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+
+        /*new AlertDialog.Builder(context)
                 .setTitle("Delete entry")
                 .setMessage("Are you sure you want to delete this entry?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -542,9 +589,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+                .show();*/
     }
-    */
+
 
     public static double averageConsumption(ArrayList<Metrhsh> metrhshes) {
         double sumMetrhseis = 0;

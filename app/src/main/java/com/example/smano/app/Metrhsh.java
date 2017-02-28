@@ -10,7 +10,7 @@ public class Metrhsh {
     private Kilovatora kilo = new Kilovatora();
     private int image;
 
-    public Metrhsh (String day, double dayKilovatora, double nightKilovatora, double average) {
+    public Metrhsh(String day, double dayKilovatora, double nightKilovatora, double average) {
         this.day = day;
         kilo.setDayKilovatora(dayKilovatora);
         kilo.setNightKilovatora(nightKilovatora);
@@ -19,6 +19,12 @@ public class Metrhsh {
             image = R.drawable.yes;
 
         }
+    }
+
+    public Metrhsh(String day, double dayKilovatora, double nightKilovatora) {
+        this.day = day;
+        kilo.setDayKilovatora(dayKilovatora);
+        kilo.setNightKilovatora(nightKilovatora);
     }
 
     public double getSumKilovatora() {
