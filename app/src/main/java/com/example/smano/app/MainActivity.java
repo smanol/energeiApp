@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
             Entries.add(new BarEntry(t1,i));
         }
 
-        barDataSet = new BarDataSet(Entries, "Dates");
+        barDataSet = new BarDataSet(Entries, "KWh");
         barDataSet.notifyDataSetChanged();
         // Εδω βάζω τις τιμές απο την λίστα metrhshes στο γράφημα
         // εδω χρείάζεται να γίνει με for loop για να μπαίνουν αυτόματα όλες οι τιμές της λίστας metrhshes
@@ -159,12 +159,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void createBlockBarchart(float block1, float block2) {
         ArrayList<String> theDate = new ArrayList<>();
-        theDate.add("Πολυκατοικία Α");
-        theDate.add("Πολυκατοικία Β");
+        theDate.add("Ομάδα Α");
+        theDate.add("Ομάδα Β");
         ArrayList<BarEntry> Entries2 = new ArrayList<>();
         Entries2.add(new BarEntry(block1, 0));
         Entries2.add(new BarEntry(block2, 1));
-        BarDataSet barDataSet2 = new BarDataSet(Entries2, "Dates");
+        BarDataSet barDataSet2 = new BarDataSet(Entries2, "KWh");
         BarData theData2 = new BarData(theDate, barDataSet2);
         barChart.setData(theData2);
         barChart.setNoDataText("Description that you want");
@@ -305,7 +305,7 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 };
-                myDB.child("Users").child(username).addValueEventListener(valueEventListener);
+                myDB.child("Users").child(username).child("Measurements").addValueEventListener(valueEventListener);
             }
         }
         if (valueEventListenerForBlocks == null) {
@@ -339,7 +339,7 @@ public class MainActivity extends AppCompatActivity {
                     boolean bool = checkInvalidMeasurement(measurement, "0");
                     if (bool) {
                         String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                        myDB.child("Users").child(username).child(date).child("Day").setValue(measurement);
+                        myDB.child("Users").child(username).child("Measurements").child(date).child("Day").setValue(measurement);
                         removeDayOnlyMeasurementBoxLinearLayout();
                     }
                 }
@@ -362,8 +362,8 @@ public class MainActivity extends AppCompatActivity {
                     boolean bool = checkInvalidMeasurement(measurementDay, measurementNight);
                     if (bool) {
                         String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                        myDB.child("Users").child(username).child(date).child("Day").setValue(measurementDay);
-                        myDB.child("Users").child(username).child(date).child("Night").setValue(measurementNight);
+                        myDB.child("Users").child(username).child("Measurements").child(date).child("Day").setValue(measurementDay);
+                        myDB.child("Users").child(username).child("Measurements").child(date).child("Night").setValue(measurementNight);
                         removeDayNightMeasurementBoxLinearLayout();
                     }
                 }
@@ -496,7 +496,7 @@ public class MainActivity extends AppCompatActivity {
         if (diff > MAX_ALLOWED_KILOVAT_PER_DAY || diffNight > MAX_ALLOWED_KILOVAT_PER_DAY) {
             popupMessage(largerThan40Message);
             return false;
-        } else if (diff <= 0 || diffNight <= 0 ) {
+        } else if (diff < 0 || diffNight < 0 ) {
             popupMessage(smallerThanPreviousMessage);
             return false;
         } else {
@@ -507,7 +507,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void detachDatabaseReadListener() {
         if (valueEventListener != null) {
-            myDB.child("Users").child(username).removeEventListener(valueEventListener);
+            myDB.child("Users").child(username).child("Measurements").removeEventListener(valueEventListener);
             valueEventListener = null;
         }
         if (valueEventListenerForBlocks != null) {
@@ -546,7 +546,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void registerUserOnDB(FirebaseUser user) {
-        if (user != null){
+        if (user != null) {
             String username = usernameFromEmail(user.getEmail());
 
             // Write new user
