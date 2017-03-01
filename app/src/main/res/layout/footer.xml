@@ -15,6 +15,12 @@
 
 </com.github.mikephil.charting.charts.BarChart>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ανοίκετε στην ομάδα "
+        android:id="@+id/Omada"
+        android:gravity="center"/>
 
     <com.github.mikephil.charting.charts.BarChart
         android:layout_width="match_parent"
@@ -27,13 +33,12 @@
     </com.github.mikephil.charting.charts.BarChart>
 
 
-
-    <!--<TextView-->
-        <!--android:background="#BA68C8"-->
-        <!--android:id="@+id/hello"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Έχετε εξοικονομήσει συνολικά "/>-->
+    <TextView
+        android:background="#BA68C8"
+        android:id="@+id/hello"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Έχετε εξοικονομήσει συνολικά "/>
 
 
 </LinearLayout>

@@ -28,6 +28,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,8 +37,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
-
-import org.apache.commons.lang3.StringUtils;
+import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -604,5 +605,16 @@ public class MainActivity extends AppCompatActivity {
         }
         averageMerthsh = sumMetrhseis/metrhshes.size();
         return averageMerthsh;
+    }
+
+    private double coins (double kilovatwra, double mean)
+    {
+        Random randomGenerator = new Random();
+
+        int randomInt = randomGenerator.nextInt(100);
+
+        double coinsAmount;
+        coinsAmount = kilovatwra*mean * randomInt;
+        return coinsAmount;
     }
 }
