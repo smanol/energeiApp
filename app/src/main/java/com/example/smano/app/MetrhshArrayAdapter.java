@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by smano on 1/11/2016.
@@ -26,6 +27,7 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
         super(context, resource, objects);
 
         this.context = context;
+        Collections.reverse(objects);
         this.metrhshes = objects;
     }
 

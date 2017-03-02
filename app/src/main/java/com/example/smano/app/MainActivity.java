@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         footer = getLayoutInflater().inflate(R.layout.footer, null);
-        barChart= (BarChart) footer.findViewById(R.id.bargraph2);
+        barChart = (BarChart) footer.findViewById(R.id.bargraph2);
         barChar = (BarChart) footer.findViewById(R.id.bargraph);
         lv = (ListView)findViewById(R.id.lv);
         lv.addFooterView(footer, null, false);
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         // Εδω βάζω τις τιμές απο την λίστα metrhshes στο γράφημα
         // εδω χρείάζεται να γίνει με for loop για να μπαίνουν αυτόματα όλες οι τιμές της λίστας metrhshes
         theDays.clear();
-        for(int i = 0; i < metrhshes.size(); i++) {
+        for (int i = 0; i < metrhshes.size(); i++) {
             theDays.add(metrhshes.get(i).getDay());
         }
         // Τοποθέτηση δεδομένων στο barchar
@@ -334,7 +334,10 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    team = Integer.parseInt(dataSnapshot.getValue().toString());
+                    Object t;
+                    if ((t = dataSnapshot.getValue()) != null){
+                        team = Integer.parseInt(t.toString());
+                    }
                 }
 
                 @Override
