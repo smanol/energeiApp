@@ -56,11 +56,13 @@ public class MainActivity extends AppCompatActivity {
     public static final String ANONYMOUS = "anonymous";
     private ValueEventListener valueEventListener;
     private ValueEventListener valueEventListenerForBlocks;
+    private ValueEventListener valueEventListenerTeam;
     private DatabaseReference myDB;
     private MetrhshArrayAdapter metrhshArrayAdapter;
     private int hasNightMeasurements = 0;
     private TextView measurementsLegend;
     private ArrayList<Metrhsh> wholeValuesMetrhseis;
+    private int team;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -309,6 +311,7 @@ public class MainActivity extends AppCompatActivity {
                 myDB.child("Users").child(username).child("Measurements").addValueEventListener(valueEventListener);
             }
         }
+
         if (valueEventListenerForBlocks == null) {
             valueEventListenerForBlocks = new ValueEventListener() {
 
@@ -324,6 +327,21 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
             myDB.child("Blocks").addValueEventListener(valueEventListenerForBlocks);
+        }
+
+        if (valueEventListenerTeam == null) {
+            valueEventListenerTeam = new ValueEventListener() {
+
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    team = Integer.parseInt(dataSnapshot.getValue().toString());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            };
+            myDB.child("Users").child(username).child("Team").addValueEventListener(valueEventListenerTeam);
         }
     }
 
