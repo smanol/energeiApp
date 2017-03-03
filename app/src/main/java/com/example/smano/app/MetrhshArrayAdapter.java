@@ -63,6 +63,8 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
 
         image.setImageResource(metrhsh.getImage());
 
+
+
         return view;
 
 

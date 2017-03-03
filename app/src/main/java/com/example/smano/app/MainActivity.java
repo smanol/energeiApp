@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     BarChart barChar;
     BarChart barChart;
     ListView lv;
+    TextView Teams;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     public static final int RC_SIGN_IN = 1;
@@ -63,6 +65,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView measurementsLegend;
     private ArrayList<Metrhsh> wholeValuesMetrhseis;
     private int team;
+    private int countGourounakia =0;
+    private TextView gourounakiaText;
+    private ImageView gourounakiaImage;
+    private double sumOfSavings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,9 +119,15 @@ public class MainActivity extends AppCompatActivity {
         barChart = (BarChart) footer.findViewById(R.id.bargraph2);
         barChar = (BarChart) footer.findViewById(R.id.bargraph);
         lv = (ListView)findViewById(R.id.lv);
+
         lv.addFooterView(footer, null, false);
         View header = ((LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.header, null, false);
         lv.addHeaderView(header, null, false);
+
+
+
+
+
     }
 
     public void createDisplay(ArrayList<Metrhsh> metrhshes) {
@@ -127,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
         float t1;
         for (int i = 0; i < metrhshes.size(); i++) {
             t1 = (float) metrhshes.get(i).getSumKilovatora();
-            Entries.add(new BarEntry(t1,i));
+            Entries.add(new BarEntry(t1, i));
         }
 
         barDataSet = new BarDataSet(Entries, "KWh");
@@ -158,7 +170,50 @@ public class MainActivity extends AppCompatActivity {
         //ένα δοκιμαστικό textView που είναι στο footer layout μαζί με το barchar
         //TextView t =(TextView) findViewById(R.id.hello);
         //t.setText("hi");
+
+
+        //Εισαγωγή πληροφοριών σχετικά με την ομάδα για την Συνθήκη νούμερα ένα
+
+
+        Teams = (TextView) footer.findViewById(R.id.TheTeamYouBelong);
+
+
+        String teamNote = "?";
+
+        if (team == 1) {
+            teamNote = "A";
+        }
+        if (team == 2) {
+            teamNote = "B";
+        }
+
+
+        Teams.setText("Ανοίκεται στην ομάδα " + teamNote);
+
+
+        if (countGourounakia > 0) {
+
+
+            //Είκόνα για γουρουνάκια
+
+            gourounakiaImage = (ImageView) findViewById(R.id.pigsImage);
+            gourounakiaImage.setImageResource(R.drawable.piggy);
+
+
+            //Στοιχεία για γουρουνάκια
+
+            gourounakiaText = (TextView) findViewById(R.id.pigsText);
+
+            gourounakiaText.setText(countGourounakia + "X ");
+
+            //Στοιχεία για την συνολική
+
+
+        }
     }
+
+
+
 
     private void createBlockBarchart(float block1, float block2) {
         ArrayList<String> theDate = new ArrayList<>();
@@ -251,6 +306,7 @@ public class MainActivity extends AppCompatActivity {
                         String day = "";
                         int counter = 0;
                         Metrhsh wholeMetrhsh;
+                        countGourounakia = 0;
                         for (com.google.firebase.database.DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                             day = postSnapshot.getKey();
                             try {
@@ -267,6 +323,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 average = averageConsumption(metrhshes);
 
+
                                 if (previousNight != -1 && nightKilovatora != -1) {
                                     subtractedNightKilovatora = nightKilovatora - previousNight;
                                     met = new Metrhsh(postSnapshot.getKey(), subtractedDayKilovatora, subtractedNightKilovatora, average);
@@ -276,6 +333,7 @@ public class MainActivity extends AppCompatActivity {
                                     met = new Metrhsh(postSnapshot.getKey(), subtractedDayKilovatora, 0, average);
                                     metrhshes.add(met);
                                 }
+                                countGourounakia += met.getGourounakia();
                             }
                             if (dayKilovatora != -1) {
                                 previousDay = dayKilovatora;
@@ -285,6 +343,7 @@ public class MainActivity extends AppCompatActivity {
                                 previousNight = nightKilovatora;
                                 hasNightMeasurements = 2;
                             }
+
 
                             if (dayKilovatora != -1 && nightKilovatora != -1) {
                                 wholeMetrhsh = new Metrhsh(postSnapshot.getKey(), dayKilovatora, nightKilovatora);

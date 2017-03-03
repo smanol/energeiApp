@@ -165,24 +165,52 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/measurementLegendLL"
-       >
-    <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Καταγεγραμένες Μετρήσεις:"
-    android:textSize="24dp"
-    android:id="@+id/measurementsLegend"
-
-        />
-
-    <TextView
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#ff00ff00"/>
+        android:orientation="vertical"
+        >
 
 
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Καταγεγραμένες Μετρήσεις:"
+            android:textSize="20sp"
+            android:id="@+id/measurementsLegend"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"/>
+
+
+
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+            <ImageView
+
+                android:id="@+id/pigsImage"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/piggy"/>
+            <TextView
+                android:id="@+id/pigsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3X"
+                android:layout_toLeftOf="@id/pigsImage"
+                android:layout_alignBottom="@id/pigsImage"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                />
+
+
+        </RelativeLayout>
     </LinearLayout>
-
 
 </LinearLayout>

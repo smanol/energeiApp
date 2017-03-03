@@ -9,6 +9,7 @@ public class Metrhsh {
     private String day;
     private Kilovatora kilo = new Kilovatora();
     private int image;
+    int gourounakia=0;
 
     public Metrhsh(String day, double dayKilovatora, double nightKilovatora, double average) {
         this.day = day;
@@ -16,9 +17,19 @@ public class Metrhsh {
         kilo.setNightKilovatora(nightKilovatora);
 
         if (dayKilovatora + nightKilovatora < average ) {
-            image = R.drawable.yes;
+            image = R.drawable.piggy;
+            gourounakia++;
+
+
 
         }
+
+        if (dayKilovatora + nightKilovatora < average)
+
+        {
+
+        }
+
     }
 
     public Metrhsh(String day, double dayKilovatora, double nightKilovatora) {
@@ -26,6 +37,8 @@ public class Metrhsh {
         kilo.setDayKilovatora(dayKilovatora);
         kilo.setNightKilovatora(nightKilovatora);
     }
+
+    public int getGourounakia() {return gourounakia;}
 
     public double getSumKilovatora() {
         return kilo.getDayKilovatora() + kilo.getNightKilovatora();
