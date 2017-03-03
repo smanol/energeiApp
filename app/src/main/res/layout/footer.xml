@@ -43,7 +43,7 @@
 
     <TextView
         android:background="#BA68C8"
-        android:id="@+id/hello"
+        android:id="@+id/exoikonomhsh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 

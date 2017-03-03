@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private int team;
     private int countGourounakia =0;
     private TextView gourounakiaText;
+    private TextView ExoikonomhshText;
     private ImageView gourounakiaImage;
     private double sumOfSavings;
 
@@ -206,7 +207,12 @@ public class MainActivity extends AppCompatActivity {
 
             gourounakiaText.setText(countGourounakia + "X ");
 
-            //Στοιχεία για την συνολική
+            //Στοιχεία για την συνολική εξοικονόμηση
+
+            ExoikonomhshText = (TextView) findViewById(R.id.exoikonomhsh);
+
+            ExoikonomhshText.setText("'Εχετε εξοικονομήσει μέχρι στηγμής "+" "+"\u20ac"+ "!" );
+
 
 
         }

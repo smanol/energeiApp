@@ -56,7 +56,7 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
         //τώρα μπορεί να κάνει και πρόσθεση
         double totalBillCost = CostEstimate.calculateCostDay(metrhsh.getDayKilovatora()) + CostEstimate.calculateCostNight(metrhsh.getNightKilovatora());
         double costOfDay = CostEstimate.round(totalBillCost/60D, 2);
-        kwh.setText( "Κατανάλωση: " + metrhsh.getSumKilovatora()+ "kWh"+"\n" + "Κόστος: " + costOfDay +" " +"\u20ac" + "\n" + "Αν ξοδεύατε κάθε μέρα όσο σήμερα ο λογαριασμός ήταν " + totalBillCost + "\u20ac" );
+        kwh.setText( "Κατανάλωση: " + metrhsh.getSumKilovatora()+ "kWh"+"\n" + "Κόστος: " + costOfDay +" " +"\u20ac" + "\n" + "Αν ξοδεύατε κάθε μέρα όσο σήμερα ο λογαριασμός θα ήταν " + totalBillCost + "\u20ac" );
 
 
         //get the image associated with this property
