@@ -172,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
         //TextView t =(TextView) findViewById(R.id.hello);
         //t.setText("hi");
 
+        double averageOf3 = getAverageConsumptionOf3(metrhshes);
 
         //Εισαγωγή πληροφοριών σχετικά με την ομάδα για την Συνθήκη νούμερα ένα
 
@@ -327,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
                                 Metrhsh met;
                                 subtractedDayKilovatora = dayKilovatora - previousDay;
 
-                                average = averageConsumption(metrhshes);
+                                average = getAverageConsumption(metrhshes);
 
 
                                 if (previousNight != -1 && nightKilovatora != -1) {
@@ -680,7 +681,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public static double averageConsumption(ArrayList<Metrhsh> metrhshes) {
+    public static double getAverageConsumption(ArrayList<Metrhsh> metrhshes) {
         double sumMetrhseis = 0;
         double averageMerthsh = 0;
         if (metrhshes.size() == 0) {
@@ -702,5 +703,23 @@ public class MainActivity extends AppCompatActivity {
         double coinsAmount;
         coinsAmount = kilovatwra*mean * randomInt;
         return coinsAmount;
+    }
+
+    public double getAverageConsumptionOf3(ArrayList<Metrhsh> metrhshes) {
+        double sumMetrhseis = 0;
+        double averageMerthsh = 0;
+        if (metrhshes.size() <= 1) {
+            return -1;
+        } else if (metrhshes.size() == 2){
+            for (int i = 0; i < 2 ; i++) {
+                sumMetrhseis += metrhshes.get(i).getSumKilovatora();
+            }
+            return sumMetrhseis/2;
+        } else {
+            for (int i = 0; i < 3 ; i++) {
+                sumMetrhseis += metrhshes.get(i).getSumKilovatora();
+            }
+            return sumMetrhseis/3;
+        }
     }
 }
