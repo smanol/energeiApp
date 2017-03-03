@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView gourounakiaImage;
     private double sumOfSavings;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -212,8 +213,8 @@ public class MainActivity extends AppCompatActivity {
 
             ExoikonomhshText = (TextView) findViewById(R.id.exoikonomhsh);
 
-            ExoikonomhshText.setText("'Εχετε εξοικονομήσει μέχρι στηγμής "+" "+"\u20ac"+ "!" );
 
+            ExoikonomhshText.setText("'Εχετε εξοικονομήσει μέχρι στιγμής "+CostEstimate.round(sumOfSavings,2)+"\u20ac"+ " !" );
 
 
         }
@@ -310,10 +311,12 @@ public class MainActivity extends AppCompatActivity {
                         double previousNight = -1;
                         double previousDay = -1;
                         double average = -1;
+                        double averageOf3= -1;
                         String day = "";
                         int counter = 0;
                         Metrhsh wholeMetrhsh;
                         countGourounakia = 0;
+                        sumOfSavings=0;
                         for (com.google.firebase.database.DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                             day = postSnapshot.getKey();
                             try {
@@ -329,18 +332,19 @@ public class MainActivity extends AppCompatActivity {
                                 subtractedDayKilovatora = dayKilovatora - previousDay;
 
                                 average = getAverageConsumption(metrhshes);
-
+                                averageOf3 = getAverageConsumptionOf3(metrhshes);
 
                                 if (previousNight != -1 && nightKilovatora != -1) {
                                     subtractedNightKilovatora = nightKilovatora - previousNight;
-                                    met = new Metrhsh(postSnapshot.getKey(), subtractedDayKilovatora, subtractedNightKilovatora, average);
+                                    met = new Metrhsh(postSnapshot.getKey(), subtractedDayKilovatora, subtractedNightKilovatora, average, averageOf3);
                                     day = postSnapshot.getKey();
                                     metrhshes.add(met);
                                 } else {
-                                    met = new Metrhsh(postSnapshot.getKey(), subtractedDayKilovatora, 0, average);
+                                    met = new Metrhsh(postSnapshot.getKey(), subtractedDayKilovatora, 0, average, averageOf3);
                                     metrhshes.add(met);
                                 }
                                 countGourounakia += met.getGourounakia();
+                                sumOfSavings += met.getSavings();
                             }
                             if (dayKilovatora != -1) {
                                 previousDay = dayKilovatora;
@@ -705,6 +709,7 @@ public class MainActivity extends AppCompatActivity {
         return coinsAmount;
     }
 
+
     public double getAverageConsumptionOf3(ArrayList<Metrhsh> metrhshes) {
         double sumMetrhseis = 0;
         double averageMerthsh = 0;
@@ -712,14 +717,17 @@ public class MainActivity extends AppCompatActivity {
             return -1;
         } else if (metrhshes.size() == 2){
             for (int i = 0; i < 2 ; i++) {
-                sumMetrhseis += metrhshes.get(i).getSumKilovatora();
+                sumMetrhseis += metrhshes.get(i).getDayKilovatora();
             }
             return sumMetrhseis/2;
         } else {
             for (int i = 0; i < 3 ; i++) {
-                sumMetrhseis += metrhshes.get(i).getSumKilovatora();
+                sumMetrhseis += metrhshes.get(i).getDayKilovatora();
             }
             return sumMetrhseis/3;
         }
     }
+
+
+
 }
