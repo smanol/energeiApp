@@ -1,6 +1,7 @@
 package com.example.smano.app;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -191,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        Teams.setText("Ανοίκεται στην ομάδα " + teamNote);
+        Teams.setText("Ανήκετε στην ομάδα " + teamNote);
 
 
         if (countGourounakia > 0) {
@@ -213,9 +214,11 @@ public class MainActivity extends AppCompatActivity {
 
             ExoikonomhshText = (TextView) findViewById(R.id.exoikonomhsh);
 
-
-            ExoikonomhshText.setText("'Εχετε εξοικονομήσει μέχρι στιγμής "+CostEstimate.round(sumOfSavings,2)+"\u20ac"+ " !" );
-
+            if(sumOfSavings>0)
+            {
+                ExoikonomhshText.setText("'Εχετε εξοικονομήσει" + CostEstimate.round(sumOfSavings, 2) + "\u20ac" + " !");
+                ExoikonomhshText.setBackgroundColor(Color.parseColor("#90CAF9"));
+            }
             //Days Left Text View
 
 

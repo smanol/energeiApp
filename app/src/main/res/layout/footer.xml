@@ -42,7 +42,7 @@
 
 
     <TextView
-        android:background="#90CAF9"
+
         android:id="@+id/exoikonomhsh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
