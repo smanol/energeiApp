@@ -199,10 +199,24 @@
                 android:layout_marginBottom="10dp"
                 android:src="@drawable/piggy"/>
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_alignParentLeft="true"
+                android:layout_alignBottom="@id/pigsImage"
+                android:text="14/14"
+                android:id="@+id/daysLeft"
+
+
+
+                />
+
+            <TextView
                 android:id="@+id/pigsText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="3X"
+                android:text=""
                 android:layout_toLeftOf="@id/pigsImage"
                 android:layout_alignBottom="@id/pigsImage"
                 android:textSize="18sp"

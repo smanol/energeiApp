@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView ExoikonomhshText;
     private ImageView gourounakiaImage;
     private double sumOfSavings;
-
+    private TextView DaysLeft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,7 +216,13 @@ public class MainActivity extends AppCompatActivity {
 
             ExoikonomhshText.setText("'Εχετε εξοικονομήσει μέχρι στιγμής "+CostEstimate.round(sumOfSavings,2)+"\u20ac"+ " !" );
 
+            //Days Left Text View
 
+
+            DaysLeft = (TextView) findViewById(R.id.daysLeft);
+
+
+            DaysLeft.setText( "Έχετε συμπληρώσει : " +"\n" + (metrhshes.size())+" /14 μέρες" );
         }
     }
 
