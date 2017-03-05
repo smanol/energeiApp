@@ -430,46 +430,50 @@ public class MainActivity extends AppCompatActivity {
     private void dayOnlyMeasurementButtonListener() {
         final Button button = (Button) findViewById(R.id.input_button);
         final EditText editText = (EditText) findViewById(R.id.editText);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                String EMPTY_TEXT_BOX = "Δεν είναι δυνατή η αποστολή της μέτρησης. Παρακαλώ εισάγετε έγκυρη τιμή στο κουτί μέτρησεων.";
-                String measurement = editText.getText().toString();
-                if (StringUtils.isBlank(measurement)) {
-                    Toast.makeText(MainActivity.this, EMPTY_TEXT_BOX, Toast.LENGTH_LONG).show();
-                } else {
-                    boolean bool = checkInvalidMeasurement(measurement, "0");
-                    if (bool) {
-                        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                        myDB.child("Users").child(username).child("Measurements").child(date).child("Day").setValue(measurement);
-                        removeDayOnlyMeasurementBoxLinearLayout();
+        if (button != null) {
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    String EMPTY_TEXT_BOX = "Δεν είναι δυνατή η αποστολή της μέτρησης. Παρακαλώ εισάγετε έγκυρη τιμή στο κουτί μέτρησεων.";
+                    String measurement = editText.getText().toString();
+                    if (StringUtils.isBlank(measurement)) {
+                        Toast.makeText(MainActivity.this, EMPTY_TEXT_BOX, Toast.LENGTH_LONG).show();
+                    } else {
+                        boolean bool = checkInvalidMeasurement(measurement, "0");
+                        if (bool) {
+                            String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                            myDB.child("Users").child(username).child("Measurements").child(date).child("Day").setValue(measurement);
+                            removeDayOnlyMeasurementBoxLinearLayout();
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     }
 
     private void dayNightMeasurementButtonListener() {
         final Button button = (Button) findViewById(R.id.input_buttonNight);
         final EditText editTextDay = (EditText) findViewById(R.id.editTextDay);
         final EditText editTextNight = (EditText) findViewById(R.id.editTextNight);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                String EMPTY_TEXT_BOX = "Δεν είναι δυνατή η αποστολή της μέτρησης. Παρακαλώ εισάγετε έγκυρες τιμές στο κουτί μέτρησεων.";
-                String measurementDay = editTextDay.getText().toString();
-                String measurementNight = editTextNight.getText().toString();
-                if (StringUtils.isBlank(measurementDay) || StringUtils.isBlank(measurementNight)) {
-                    Toast.makeText(MainActivity.this, EMPTY_TEXT_BOX, Toast.LENGTH_LONG).show();
-                } else {
-                    boolean bool = checkInvalidMeasurement(measurementDay, measurementNight);
-                    if (bool) {
-                        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                        myDB.child("Users").child(username).child("Measurements").child(date).child("Day").setValue(measurementDay);
-                        myDB.child("Users").child(username).child("Measurements").child(date).child("Night").setValue(measurementNight);
-                        removeDayNightMeasurementBoxLinearLayout();
+        if (button != null) {
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    String EMPTY_TEXT_BOX = "Δεν είναι δυνατή η αποστολή της μέτρησης. Παρακαλώ εισάγετε έγκυρες τιμές στο κουτί μέτρησεων.";
+                    String measurementDay = editTextDay.getText().toString();
+                    String measurementNight = editTextNight.getText().toString();
+                    if (StringUtils.isBlank(measurementDay) || StringUtils.isBlank(measurementNight)) {
+                        Toast.makeText(MainActivity.this, EMPTY_TEXT_BOX, Toast.LENGTH_LONG).show();
+                    } else {
+                        boolean bool = checkInvalidMeasurement(measurementDay, measurementNight);
+                        if (bool) {
+                            String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                            myDB.child("Users").child(username).child("Measurements").child(date).child("Day").setValue(measurementDay);
+                            myDB.child("Users").child(username).child("Measurements").child(date).child("Night").setValue(measurementNight);
+                            removeDayNightMeasurementBoxLinearLayout();
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     }
 
     private void showGraphs() {
