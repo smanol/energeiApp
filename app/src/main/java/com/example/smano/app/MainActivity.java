@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -64,12 +65,13 @@ public class MainActivity extends AppCompatActivity {
     private ValueEventListener valueEventListener;
     private ValueEventListener valueEventListenerForBlocks;
     private ValueEventListener valueEventListenerTeam;
+    private ValueEventListener valueEventListenerT;
     private DatabaseReference myDB;
     private MetrhshArrayAdapter metrhshArrayAdapter;
     private int hasNightMeasurements = 0;
     private TextView measurementsLegend;
     private ArrayList<Metrhsh> wholeValuesMetrhseis;
-    private int team;
+    private int team = 0;
     private int countGourounakia =0;
     private TextView gourounakiaText;
     private TextView ExoikonomhshText;
@@ -177,8 +179,6 @@ public class MainActivity extends AppCompatActivity {
         //ένα δοκιμαστικό textView που είναι στο footer layout μαζί με το barchar
         //TextView t =(TextView) findViewById(R.id.hello);
         //t.setText("hi");
-
-        double averageOf3 = getAverageConsumptionOf3(metrhshes);
 
         //Εισαγωγή πληροφοριών σχετικά με την ομάδα για την Συνθήκη νούμερα ένα
 
@@ -311,6 +311,24 @@ public class MainActivity extends AppCompatActivity {
 
     private void attachDatabaseReadListener() {
         if (username != null && !ANONYMOUS.equals(username)) {
+            if (valueEventListenerTeam == null) {
+                valueEventListenerTeam = new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Object t;
+                        if ((t = dataSnapshot.getValue()) != null){
+                            team = Integer.parseInt(t.toString());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                };
+                myDB.child("Users").child(username).child("Team").addValueEventListener(valueEventListenerTeam);
+            }
+
             if (valueEventListener == null) {
                 valueEventListener = new ValueEventListener() {
                     @Override
@@ -384,6 +402,7 @@ public class MainActivity extends AppCompatActivity {
                         createDisplay(metrhshes);
                         checkForMeasurementBoxRemoval(day);
                         checkLayout(counter);//over 1.5   //under 2.5
+                        uploadComparableVariable(countGourounakia);
                     }
 
                     @Override
@@ -400,8 +419,16 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    float block1 = Float.parseFloat(dataSnapshot.child("Block1").getValue().toString());
-                    float block2 = Float.parseFloat(dataSnapshot.child("Block2").getValue().toString());
+                    Object b1 = dataSnapshot.child("Block1").getValue();
+                    float block1 = 0.0f;
+                    if (b1 != null) {
+                        block1 = Float.parseFloat(b1.toString());
+                    }
+                    Object b2 = dataSnapshot.child("Block2").getValue();
+                    float block2 = 0.0f;
+                    if (b2 != null) {
+                        block2 = Float.parseFloat(b2.toString());
+                    }
                     createBlockBarchart(block1, block2);
                 }
 
@@ -411,23 +438,60 @@ public class MainActivity extends AppCompatActivity {
             };
             myDB.child("Blocks").addValueEventListener(valueEventListenerForBlocks);
         }
+    }
 
-        if (valueEventListenerTeam == null) {
-            valueEventListenerTeam = new ValueEventListener() {
+    private void uploadComparableVariable(int countGourounakia) {
+        myDB.child("Users").child(username).child("ComparableVariable").setValue(countGourounakia);
 
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Object t;
-                    if ((t = dataSnapshot.getValue()) != null){
-                        team = Integer.parseInt(t.toString());
+        valueEventListenerT = new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Object t = dataSnapshot.getValue();
+                if (t != null){
+                    team = Integer.parseInt(t.toString());
+                    summationOfPigs();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        myDB.child("Users").child(username).child("Team").addValueEventListener(valueEventListenerT);
+    }
+
+    private void summationOfPigs() {
+        ValueEventListener summation = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                double counter = 0;
+                for (DataSnapshot user : dataSnapshot.getChildren()) {
+                    try {
+                        //if (user.child("Team").equals(myteam)) {
+                        DataSnapshot cv = user.child("ComparableVariable");
+                        if (cv != null) {
+                            Object cvv;
+                            if ((cvv = cv.getValue()) != null) {
+                                counter += Double.parseDouble(cvv.toString());
+                            }
+                        }
+                        //  }
+                    } catch (Exception e) {
+                        ;
                     }
                 }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            };
-            myDB.child("Users").child(username).child("Team").addValueEventListener(valueEventListenerTeam);
+                //if (counter != 0 && myteam != 0) {
+                myDB.child("Blocks").child("Team" + team).setValue(counter);
+                //}
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        //Every user counts his team's piggies
+        if (team != 0) {
+            myDB.child("Users").orderByChild("Team").equalTo(Integer.toString(team)).addValueEventListener(summation);
         }
     }
 
