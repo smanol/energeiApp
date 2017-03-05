@@ -637,17 +637,23 @@ public class MainActivity extends AppCompatActivity {
 
         final EditText editTextDay = (EditText) findViewById(R.id.editTextDay);
         final EditText editTextNight = (EditText) findViewById(R.id.editTextNight);
-        editTextDay.addTextChangedListener(tw);
-        editTextNight.addTextChangedListener(tw);
+        if (editTextDay != null) {
+            editTextDay.addTextChangedListener(tw);
+        }
+        if (editTextNight != null) {
+            editTextNight.addTextChangedListener(tw);
+        }
     }
 
     private void updateButtonState() {
         Button b = (Button) findViewById(R.id.input_buttonNight);
         final EditText editTextDay = (EditText) findViewById(R.id.editTextDay);
         final EditText editTextNight = (EditText) findViewById(R.id.editTextNight);
-        String s1 = editTextDay.getText().toString();
-        String s2 = editTextNight.getText().toString();
-        b.setEnabled(!s1.trim().isEmpty() && !s2.trim().isEmpty());
+        if (editTextDay != null && editTextNight != null) {
+            String s1 = editTextDay.getText().toString();
+            String s2 = editTextNight.getText().toString();
+            b.setEnabled(!s1.trim().isEmpty() && !s2.trim().isEmpty());
+        }
     }
 
     private void registerUserOnDB(FirebaseUser user) {
