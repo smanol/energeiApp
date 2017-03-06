@@ -491,7 +491,7 @@ public class MainActivity extends AppCompatActivity {
         };
         //Every user counts his team's piggies
         if (team != 0) {
-            myDB.child("Users").orderByChild("Team").equalTo(Integer.toString(team)).addValueEventListener(summation);
+            myDB.child("Users").orderByChild("Team").equalTo(Integer.toString(team)).addListenerForSingleValueEvent(summation);
         }
     }
 
