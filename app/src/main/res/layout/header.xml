@@ -174,7 +174,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Καταγεγραμένες Μετρήσεις:"
+            android:text="Καταγεγραμμένες Μετρήσεις:"
             android:textSize="20sp"
             android:id="@+id/measurementsLegend"
             android:layout_marginBottom="10dp"
