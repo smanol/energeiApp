@@ -28,6 +28,7 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView gourounakiaImage;
     private double sumOfSavings;
     private TextView DaysLeft;
+    private long countOfUsers = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,22 +185,6 @@ public class MainActivity extends AppCompatActivity {
         //Εισαγωγή πληροφοριών σχετικά με την ομάδα για την Συνθήκη νούμερα ένα
 
 
-        Teams = (TextView) footer.findViewById(R.id.TheTeamYouBelong);
-
-
-        String teamNote = "?";
-
-        if (team == 1) {
-            teamNote = "A";
-        }
-        if (team == 2) {
-            teamNote = "B";
-        }
-
-
-        Teams.setText("Ανήκετε στην ομάδα " + teamNote);
-
-
         if (countGourounakia > 0) {
 
 
@@ -233,6 +219,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    private void displayTeamsText() {
+        Teams = (TextView) footer.findViewById(R.id.TheTeamYouBelong);
+
+        String teamNote = "?";
+
+        if (team == 1) {
+            teamNote = "A";
+        }
+        if (team == 2) {
+            teamNote = "B";
+        }
+
+        Teams.setText("Ανήκετε στην ομάδα " + teamNote);
+
+    }
 
 
 
@@ -319,6 +321,44 @@ public class MainActivity extends AppCompatActivity {
                         Object t;
                         if ((t = dataSnapshot.getValue()) != null){
                             team = Integer.parseInt(t.toString());
+
+                            displayTeamsText();
+
+                            if (valueEventListenerForBlocks == null) {
+                                valueEventListenerForBlocks = new ValueEventListener() {
+
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        Object t1 = dataSnapshot.child("Team1").getValue();
+                                        float team1 = 0.0f;
+                                        if (t1 != null) {
+                                            team1 = Float.parseFloat(t1.toString());
+                                        }
+                                        Object t2 = dataSnapshot.child("Team2").getValue();
+                                        float team2 = 0.0f;
+                                        if (t2 != null) {
+                                            team2 = Float.parseFloat(t2.toString());
+                                        }
+                                        if (team == 1) {
+                                            createBlockBarchart(team1, team2);
+                                        } else if (team == 2) {
+                                            listerForCountOfUsers();
+                                            getCountOfUsers();
+                                            if (countOfUsers != 0) {
+                                                float averagePigsPerUser = (team1 + team2) / countOfUsers ;
+                                                createBlockBarchart(countGourounakia, averagePigsPerUser);
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                    }
+                                };
+                                myDB.child("Blocks").addValueEventListener(valueEventListenerForBlocks);
+                            }
+
+
                         }
                     }
 
@@ -326,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 };
-                myDB.child("Users").child(username).child("Team").addValueEventListener(valueEventListenerTeam);
+                myDB.child("Users").child(username).child("Team").addListenerForSingleValueEvent(valueEventListenerTeam);
             }
 
             if (valueEventListener == null) {
@@ -414,30 +454,51 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        if (valueEventListenerForBlocks == null) {
-            valueEventListenerForBlocks = new ValueEventListener() {
 
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Object b1 = dataSnapshot.child("Block1").getValue();
-                    float block1 = 0.0f;
-                    if (b1 != null) {
-                        block1 = Float.parseFloat(b1.toString());
-                    }
-                    Object b2 = dataSnapshot.child("Block2").getValue();
-                    float block2 = 0.0f;
-                    if (b2 != null) {
-                        block2 = Float.parseFloat(b2.toString());
-                    }
-                    createBlockBarchart(block1, block2);
-                }
+    }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            };
-            myDB.child("Blocks").addValueEventListener(valueEventListenerForBlocks);
-        }
+    private void getCountOfUsers() {
+        myDB.child("Blocks").child("CountOfUsers").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                countOfUsers = Long.parseLong(dataSnapshot.getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void listerForCountOfUsers() {
+        myDB.child("Users").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                countOfUsers = dataSnapshot.getChildrenCount();
+                //myDB.child("Blocks").child("CountOfUsers").setValue(countOfUsers);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void uploadComparableVariable(int countGourounakia) {
@@ -753,22 +814,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void popupMessage(String message) {
         Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
-
-        /*new AlertDialog.Builder(context)
-                .setTitle("Delete entry")
-                .setMessage("Are you sure you want to delete this entry?")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // continue with delete
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();*/
     }
 
 
@@ -799,7 +844,6 @@ public class MainActivity extends AppCompatActivity {
 
     public double getAverageConsumptionOf3(ArrayList<Metrhsh> metrhshes) {
         double sumMetrhseis = 0;
-        double averageMerthsh = 0;
         if (metrhshes.size() <= 1) {
             return -1;
         } else if (metrhshes.size() == 2){
