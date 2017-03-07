@@ -719,27 +719,28 @@ public class MainActivity extends AppCompatActivity {
         final String correctMessage = "Η μέτρηση που εισάγατε καταχωρήθηκε επιτυχώς.";
         final double MAX_ALLOWED_KILOVAT_PER_DAY = 40;
 
-        double lastDatabaseValue = wholeValuesMetrhseis.get(wholeValuesMetrhseis.size()-1).getDayKilovatora();
-        double measure = Double.parseDouble(measurementDay);
-        double diff = measure - lastDatabaseValue;
+        if (wholeValuesMetrhseis.size() > 0) {
+            double lastDatabaseValue = wholeValuesMetrhseis.get(wholeValuesMetrhseis.size() - 1).getDayKilovatora();
+            double measure = Double.parseDouble(measurementDay);
+            double diff = measure - lastDatabaseValue;
 
-        double diffNight = 0;
-        double measureNight = Double.parseDouble(measurementNight);
-        if (measureNight != 0) {
-            double lastDatabaseValueNight = wholeValuesMetrhseis.get(wholeValuesMetrhseis.size()-1).getNightKilovatora();
-            diffNight = measure - lastDatabaseValueNight;
-        }
+            double diffNight = 0;
+            double measureNight = Double.parseDouble(measurementNight);
+            if (measureNight != 0) {
+                double lastDatabaseValueNight = wholeValuesMetrhseis.get(wholeValuesMetrhseis.size() - 1).getNightKilovatora();
+                diffNight = measure - lastDatabaseValueNight;
+            }
 
-        if (diff > MAX_ALLOWED_KILOVAT_PER_DAY || diffNight > MAX_ALLOWED_KILOVAT_PER_DAY) {
-            popupMessage(largerThan40Message);
-            return false;
-        } else if (diff < 0 || diffNight < 0 ) {
-            popupMessage(smallerThanPreviousMessage);
-            return false;
-        } else {
-            popupMessage(correctMessage);
-            return true;
+            if (diff > MAX_ALLOWED_KILOVAT_PER_DAY || diffNight > MAX_ALLOWED_KILOVAT_PER_DAY) {
+                popupMessage(largerThan40Message);
+                return false;
+            } else if (diff < 0 || diffNight < 0) {
+                popupMessage(smallerThanPreviousMessage);
+                return false;
+            }
         }
+        popupMessage(correctMessage);
+        return true;
     }
 
     private void detachDatabaseReadListener() {
@@ -832,18 +833,6 @@ public class MainActivity extends AppCompatActivity {
         averageMerthsh = sumMetrhseis/metrhshes.size();
         return averageMerthsh;
     }
-
-    private double coins (double kilovatwra, double mean)
-    {
-        Random randomGenerator = new Random();
-
-        int randomInt = randomGenerator.nextInt(100);
-
-        double coinsAmount;
-        coinsAmount = kilovatwra*mean * randomInt;
-        return coinsAmount;
-    }
-
 
     public double getAverageConsumptionOf3(ArrayList<Metrhsh> metrhshes) {
         double sumMetrhseis = 0;
