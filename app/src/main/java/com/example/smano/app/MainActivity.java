@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
@@ -562,6 +563,7 @@ public class MainActivity extends AppCompatActivity {
         if (button != null) {
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
+                    makeNotification();
                     String EMPTY_TEXT_BOX = "Δεν είναι δυνατή η αποστολή της μέτρησης. Παρακαλώ εισάγετε έγκυρη τιμή στο κουτί μέτρησεων.";
                     String measurement = editText.getText().toString();
                     if (StringUtils.isBlank(measurement)) {
@@ -586,6 +588,7 @@ public class MainActivity extends AppCompatActivity {
         if (button != null) {
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
+                    makeNotification();
                     String EMPTY_TEXT_BOX = "Δεν είναι δυνατή η αποστολή της μέτρησης. Παρακαλώ εισάγετε έγκυρες τιμές στο κουτί μέτρησεων.";
                     String measurementDay = editTextDay.getText().toString();
                     String measurementNight = editTextNight.getText().toString();
@@ -861,14 +864,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void makeNotification(){
 
-        Intent myIntent = new Intent(this , NotifyService.class);
-        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getService(MainActivity.this, 0, myIntent, 0);
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 8);
-        calendar.set(Calendar.MINUTE, 00);
-        calendar.set(Calendar.SECOND, 00);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 24*60*60*1000 , pendingIntent);
-    }
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
 
+        Intent intent = new Intent(getApplicationContext(), NotifyService.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmManager.INTERVAL_DAY , pendingIntent);
+    }
 }
