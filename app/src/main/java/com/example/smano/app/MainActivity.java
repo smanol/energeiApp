@@ -132,11 +132,6 @@ public class MainActivity extends AppCompatActivity {
         lv.addFooterView(footer, null, false);
         View header = ((LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.header, null, false);
         lv.addHeaderView(header, null, false);
-
-
-
-
-
     }
 
     public void createDisplay(ArrayList<Metrhsh> metrhshes) {
@@ -204,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
 
             if(sumOfSavings>0)
             {
-                ExoikonomhshText.setText("'Εχετε εξοικονομήσει" + CostEstimate.round(sumOfSavings, 2) + "\u20ac" + " !");
+                ExoikonomhshText.setText("'Εχετε εξοικονομήσει " + CostEstimate.round(sumOfSavings, 2) + "\u20ac" + " !");
                 ExoikonomhshText.setBackgroundColor(Color.parseColor("#90CAF9"));
             }
             //Days Left Text View
@@ -341,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
                                             createBlockBarchart(team1, team2);
                                         } else if (team == 2) {
                                             listerForCountOfUsers();
-                                            getCountOfUsers();
+                                            //getCountOfUsers();
                                             if (countOfUsers != 0) {
                                                 float averagePigsPerUser = (team1 + team2) / countOfUsers ;
                                                 createBlockBarchart(countGourounakia, averagePigsPerUser);
@@ -439,7 +434,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         createDisplay(metrhshes);
                         checkForMeasurementBoxRemoval(day);
-                        checkLayout(counter);//over 1.5   //under 2.5
+                        checkLayout(counter);
                         uploadComparableVariable(countGourounakia);
                     }
 
