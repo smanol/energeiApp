@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,23 +71,30 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
         cost.setText(costOfDay +" " +"\u20ac");
 
 
-        if (metrhsh.getSumKilovatora()>1.5*metrhsh.getAverageof3()) {
+
+
+        if (metrhsh.getSumKilovatora()>1.5*metrhsh.getAverage()) {
             cost.setTextColor(Color.parseColor("#F9A825"));
         }
-        else if (metrhsh.getSumKilovatora()>1.2*metrhsh.getAverageof3()) {
-            cost.setTextColor(Color.parseColor("#FFEA00"));
+        else if (metrhsh.getSumKilovatora()>1.2*metrhsh.getAverage()) {
+            cost.setTextColor(Color.parseColor("#FFD54F"));
         }
-        else if (metrhsh.getSumKilovatora()>1*metrhsh.getAverageof3()) {
+        else if (metrhsh.getSumKilovatora()>1*metrhsh.getAverage()) {
             cost.setTextColor(Color.parseColor("#1E88E5"));
         }
-        else if (metrhsh.getSumKilovatora()>0.8*metrhsh.getAverageof3()) {
+        else if (metrhsh.getSumKilovatora()>0.8*metrhsh.getAverage()) {
             cost.setTextColor(Color.parseColor("#00BCD4"));
         }
         else
             {
-            cost.setTextColor(Color.parseColor("#00E676"));
+            cost.setTextColor(Color.parseColor("#00C853"));
+                cost.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);;
                 cost.setTypeface(null, Typeface.BOLD);
+                cost.setText(costOfDay +" " +"\u20ac"+ " !");
         }
+
+
+
 
 //        TextView lowerBill = (TextView) view.findViewById(R.id.Bill);
 //

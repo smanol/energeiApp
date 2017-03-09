@@ -159,61 +159,184 @@
         </LinearLayout>
 
     </LinearLayout>
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Γενικά Στοιχεία"-->
+        <!--android:textSize="20sp"-->
+        <!--android:padding="12dp"-->
+        <!--android:textStyle="bold"/>-->
+    <!--<RelativeLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:padding="8dp"-->
+        <!--android:background="#FFFFFF"-->
+        <!--&gt;-->
+        <!--<ImageView-->
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
+            <!--android:id="@+id/pigsImage"-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:layout_marginBottom="10dp"-->
+
+            <!--/>-->
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textSize="18sp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_alignBottom="@id/pigsImage"-->
+
+            <!--android:id="@+id/daysLeft"-->
+
+
+
+            <!--/>-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/exoikonomhsh"/>-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/pigsText"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text=""-->
+            <!--android:layout_toLeftOf="@id/pigsImage"-->
+            <!--android:layout_alignBottom="@id/pigsImage"-->
+            <!--android:textSize="18sp"-->
+            <!--android:textStyle="bold"-->
+            <!--/>-->
+
+
+    <!--</RelativeLayout>-->
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:background="#FFFFFF"
-        >
-        <ImageView
-
-            android:id="@+id/pigsImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-
-            />
+        android:orientation="vertical">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:text="Γενικά Στοιχεία"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_alignParentLeft="true"
-            android:layout_alignBottom="@id/pigsImage"
-
-            android:id="@+id/daysLeft"
-
-
-
+            android:padding="12dp"
             />
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/exoikonomhsh"/>
+            android:padding="8dp"
+            android:background="#FFFFFF"
+            >
 
-        <TextView
-            android:id="@+id/pigsText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:layout_toLeftOf="@id/pigsImage"
-            android:layout_alignBottom="@id/pigsImage"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Μέρες που απομένουν"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Μέσος Όρος Κατανάλωσης"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Χρέωση Έως Τώρα"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Λογαριασμός  (Εκτίμηση)"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Μείωση (Εκτίμηση)"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Σύνολο Πόντων"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ομάδα/Κατάταξη"
+                    android:id="@+id/Omada.Katataksh"/>
 
 
-    </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Μέρες που Απομένουν"
+                    android:id="@+id/MeresPouApomenoyn"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Μέσος Όρος Κατανάλωσης"
+                    android:id="@+id/MOKatanalwshs"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Χρέωση Έως Τώρα"
+                    android:id="@+id/XrewshEwsTwra"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Λογαριασμός  (Εκτίμηση)"
+                    android:id="@+id/LogariasmosEktimhsh"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Μείωση (Εκτίμηση)"
+                    android:id="@+id/MeiwshEktimhsh"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Σύνολο Πόντων"
+                    android:id="@+id/SynoloPontwn"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ομάδα/Κατάταξη"
+                    android:id="@+id/Omada.KatatakshInput"
+                    />
+;l
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/measurementLegendLL"
         android:orientation="vertical"
+        android:padding="12dp"
         >
 
 
@@ -222,11 +345,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Καταγεγραμμένες Μετρήσεις:"
+            android:text="Καταγεγραμμένες Μετρήσεις"
             android:textSize="20sp"
             android:id="@+id/measurementsLegend"
-            android:layout_marginBottom="10dp"
-            android:textStyle="bold"/>
+android:textStyle="bold"
+
+            />
 
 
 

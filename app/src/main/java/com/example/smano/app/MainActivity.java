@@ -4,7 +4,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -57,6 +56,12 @@ public class MainActivity extends AppCompatActivity {
     BarChart barChart;
     ListView lv;
     TextView Teams;
+    TextView MOKatanalwsh;
+    TextView XrewshEwsTwra;
+    TextView LogariasmosE;
+    TextView MeiwshE;
+    TextView OmadaKatanalwshInput;
+    TextView OmadaKatanalwsh;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     public static final int RC_SIGN_IN = 1;
@@ -174,38 +179,38 @@ public class MainActivity extends AppCompatActivity {
         lv.setAdapter(metrhshArrayAdapter);
 
 
-        if (countGourounakia > 0) {
+
 
 
             //Είκόνα για γουρουνάκια
 
-            gourounakiaImage = (ImageView) findViewById(R.id.pigsImage);
-            gourounakiaImage.setImageResource(R.drawable.piggy);
-
+//            gourounakiaImage = (ImageView) findViewById(R.id.pigsImage);
+//            gourounakiaImage.setImageResource(R.drawable.piggy);
+//
 
             //Στοιχεία για γουρουνάκια
 
-            gourounakiaText = (TextView) findViewById(R.id.pigsText);
-
-            gourounakiaText.setText(countGourounakia + "X ");
+            gourounakiaText = (TextView) findViewById(R.id.SynoloPontwn);
+            gourounakiaText.setText(countGourounakia+"");
 
             //Στοιχεία για την συνολική εξοικονόμηση
 
-            ExoikonomhshText = (TextView) findViewById(R.id.exoikonomhsh);
+            ExoikonomhshText = (TextView) findViewById(R.id.MeiwshEktimhsh);
 
-            if(sumOfSavings>0)
-            {
-                ExoikonomhshText.setText("'Εχετε εξοικονομήσει " + CostEstimate.round(sumOfSavings, 2) + "\u20ac" + " !");
-                ExoikonomhshText.setBackgroundColor(Color.parseColor("#90CAF9"));
+            if (sumOfSavings>0) {
+                ExoikonomhshText.setText(CostEstimate.round(sumOfSavings, 2) + "\u20ac");
             }
+            else { ExoikonomhshText.setText("0 "+"\u20ac");}
+
             //Days Left Text View
 
 
-            DaysLeft = (TextView) findViewById(R.id.daysLeft);
+            DaysLeft = (TextView) findViewById(R.id.MeresPouApomenoyn);
+            int meres=14-metrhshes.size();
+            DaysLeft.setText(""+meres);
 
 
-            DaysLeft.setText( "Έχετε συμπληρώσει : " +"\n" + (metrhshes.size())+" /14 μέρες" );
-        }
+
     }
 
 
@@ -216,12 +221,15 @@ public class MainActivity extends AppCompatActivity {
 
         if (team == 1) {
             teamNote = "A";
+            Teams.setText("Ανήκετε στην ομάδα " + teamNote);
+            //Diafora
         }
         if (team == 2) {
             teamNote = "B";
+            //Katataksh
         }
 
-        Teams.setText("Ανήκετε στην ομάδα " + teamNote);
+
 
     }
 

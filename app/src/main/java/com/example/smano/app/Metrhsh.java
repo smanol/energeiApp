@@ -10,6 +10,7 @@ public class Metrhsh {
     private Kilovatora kilo = new Kilovatora();
     private int image;
     private double av3;
+    private double av;
     int gourounakia=0;
     double savings = 0;
 
@@ -17,6 +18,7 @@ public class Metrhsh {
     public Metrhsh(String day, double dayKilovatora, double nightKilovatora, double average, double averageOf3) {
         this.day = day;
         this.av3 = averageOf3;
+        this.av = average;
         kilo.setDayKilovatora(dayKilovatora);
         kilo.setNightKilovatora(nightKilovatora);
 
@@ -40,6 +42,8 @@ public class Metrhsh {
     public int getGourounakia() {return gourounakia;}
 
     public double getAverageof3() {return av3;}
+
+    public double getAverage() {return av;}
 
     public double getSavings() {return savings;}
 
