@@ -136,8 +136,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void createDisplay(ArrayList<Metrhsh> metrhshes) {
-        //Adding footer on the ListView
-        metrhshes = transformArraylistsDatesToWords(metrhshes);
+
         // Εδω βάζω τις τιμές απο την λίστα metrhshes στο γράφημα
         // εδω χρείάζεται να γίνει με for loop για να μπαίνουν αυτόματα όλες οι τιμές της λίστας metrhshes
         Entries.clear();
@@ -153,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
         // εδω χρείάζεται να γίνει με for loop για να μπαίνουν αυτόματα όλες οι τιμές της λίστας metrhshes
         theDays.clear();
         for (int i = 0; i < metrhshes.size(); i++) {
-            theDays.add(metrhshes.get(i).getDay());
+            theDays.add(transformDateToDayMonth(metrhshes.get(i).getDay()));
         }
         // Τοποθέτηση δεδομένων στο barchar
         theData = new BarData(theDays, barDataSet);
@@ -170,13 +169,10 @@ public class MainActivity extends AppCompatActivity {
         barChar.setTouchEnabled(true);
         barChar.getAxisLeft().setStartAtZero(true);
         barChar.setNoDataText("Description that you want");
-        metrhshArrayAdapter = new MetrhshArrayAdapter(this, 0, metrhshes);
-        lv.setAdapter(metrhshArrayAdapter);
-        //ένα δοκιμαστικό textView που είναι στο footer layout μαζί με το barchar
-        //TextView t =(TextView) findViewById(R.id.hello);
-        //t.setText("hi");
 
-        //Εισαγωγή πληροφοριών σχετικά με την ομάδα για την Συνθήκη νούμερα ένα
+        ArrayList<Metrhsh> metrhshesForAdapter = transformArraylistsDatesToWords(metrhshes);
+        metrhshArrayAdapter = new MetrhshArrayAdapter(this, 0, metrhshesForAdapter);
+        lv.setAdapter(metrhshArrayAdapter);
 
 
         if (countGourounakia > 0) {
@@ -266,7 +262,33 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
             return null;
         }
+        DateFormat targetFormat = new SimpleDateFormat("EEEE d MMMM", new Locale("el", "GR"));
+        return targetFormat.format(date);
+    }
+
+    private String transformDateToWordsForCheck(String inputDate) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        try {
+            date = df.parse(inputDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
         DateFormat targetFormat = new SimpleDateFormat("dd MMMM", new Locale("el", "GR"));
+        return targetFormat.format(date);
+    }
+
+    private String transformDateToDayMonth(String inputDate) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        try {
+            date = df.parse(inputDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+        DateFormat targetFormat = new SimpleDateFormat("dd/MM", new Locale("el", "GR"));
         return targetFormat.format(date);
     }
 
@@ -343,8 +365,7 @@ public class MainActivity extends AppCompatActivity {
                                         if (team == 1) {
                                             createBlockBarchart(team1, team2);
                                         } else if (team == 2) {
-                                            listerForCountOfUsers();
-                                            //getCountOfUsers();
+                                            listenForCountOfUsers();
                                             if (countOfUsers != 0) {
                                                 float averagePigsPerUser = (team1 + team2) / countOfUsers ;
                                                 createBlockBarchart(countGourounakia, averagePigsPerUser);
@@ -358,8 +379,6 @@ public class MainActivity extends AppCompatActivity {
                                 };
                                 myDB.child("Blocks").addValueEventListener(valueEventListenerForBlocks);
                             }
-
-
                         }
                     }
 
@@ -455,30 +474,13 @@ public class MainActivity extends AppCompatActivity {
                 myDB.child("Users").child(username).child("Measurements").addValueEventListener(valueEventListener);
             }
         }
-
-
     }
 
-    private void getCountOfUsers() {
-        myDB.child("Blocks").child("CountOfUsers").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                countOfUsers = Long.parseLong(dataSnapshot.getValue().toString());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void listerForCountOfUsers() {
+    private void listenForCountOfUsers() {
         myDB.child("Users").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 countOfUsers = dataSnapshot.getChildrenCount();
-                //myDB.child("Blocks").child("CountOfUsers").setValue(countOfUsers);
             }
 
             @Override
@@ -676,7 +678,7 @@ public class MainActivity extends AppCompatActivity {
             String today = new SimpleDateFormat("dd MMMM", new Locale("el", "GR")).format(new Date());
             String formattedDay = "";
             try {
-                formattedDay = transformDateToWords(day);
+                formattedDay = transformDateToWordsForCheck(day);
             } catch (Exception e) {
                 return;
             }
