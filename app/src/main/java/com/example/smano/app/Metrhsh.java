@@ -9,11 +9,14 @@ public class Metrhsh {
     private String day;
     private Kilovatora kilo = new Kilovatora();
     private int image;
+    private double av3;
     int gourounakia=0;
     double savings = 0;
 
+
     public Metrhsh(String day, double dayKilovatora, double nightKilovatora, double average, double averageOf3) {
         this.day = day;
+        this.av3 = averageOf3;
         kilo.setDayKilovatora(dayKilovatora);
         kilo.setNightKilovatora(nightKilovatora);
 
@@ -24,7 +27,7 @@ public class Metrhsh {
 
         // Calculation of total  savings
         if (averageOf3 != -1) {
-           savings = CostEstimate.calculateCostDay((dayKilovatora + nightKilovatora) - averageOf3) /60D;
+           savings = CostEstimate.calculateCostDay( averageOf3 - (dayKilovatora + nightKilovatora)) /60D;
         }
     }
 
@@ -35,6 +38,8 @@ public class Metrhsh {
     }
 
     public int getGourounakia() {return gourounakia;}
+
+    public double getAverageof3() {return av3;}
 
     public double getSavings() {return savings;}
 

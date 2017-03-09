@@ -2,6 +2,8 @@ package com.example.smano.app;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +33,8 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
         this.metrhshes = objects;
     }
 
-    //called when rendering the list
-    public View getView(int position, View convertView, ViewGroup parent) {
+        //called when rendering the list
+        public View getView(int position, View convertView, ViewGroup parent) {
 
         //get the property we are displaying
         Metrhsh metrhsh = metrhshes.get(position);
@@ -41,27 +43,63 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.layout, null);
 
-        TextView hmeromhnia = (TextView) view.findViewById(R.id.textView1);
-        TextView kwh = (TextView) view.findViewById(R.id.textView2);
 
-        ImageView image = (ImageView) view.findViewById(R.id.imageView1);
-
-
-        //set address and description
+        // Date Configuration
+        TextView hmeromhnia = (TextView) view.findViewById(R.id.Date);
         String hmeromhnias = metrhsh.getDay();
         hmeromhnia.setText(hmeromhnias);
 
+        //ImageView Configuration
+        ImageView image = (ImageView) view.findViewById(R.id.image);
+        image.setImageResource(metrhsh.getImage());
 
         //set price and rental attributes
         //τώρα μπορεί να κάνει και πρόσθεση
         double totalBillCost = CostEstimate.calculateCostDay(metrhsh.getDayKilovatora()) + CostEstimate.calculateCostNight(metrhsh.getNightKilovatora());
         double costOfDay = CostEstimate.round(totalBillCost/60D, 2);
-        kwh.setText( "Κατανάλωση: " + metrhsh.getSumKilovatora()+ "kWh"+"\n" + "Κόστος: " + costOfDay +" " +"\u20ac" + "\n" + "Αν ξοδεύατε κάθε μέρα όσο σήμερα ο λογαριασμός θα ήταν " + totalBillCost + "\u20ac" );
 
 
-        //get the image associated with this property
 
-        image.setImageResource(metrhsh.getImage());
+
+
+        TextView kwh = (TextView) view.findViewById(R.id.KwhN);
+        kwh.setText(metrhsh.getSumKilovatora()+ "kWh");
+
+
+        TextView cost = (TextView) view.findViewById(R.id.CostN);
+        cost.setText(costOfDay +" " +"\u20ac");
+
+
+        if (metrhsh.getSumKilovatora()>1.5*metrhsh.getAverageof3()) {
+            cost.setTextColor(Color.parseColor("#F9A825"));
+        }
+        else if (metrhsh.getSumKilovatora()>1.2*metrhsh.getAverageof3()) {
+            cost.setTextColor(Color.parseColor("#FFEA00"));
+        }
+        else if (metrhsh.getSumKilovatora()>1*metrhsh.getAverageof3()) {
+            cost.setTextColor(Color.parseColor("#1E88E5"));
+        }
+        else if (metrhsh.getSumKilovatora()>0.8*metrhsh.getAverageof3()) {
+            cost.setTextColor(Color.parseColor("#00BCD4"));
+        }
+        else
+            {
+            cost.setTextColor(Color.parseColor("#00E676"));
+                cost.setTypeface(null, Typeface.BOLD);
+        }
+
+//        TextView lowerBill = (TextView) view.findViewById(R.id.Bill);
+//
+//        if ( metrhsh.getSavings()>0)
+//        {
+//            lowerBill.setText( " ** Μείωση Λογαριασμού: " + metrhsh.getSavings()*60D + "\u20ac" +" ! **"  );
+//
+//        }
+//
+//        //get the image associated with this property
+
+
+
 
 
 

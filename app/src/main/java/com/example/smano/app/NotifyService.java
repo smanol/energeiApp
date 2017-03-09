@@ -6,7 +6,10 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.provider.Settings;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 /**
@@ -26,19 +29,25 @@ public class NotifyService extends BroadcastReceiver {
 
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 100, repeating_intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
+        Uri sound = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.nsound);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(R.mipmap.lightbulb)
                 .setContentTitle("Ήρθε η ώρα...")
                 .setContentText("Για τη σημερινή μέτρηση!")
-                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+                .setSound(sound)
                 .setDefaults(Notification.DEFAULT_VIBRATE)
-                .setAutoCancel(true);
-//        Uri sound = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.nsound);
+                .setAutoCancel(true)
+                .setLargeIcon(largeIcon(context));
+
 //        mBuilder.setSound(sound);
 
         notificationManager.notify(100, mBuilder.build());
 
+    }
+    private static Bitmap largeIcon (Context context){
+        Resources res = context.getResources();
+        Bitmap largeIcon = BitmapFactory.decodeResource(res,R.drawable.lightbulb);
+        return largeIcon;
     }
 }

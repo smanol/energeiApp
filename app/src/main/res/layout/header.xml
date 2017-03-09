@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:id="@+id/eisagwgiko"
-        android:text="Καλώς ήρθατε στην εφαρμογή ΕνέργειApp! Για δύο εβδομάδες θα παρακολουθήσουμε την οικιακή κατανάλωση ρεύματος. Απαραίτητη είναι η καθημερινή εισαγωγή στο κατάλληλο πλαίσιο της ένδειξης του ρολογιού της ΔΕΗ μια καθορισμένη ώρα. Αν έχετε γενικό οικιακό τιμολόγιο εισάγετε την ένδειξη του μετρητή στο πλαίσιο γενικού οικιακού τιμολογίου με τη μονή θέση εισαγωγής. Αν έχετε νυχτερινό νυχτερινό τιμολόγιο εισάγετε την μέτρηση στο πλαίσιο νυχτερινού με τις με τις δύο θέσεις εισαγωγής, για τη κανονική και την μειωμένη τιμολόγηση. Στη συνέχεια η διαφορά στην κατανάλωση και το εκτιμώμενο κόστος θα υπολογίζεται αυτόματα. Τα πρώτα δεδομένα θα είναι διαθέσιμα μετά τη δεύτερη καταχώρηση."
+        android:text="Καλώς ήρθατε στην εφαρμογή ΕνέργειApp! Για δύο εβδομάδες θα παρακολουθήσουμε την οικιακή κατανάλωση ρεύματος. Απαραίτητη είναι η καθημερινή εισαγωγή στο κατάλληλο πλαίσιο της ένδειξης του ρολογιού της ΔΕΗ. Αν έχετε γενικό οικιακό τιμολόγιο εισάγετε την ένδειξη του μετρητή στο πλαίσιο γενικού οικιακού τιμολογίου με τη μονή θέση εισαγωγής. Αν έχετε νυχτερινό νυχτερινό τιμολόγιο εισάγετε την μέτρηση στο πλαίσιο νυχτερινού με τις με τις δύο θέσεις εισαγωγής, για τη κανονική και την μειωμένη τιμολόγηση. Στη συνέχεια η διαφορά στην κατανάλωση και το εκτιμώμενο κόστος θα υπολογίζεται αυτόματα. Τα πρώτα δεδομένα θα είναι διαθέσιμα μετά τη δεύτερη καταχώρηση."
         />
 
 
@@ -160,7 +160,55 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:background="#FFFFFF"
+        >
+        <ImageView
 
+            android:id="@+id/pigsImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_alignParentLeft="true"
+            android:layout_alignBottom="@id/pigsImage"
+
+            android:id="@+id/daysLeft"
+
+
+
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/exoikonomhsh"/>
+
+        <TextView
+            android:id="@+id/pigsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_toLeftOf="@id/pigsImage"
+            android:layout_alignBottom="@id/pigsImage"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            />
+
+
+    </RelativeLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -184,47 +232,7 @@
 
 
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
-            <ImageView
 
-                android:id="@+id/pigsImage"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_alignParentLeft="true"
-                android:layout_alignBottom="@id/pigsImage"
-
-                android:id="@+id/daysLeft"
-
-
-
-                />
-
-            <TextView
-                android:id="@+id/pigsText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:layout_toLeftOf="@id/pigsImage"
-                android:layout_alignBottom="@id/pigsImage"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                />
-
-
-        </RelativeLayout>
     </LinearLayout>
 
 </LinearLayout>
