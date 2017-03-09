@@ -2,6 +2,7 @@ package com.example.smano.app;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -335,6 +336,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void attachDatabaseReadListener() {
+
+        final ProgressDialog dialog=new ProgressDialog(this);
+        dialog.setMessage("Παρακαλώ Περιμένετε...");
+        dialog.setCancelable(false);
+        dialog.setInverseBackgroundForced(false);
+        dialog.show();
+
         if (username != null && !ANONYMOUS.equals(username)) {
             if (valueEventListenerTeam == null) {
                 valueEventListenerTeam = new ValueEventListener() {
@@ -462,6 +470,7 @@ public class MainActivity extends AppCompatActivity {
                         createDisplay(metrhshes);
                         checkForMeasurementBoxRemoval(day);
                         checkLayout(counter);
+                        dialog.hide();
                         uploadComparableVariable(countGourounakia);
                     }
 
