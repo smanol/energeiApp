@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView measurementsLegend;
     private ArrayList<Metrhsh> wholeValuesMetrhseis;
     private int team = 0;
-    private int countGourounakia =0;
+    private int countGourounakia = 0;
     private TextView gourounakiaText;
     private TextView ExoikonomhshText;
     private ImageView gourounakiaImage;
@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView DaysLeft;
     private long countOfUsers = 0;
     private TextView moBase;
+    private int ranking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,57 +211,57 @@ public class MainActivity extends AppCompatActivity {
         int meres = 14 - metrhshes.size();
         DaysLeft.setText("" + meres);
 
-        if(metrhshes.size()>2){
-        MOKatanalwsh = (TextView) findViewById(R.id.MOKatanalwshs);
+        if (metrhshes.size() > 2) {
+            MOKatanalwsh = (TextView) findViewById(R.id.MOKatanalwshs);
 
-        MOKatanalwsh.setText(CostEstimate.round(getAverageConsumption(metrhshes), 2) + " KWh");
+            MOKatanalwsh.setText(CostEstimate.round(getAverageConsumption(metrhshes), 2) + " KWh");
 
-        LogariasmosE = (TextView) findViewById(R.id.LogariasmosEktimhsh);
+            LogariasmosE = (TextView) findViewById(R.id.LogariasmosEktimhsh);
 
-        Double kwhEwsTwraDay = wholeValuesMetrhseis.get(metrhshes.size()).getDayKilovatora() - wholeValuesMetrhseis.get(0).getDayKilovatora();
+            Double kwhEwsTwraDay = wholeValuesMetrhseis.get(metrhshes.size()).getDayKilovatora() - wholeValuesMetrhseis.get(0).getDayKilovatora();
 
-        Double kwhEwsTwraNight = wholeValuesMetrhseis.get(metrhshes.size()).getNightKilovatora() - wholeValuesMetrhseis.get(0).getNightKilovatora();
+            Double kwhEwsTwraNight = wholeValuesMetrhseis.get(metrhshes.size()).getNightKilovatora() - wholeValuesMetrhseis.get(0).getNightKilovatora();
 
-        Double costEwsTwraDay = CostEstimate.calculateCostDay(kwhEwsTwraDay, metrhshes.size()) / 120 * metrhshes.size();
+            Double costEwsTwraDay = CostEstimate.calculateCostDay(kwhEwsTwraDay, metrhshes.size()) / 120 * metrhshes.size();
 
-        Double costEwsTwraNight = CostEstimate.calculateCostNight(kwhEwsTwraNight, metrhshes.size()) / 120 * metrhshes.size();
+            Double costEwsTwraNight = CostEstimate.calculateCostNight(kwhEwsTwraNight, metrhshes.size()) / 120 * metrhshes.size();
 
-        Double xrewshEwsTwra = costEwsTwraDay + costEwsTwraNight;
+            Double xrewshEwsTwra = costEwsTwraDay + costEwsTwraNight;
 
-        XrewshEwsTwra = (TextView) findViewById(R.id.XrewshEwsTwra);
+            XrewshEwsTwra = (TextView) findViewById(R.id.XrewshEwsTwra);
 
-        XrewshEwsTwra.setText(CostEstimate.round(xrewshEwsTwra, 2) + " \u20ac");
+            XrewshEwsTwra.setText(CostEstimate.round(xrewshEwsTwra, 2) + " \u20ac");
 
-        Double logariasmosE = CostEstimate.calculateCostDay(kwhEwsTwraDay, metrhshes.size())+CostEstimate.calculateCostNight(kwhEwsTwraNight, metrhshes.size());
+            Double logariasmosE = CostEstimate.calculateCostDay(kwhEwsTwraDay, metrhshes.size())+CostEstimate.calculateCostNight(kwhEwsTwraNight, metrhshes.size());
 
-        LogariasmosE.setText(CostEstimate.round(logariasmosE,2)+" \u20ac");
+            LogariasmosE.setText(CostEstimate.round(logariasmosE,2)+" \u20ac");
 
-        TextView averageOf3kwh = (TextView) findViewById(R.id.MOKatanalwshsBase);
-        double averO3 = getAverageConsumptionOf3DayInit(metrhshes)+getAverageConsumptionOf3NightInit(metrhshes);
-        double averageOf3 = CostEstimate.round((averO3),2);
-        averageOf3kwh.setText(averageOf3+" KWh");
-
-
-        TextView consumptionOf3 =(TextView) findViewById(R.id.MeanCostBase);
-        double consumptionOf3Cost = (CostEstimate.calculateCostDay(getAverageConsumptionOf3DayInit(metrhshes),1)+CostEstimate.calculateCostNight(getAverageConsumptionOf3NightInit(metrhshes),1))/120;
-        consumptionOf3.setText(CostEstimate.round(consumptionOf3Cost,2)+" \u20ac");
-
-        TextView BillOf3 =(TextView) findViewById(R.id.CostProjectionBase);
-        double consumptionOf3Bill = (CostEstimate.calculateCostDay(getAverageConsumptionOf3DayInit(metrhshes),1)+CostEstimate.calculateCostNight(getAverageConsumptionOf3NightInit(metrhshes),1));
-        BillOf3.setText(CostEstimate.round(consumptionOf3Bill,2)+" \u20ac");
+            TextView averageOf3kwh = (TextView) findViewById(R.id.MOKatanalwshsBase);
+            double averO3 = getAverageConsumptionOf3DayInit(metrhshes)+getAverageConsumptionOf3NightInit(metrhshes);
+            double averageOf3 = CostEstimate.round((averO3),2);
+            averageOf3kwh.setText(averageOf3+" KWh");
 
 
-        TextView MeiwshEktimhsh =(TextView) findViewById(R.id.MeiwshEktimhsh);
+            TextView consumptionOf3 =(TextView) findViewById(R.id.MeanCostBase);
+            double consumptionOf3Cost = (CostEstimate.calculateCostDay(getAverageConsumptionOf3DayInit(metrhshes),1)+CostEstimate.calculateCostNight(getAverageConsumptionOf3NightInit(metrhshes),1))/120;
+            consumptionOf3.setText(CostEstimate.round(consumptionOf3Cost,2)+" \u20ac");
 
-        double meiwshEkt = CostEstimate.round(consumptionOf3Bill,2)-CostEstimate.round(logariasmosE,2);
+            TextView BillOf3 =(TextView) findViewById(R.id.CostProjectionBase);
+            double consumptionOf3Bill = (CostEstimate.calculateCostDay(getAverageConsumptionOf3DayInit(metrhshes),1)+CostEstimate.calculateCostNight(getAverageConsumptionOf3NightInit(metrhshes),1));
+            BillOf3.setText(CostEstimate.round(consumptionOf3Bill,2)+" \u20ac");
 
-        if (meiwshEkt>0 ) {
-            MeiwshEktimhsh.setText(meiwshEkt + " \u20ac");
+
+            TextView MeiwshEktimhsh =(TextView) findViewById(R.id.MeiwshEktimhsh);
+
+            double meiwshEkt = CostEstimate.round(consumptionOf3Bill,2)-CostEstimate.round(logariasmosE,2);
+
+            if (meiwshEkt>0 ) {
+                MeiwshEktimhsh.setText(meiwshEkt + " \u20ac");
+            }
+            else{
+                MeiwshEktimhsh.setText(0 + " \u20ac");
+            }
         }
-        else{
-            MeiwshEktimhsh.setText(0 + " \u20ac");
-        }
-    }
     }
 
 
@@ -536,6 +537,7 @@ public class MainActivity extends AppCompatActivity {
                         checkLayout(counter);
                         dialog.hide();
                         uploadComparableVariable(countGourounakia);
+                        getRanking();
                     }
 
                     @Override
@@ -632,6 +634,33 @@ public class MainActivity extends AppCompatActivity {
             myDB.child("Users").orderByChild("Team").equalTo(Integer.toString(team)).addListenerForSingleValueEvent(summation);
         }
     }
+
+    private void getRanking() {
+        ValueEventListener rankingListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ranking = 1;
+                for (DataSnapshot user : dataSnapshot.getChildren()) {
+                   try {
+                       Object val = user.child("ComparableVariable").getValue();
+                       String str = val.toString();
+                       int l = Integer.valueOf(str);
+                       if (l > countGourounakia) {
+                           ranking++;
+                       }
+                   } catch (Exception e) {
+                       ;
+                   }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        // Count the ranking by retrieving the users that have a greater ComparableVariable value
+        myDB.child("Users").orderByChild("ComparableVariable").startAt(countGourounakia).addListenerForSingleValueEvent(rankingListener);
+    }
+
 
     private void dayOnlyMeasurementButtonListener() {
         final Button button = (Button) findViewById(R.id.input_button);
