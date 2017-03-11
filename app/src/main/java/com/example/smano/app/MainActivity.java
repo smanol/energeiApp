@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView measurementsLegend;
     private ArrayList<Metrhsh> wholeValuesMetrhseis;
     private int team = 0;
-    private int countGourounakia =0;
+    private int countGourounakia = 0;
     private TextView gourounakiaText;
     private TextView ExoikonomhshText;
     private ImageView gourounakiaImage;
@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView DaysLeft;
     private long countOfUsers = 0;
     private TextView moBase;
+    private int ranking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -549,6 +550,7 @@ public class MainActivity extends AppCompatActivity {
                         checkLayout(counter);
                         dialog.hide();
                         uploadComparableVariable(countGourounakia);
+                        getRanking();
                     }
 
                     @Override
@@ -645,6 +647,33 @@ public class MainActivity extends AppCompatActivity {
             myDB.child("Users").orderByChild("Team").equalTo(Integer.toString(team)).addListenerForSingleValueEvent(summation);
         }
     }
+
+    private void getRanking() {
+        ValueEventListener rankingListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ranking = 1;
+                for (DataSnapshot user : dataSnapshot.getChildren()) {
+                   try {
+                       Object val = user.child("ComparableVariable").getValue();
+                       String str = val.toString();
+                       int l = Integer.valueOf(str);
+                       if (l > countGourounakia) {
+                           ranking++;
+                       }
+                   } catch (Exception e) {
+                       ;
+                   }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        // Count the ranking by retrieving the users that have a greater ComparableVariable value
+        myDB.child("Users").orderByChild("ComparableVariable").startAt(countGourounakia).addListenerForSingleValueEvent(rankingListener);
+    }
+
 
     private void dayOnlyMeasurementButtonListener() {
         final Button button = (Button) findViewById(R.id.input_button);
