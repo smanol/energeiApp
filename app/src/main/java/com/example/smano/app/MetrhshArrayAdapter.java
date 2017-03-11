@@ -3,13 +3,12 @@ package com.example.smano.app;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -46,79 +45,73 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
 
 
         // Date Configuration
-        TextView hmeromhnia = (TextView) view.findViewById(R.id.Date);
+        TextView hmeromhnia = (TextView) view.findViewById(R.id.ArrayAdapterDate);
         String hmeromhnias = metrhsh.getDay();
         hmeromhnia.setText(hmeromhnias);
 
-        //ImageView Configuration
-        ImageView image = (ImageView) view.findViewById(R.id.image);
-        image.setImageResource(metrhsh.getImage());
 
         //set price and rental attributes
         //τώρα μπορεί να κάνει και πρόσθεση
-        double totalBillCost = CostEstimate.calculateCostDay(metrhsh.getDayKilovatora()) + CostEstimate.calculateCostNight(metrhsh.getNightKilovatora());
-        double costOfDay = CostEstimate.round(totalBillCost/60D, 2);
+
+        double totalBillCost = CostEstimate.calculateCostDay(metrhsh.getDayKilovatora(),1) + CostEstimate.calculateCostNight(metrhsh.getNightKilovatora(),1);
+        double costOfDay = CostEstimate.round(totalBillCost/120D, 2);
+        double percentage = (metrhsh.getAverageof3()- metrhsh.getSumKilovatora())/metrhsh.getAverageof3()*100;
+        double percentageValue = (CostEstimate.round(percentage,1));
+
+        double xrewshTetramhnoyAverageOf3 =CostEstimate.calculateCostDay(metrhsh.getAverageof3Day(),1) + CostEstimate.calculateCostNight(metrhsh.getAverageof3Night(),1);
+            metrhsh.getAverageof3();
+        double difference =  CostEstimate.round(xrewshTetramhnoyAverageOf3 -  totalBillCost,2);
 
 
+            if (metrhsh.getAverageof3()>= metrhsh.getSumKilovatora()){
+                TextView percentageText = (TextView) view.findViewById(R.id.ExtraBoxText);
+                percentageText.setText("Συγχαρητήρια μειώσατε την κατανάλωση σας σε ποσοστό "+percentageValue+"%."+"\nΑν καταναλώνατε κάθε μέρα όσο σήμερα ο λογαριασμός τετραμήνου θα ήταν "+ totalBillCost +"€ και θα εξοικονομούσατε "+ difference+"€." );
+
+            }
+        else {
+                LinearLayout parent1 = (LinearLayout) view.findViewById(R.id.ArrayAdapterGeneral);
+                LinearLayout child1 = (LinearLayout) view.findViewById(R.id.ExtraBox);
+
+                parent1.removeView(child1);
 
 
+            }
 
-        TextView kwh = (TextView) view.findViewById(R.id.KwhN);
+
+        TextView kwh = (TextView) view.findViewById(R.id.UsualBoxKwhN);
         kwh.setText(metrhsh.getSumKilovatora()+ "kWh");
 
 
-        TextView cost = (TextView) view.findViewById(R.id.CostN);
+        TextView cost = (TextView) view.findViewById(R.id.UsualBoxCostN);
         cost.setText(costOfDay +" " +"\u20ac");
 
 
+            //ImageView Configuration
+            ImageView image = (ImageView) view.findViewById(R.id.image);
 
 
-        if (metrhsh.getSumKilovatora()>1.5*metrhsh.getAverage()) {
-            cost.setTextColor(Color.parseColor("#F9A825"));
-        }
-        else if (metrhsh.getSumKilovatora()>1.2*metrhsh.getAverage()) {
-            cost.setTextColor(Color.parseColor("#FFD54F"));
-        }
-        else if (metrhsh.getSumKilovatora()>1*metrhsh.getAverage()) {
-            cost.setTextColor(Color.parseColor("#1E88E5"));
-        }
-        else if (metrhsh.getSumKilovatora()>0.8*metrhsh.getAverage()) {
-            cost.setTextColor(Color.parseColor("#00BCD4"));
-        }
-        else
-            {
-            cost.setTextColor(Color.parseColor("#00C853"));
-                cost.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);;
-                cost.setTypeface(null, Typeface.BOLD);
-                cost.setText(costOfDay +" " +"\u20ac"+ " !");
-        }
+            if (metrhsh.getSumKilovatora()< metrhsh.getAverageof3()& metrhsh.getSumKilovatora()> 0.9 * metrhsh.getAverageof3()) {
+                image.setImageResource(R.drawable.piggy1);
+                cost.setTextColor(Color.parseColor("#1E88E5"));
 
-
-
-
+            }
+            else if (metrhsh.getSumKilovatora()< 0.9 * metrhsh.getAverageof3()& metrhsh.getSumKilovatora()> 0.8 * metrhsh.getAverageof3()) {
+                image.setImageResource(R.drawable.piggy2);
+                cost.setTextColor(Color.parseColor("#00BCD4"));
+            }
+            else if (metrhsh.getSumKilovatora()< 0.8 * metrhsh.getAverageof3()) {
+                image.setImageResource(R.drawable.piggy3);
+                cost.setTextColor(Color.parseColor("#00C853"));}
 //        TextView lowerBill = (TextView) view.findViewById(R.id.Bill);
 //
 //        if ( metrhsh.getSavings()>0)
 //        {
-//            lowerBill.setText( " ** Μείωση Λογαριασμού: " + metrhsh.getSavings()*60D + "\u20ac" +" ! **"  );
+//            lowerBill.setText( " ** Μείωση Λογαριασμού: " + metrhsh.getSavings()*60D + "\u20ac" +" ! **"
 //
 //        }
 //
 //        //get the image associated with this property
-
-
-
-
-
-
-        return view;
-
-
-
+             return view;
 
     }
-
-
-
-
 }

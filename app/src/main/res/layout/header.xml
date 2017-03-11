@@ -219,7 +219,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/DokimastikhPeriodosBox">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -256,7 +257,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Εκτίμηση Χρέωσης Τετραμήνου"/>
+                    android:text="Χρέωση Τετραμήνου"/>
 
 
             </LinearLayout>
@@ -293,7 +294,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/GenikaInfoBox">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -345,7 +347,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Μείωση (Εκτίμηση)"/>
+                    android:text="Εξοικονόμηση Τετραμήνου"/>
 
 
 

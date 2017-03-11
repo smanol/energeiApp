@@ -8,12 +8,12 @@ import java.math.RoundingMode;
 
 public class CostEstimate {
 
-    public static double calculateCostDay(Double kilovat){
+    public static double calculateCostDay(Double kilovat,int days){
 
         double a,b,c,d,e,f,g,h,i,j,k,l ;
-        double meresDimhnou = 60.0 ;
-        final double meresEtous = 365.0;
-        double anhgmenhKatanalwshMhna = kilovat * meresDimhnou;
+        double meresDimhnou = 120.0 / days;
+        final double meresEtous = 365.0*days;
+        double anhgmenhKatanalwshMhna = kilovat * meresDimhnou  ;
 
 
         double pagio = 1.52;
@@ -143,7 +143,7 @@ public class CostEstimate {
     }
 
 
-    public static double calculateCostNight(double kilovatorNight){
+    public static double calculateCostNight(double kilovatorNight, int days){
 
        // Συνθήκη για να μην προστίθεται το πάγιο του νυχτερινού στο σύνολο όταν δεν υπάρχει
         if (kilovatorNight == 0) {
@@ -153,7 +153,7 @@ public class CostEstimate {
         //Βοηθητικές Μεταβλητές
 
         double an,bn,cn,dn,en,fn,hn,in,jn;
-        double meresDimhnou= 60;
+        double meresDimhnou= 120/days;
         // Ανηγμένη Κατανάλωση Δίμηνου
         double anhgmenhKatanalwshDimhnouNight = kilovatorNight*meresDimhnou ;
         // Πάγιο Νύχτα

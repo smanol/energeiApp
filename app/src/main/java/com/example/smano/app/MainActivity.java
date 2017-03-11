@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
     private double sumOfSavings;
     private TextView DaysLeft;
     private long countOfUsers = 0;
+    private TextView moBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,38 +181,86 @@ public class MainActivity extends AppCompatActivity {
         lv.setAdapter(metrhshArrayAdapter);
 
 
-
-
-
-            //Είκόνα για γουρουνάκια
+        //Είκόνα για γουρουνάκια
 
 //            gourounakiaImage = (ImageView) findViewById(R.id.pigsImage);
 //            gourounakiaImage.setImageResource(R.drawable.piggy);
 //
 
-            //Στοιχεία για γουρουνάκια
+        //Στοιχεία για γουρουνάκια
 
-            gourounakiaText = (TextView) findViewById(R.id.SynoloPontwn);
-            gourounakiaText.setText(countGourounakia+"");
+        gourounakiaText = (TextView) findViewById(R.id.SynoloPontwn);
+        gourounakiaText.setText(countGourounakia + "");
 
-            //Στοιχεία για την συνολική εξοικονόμηση
+        //Στοιχεία για την συνολική εξοικονόμηση
 
-            ExoikonomhshText = (TextView) findViewById(R.id.MeiwshEktimhsh);
-
-            if (sumOfSavings>0) {
-                ExoikonomhshText.setText(CostEstimate.round(sumOfSavings, 2) + "\u20ac");
-            }
-            else { ExoikonomhshText.setText("0 "+"\u20ac");}
-
-            //Days Left Text View
+        ExoikonomhshText = (TextView) findViewById(R.id.MeiwshEktimhsh);
 
 
-            DaysLeft = (TextView) findViewById(R.id.MeresPouApomenoyn);
-            int meres=14-metrhshes.size();
-            DaysLeft.setText(""+meres);
+        if (sumOfSavings > 0) {
+            ExoikonomhshText.setText(CostEstimate.round(sumOfSavings, 2) + "\u20ac");
+        } else {
+            ExoikonomhshText.setText("0 " + "\u20ac");
+        }
+
+        //Days Left Text View
 
 
+        DaysLeft = (TextView) findViewById(R.id.MeresPouApomenoyn);
+        int meres = 14 - metrhshes.size();
+        DaysLeft.setText("" + meres);
 
+        if(metrhshes.size()>2){
+        MOKatanalwsh = (TextView) findViewById(R.id.MOKatanalwshs);
+
+        MOKatanalwsh.setText(CostEstimate.round(getAverageConsumption(metrhshes), 2) + " KWh");
+
+        LogariasmosE = (TextView) findViewById(R.id.LogariasmosEktimhsh);
+
+        Double kwhEwsTwraDay = wholeValuesMetrhseis.get(metrhshes.size()).getDayKilovatora() - wholeValuesMetrhseis.get(0).getDayKilovatora();
+
+        Double kwhEwsTwraNight = wholeValuesMetrhseis.get(metrhshes.size()).getNightKilovatora() - wholeValuesMetrhseis.get(0).getNightKilovatora();
+
+        Double costEwsTwraDay = CostEstimate.calculateCostDay(kwhEwsTwraDay, metrhshes.size()) / 120 * metrhshes.size();
+
+        Double costEwsTwraNight = CostEstimate.calculateCostNight(kwhEwsTwraNight, metrhshes.size()) / 120 * metrhshes.size();
+
+        Double xrewshEwsTwra = costEwsTwraDay + costEwsTwraNight;
+
+        XrewshEwsTwra = (TextView) findViewById(R.id.XrewshEwsTwra);
+
+        XrewshEwsTwra.setText(CostEstimate.round(xrewshEwsTwra, 2) + " \u20ac");
+
+        Double logariasmosE = CostEstimate.calculateCostDay(kwhEwsTwraDay, metrhshes.size())+CostEstimate.calculateCostNight(kwhEwsTwraNight, metrhshes.size());
+
+        LogariasmosE.setText(CostEstimate.round(logariasmosE,2)+" \u20ac");
+
+        TextView averageOf3kwh = (TextView) findViewById(R.id.MOKatanalwshsBase);
+        double averO3 = getAverageConsumptionOf3DayInit(metrhshes)+getAverageConsumptionOf3NightInit(metrhshes);
+        double averageOf3 = CostEstimate.round((averO3),2);
+        averageOf3kwh.setText(averageOf3+" KWh");
+
+
+        TextView consumptionOf3 =(TextView) findViewById(R.id.MeanCostBase);
+        double consumptionOf3Cost = (CostEstimate.calculateCostDay(getAverageConsumptionOf3DayInit(metrhshes),1)+CostEstimate.calculateCostNight(getAverageConsumptionOf3NightInit(metrhshes),1))/120;
+        consumptionOf3.setText(CostEstimate.round(consumptionOf3Cost,2)+" \u20ac");
+
+        TextView BillOf3 =(TextView) findViewById(R.id.CostProjectionBase);
+        double consumptionOf3Bill = (CostEstimate.calculateCostDay(getAverageConsumptionOf3DayInit(metrhshes),1)+CostEstimate.calculateCostNight(getAverageConsumptionOf3NightInit(metrhshes),1));
+        BillOf3.setText(CostEstimate.round(consumptionOf3Bill,2)+" \u20ac");
+
+
+        TextView MeiwshEktimhsh =(TextView) findViewById(R.id.MeiwshEktimhsh);
+
+        double meiwshEkt = CostEstimate.round(consumptionOf3Bill,2)-CostEstimate.round(logariasmosE,2);
+
+        if (meiwshEkt>0 ) {
+            MeiwshEktimhsh.setText(meiwshEkt + " \u20ac");
+        }
+        else{
+            MeiwshEktimhsh.setText(0 + " \u20ac");
+        }
+    }
     }
 
 
@@ -223,10 +272,17 @@ public class MainActivity extends AppCompatActivity {
         if (team == 1) {
             teamNote = "A";
             Teams.setText("Ανήκετε στην ομάδα " + teamNote);
-            //Diafora
+            OmadaKatanalwsh = (TextView) findViewById(R.id.Omada_Katataksh);
+            OmadaKatanalwsh.setText("Ομάδα");
+            OmadaKatanalwshInput = (TextView) findViewById(R.id.Omada_KatatakshInput);
+            OmadaKatanalwshInput.setText(teamNote);
         }
         if (team == 2) {
             teamNote = "B";
+            OmadaKatanalwsh = (TextView) findViewById(R.id.Omada_Katataksh);
+            OmadaKatanalwsh.setText("Κατάταξη");
+            OmadaKatanalwshInput = (TextView) findViewById(R.id.Omada_KatatakshInput);
+            OmadaKatanalwshInput.setText(teamNote);
             //Katataksh
         }
 
@@ -411,6 +467,9 @@ public class MainActivity extends AppCompatActivity {
                         double previousDay = -1;
                         double average = -1;
                         double averageOf3= -1;
+                        double averageOf3Day= -1;
+                        double averageOf3Night= -1;
+
                         String day = "";
                         int counter = 0;
                         Metrhsh wholeMetrhsh;
@@ -431,17 +490,21 @@ public class MainActivity extends AppCompatActivity {
                                 subtractedDayKilovatora = dayKilovatora - previousDay;
 
                                 average = getAverageConsumption(metrhshes);
-                                averageOf3 = getAverageConsumptionOf3(metrhshes);
+                                averageOf3Day = getAverageConsumptionOf3Day(metrhshes);
+                                averageOf3Night = getAverageConsumptionOf3Night(metrhshes);
+                                averageOf3= (averageOf3Day + averageOf3Night);
 
                                 if (previousNight != -1 && nightKilovatora != -1) {
                                     subtractedNightKilovatora = nightKilovatora - previousNight;
-                                    met = new Metrhsh(postSnapshot.getKey(), subtractedDayKilovatora, subtractedNightKilovatora, average, averageOf3);
+                                    met = new Metrhsh(postSnapshot.getKey(), subtractedDayKilovatora, subtractedNightKilovatora, average, averageOf3,averageOf3Day,averageOf3Night);
                                     day = postSnapshot.getKey();
                                     metrhshes.add(met);
                                 } else {
-                                    met = new Metrhsh(postSnapshot.getKey(), subtractedDayKilovatora, 0, average, averageOf3);
+                                    met = new Metrhsh(postSnapshot.getKey(), subtractedDayKilovatora, 0, average, averageOf3,averageOf3Day,averageOf3Night);
                                     metrhshes.add(met);
                                 }
+
+
                                 countGourounakia += met.getGourounakia();
                                 sumOfSavings += met.getSavings();
                             }
@@ -465,6 +528,7 @@ public class MainActivity extends AppCompatActivity {
                                 wholeValuesMetrhseis.add(wholeMetrhsh);
                             }
 
+
                             counter++;
                         }
                         createDisplay(metrhshes);
@@ -482,6 +546,7 @@ public class MainActivity extends AppCompatActivity {
                 myDB.child("Users").child(username).child("Measurements").addValueEventListener(valueEventListener);
             }
         }
+
     }
 
     private void listenForCountOfUsers() {
@@ -673,6 +738,18 @@ public class MainActivity extends AppCompatActivity {
         parent.removeView(child);
     }
 
+
+    private void removeGeneralInfoBoxLinearLayout() {
+        LinearLayout parent = (LinearLayout) findViewById(R.id.mainLinearLayout);
+        LinearLayout child = (LinearLayout) findViewById(R.id.GenikaInfoBox);
+        parent.removeView(child);}
+
+    private void removeDokimastikhPeriodosBox() {
+        LinearLayout parent = (LinearLayout) findViewById(R.id.mainLinearLayout);
+        LinearLayout child = (LinearLayout) findViewById(R.id.DokimastikhPeriodosBox);
+        parent.removeView(child);}
+
+
     private void removeDayNightMeasurementBoxLinearLayout() {
         LinearLayout parent = (LinearLayout) findViewById(R.id.mainLinearLayout);
         LinearLayout child = (LinearLayout) findViewById(R.id.measurementBoxNight);
@@ -844,8 +921,78 @@ public class MainActivity extends AppCompatActivity {
         averageMerthsh = sumMetrhseis/metrhshes.size();
         return averageMerthsh;
     }
+    public static double getAverageConsumptionDay(ArrayList<Metrhsh> metrhshes) {
+        double sumMetrhseis = 0;
+        double averageMerthsh = 0;
+        if (metrhshes.size() == 0) {
+            return -1;
+        }
+        for (int i = 0; i < metrhshes.size() ; i++) {
+            sumMetrhseis += metrhshes.get(i).getDayKilovatora();
+        }
+        averageMerthsh = sumMetrhseis/metrhshes.size();
+        return averageMerthsh;
+    }
+    public static double getAverageConsumptionNight(ArrayList<Metrhsh> metrhshes) {
+        double sumMetrhseis = 0;
+        double averageMerthsh = 0;
+        if (metrhshes.size() == 0) {
+            return -1;
+        }
+        for (int i = 0; i < metrhshes.size() ; i++) {
+            sumMetrhseis += metrhshes.get(i).getNightKilovatora();
+        }
+        averageMerthsh = sumMetrhseis/metrhshes.size();
+        return averageMerthsh;
+    }
+    public static double getSumNightKilo(ArrayList<Metrhsh> metrhshes) {
+        double sumMetrhseis = 0;
+        if (metrhshes.size() == 0) {
+            return 0;
+        }
+        for (int i = 0; i < metrhshes.size() ; i++) {
+            sumMetrhseis += metrhshes.get(i).getNightKilovatora();
+        }
+        return sumMetrhseis;
 
-    public double getAverageConsumptionOf3(ArrayList<Metrhsh> metrhshes) {
+    }
+    public static double getSumDayKilo(ArrayList<Metrhsh> metrhshes) {
+        double sumMetrhseis = 0;
+        if (metrhshes.size() == 0) {
+            return 0;
+        }
+        for (int i = 0; i < metrhshes.size() ; i++) {
+            sumMetrhseis += metrhshes.get(i).getDayKilovatora();
+        }
+        return sumMetrhseis;
+
+    }
+    public static double getCostSumNightKilo(ArrayList<Metrhsh> metrhshes) {
+        double costSumMetrhseis = 0;
+        if (metrhshes.size() == 0) {
+            return 0;
+        }
+        for (int i = 0; i < metrhshes.size() ; i++) {
+            costSumMetrhseis += CostEstimate.calculateCostNight(metrhshes.get(i).getNightKilovatora(),1)/120;
+        }
+        return costSumMetrhseis;
+
+    }
+    public static double getCostSumDayKilo(ArrayList<Metrhsh> metrhshes) {
+        double costSumMetrhseis = 0;
+        if (metrhshes.size() == 0) {
+            return 0;
+        }
+        for (int i = 0; i < metrhshes.size() ; i++) {
+            costSumMetrhseis += CostEstimate.calculateCostDay(metrhshes.get(i).getDayKilovatora(),1)/120;
+        }
+        return costSumMetrhseis;
+
+    }
+
+
+
+    public double getAverageConsumptionOf3Day(ArrayList<Metrhsh> metrhshes) {
         double sumMetrhseis = 0;
         if (metrhshes.size() <= 1) {
             return -1;
@@ -858,9 +1005,64 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < 3 ; i++) {
                 sumMetrhseis += metrhshes.get(i).getDayKilovatora();
             }
+            double averageOf3 = sumMetrhseis/3;
+            return averageOf3;
+        }
+    }
+
+    public double getAverageConsumptionOf3DayInit(ArrayList<Metrhsh> metrhshes) {
+        double sumMetrhseis = 0;
+        if (metrhshes.size() <= 1) {
+            return -1;
+        } else if (metrhshes.size() == 2){
+            for (int i = 0; i < 2 ; i++) {
+                sumMetrhseis += metrhshes.get(i).getDayKilovatora();
+            }
+            return sumMetrhseis/2;
+        } else {
+            for (int i = 0; i < 3; i++) {
+                sumMetrhseis += metrhshes.get(metrhshes.size() - i - 1).getDayKilovatora();
+            }
+            double averageOf3 = sumMetrhseis / 3;
+            return averageOf3;
+        }
+    }
+
+    public double getAverageConsumptionOf3NightInit(ArrayList<Metrhsh> metrhshes) {
+        double sumMetrhseis = 0;
+        if (metrhshes.size() <= 1) {
+            return -1;
+        } else if (metrhshes.size() == 2){
+            for (int i = 0; i < 2 ; i++) {
+                sumMetrhseis += metrhshes.get(i).getDayKilovatora();
+            }
+            return sumMetrhseis/2;
+        } else {
+            for (int i = 0; i < 3; i++) {
+                sumMetrhseis += metrhshes.get(metrhshes.size() - i - 1).getNightKilovatora();
+            }
+            double averageOf3 = sumMetrhseis / 3;
+            return averageOf3;
+        }
+    }
+    public double getAverageConsumptionOf3Night(ArrayList<Metrhsh> metrhshes) {
+        double sumMetrhseis = 0;
+        if (metrhshes.size() <= 1) {
+            return -1;
+        } else if (metrhshes.size() == 2){
+            for (int i = 0; i < 2 ; i++) {
+                sumMetrhseis += metrhshes.get(i).getNightKilovatora();
+            }
+            return sumMetrhseis/2;
+        } else {
+            for (int i = 0; i < 3 ; i++) {
+                sumMetrhseis += metrhshes.get(i).getNightKilovatora();
+            }
             return sumMetrhseis/3;
         }
     }
+
+
 
     public void makeNotification(){
 
