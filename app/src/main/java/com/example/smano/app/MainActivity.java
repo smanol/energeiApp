@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
         // εδω χρείάζεται να γίνει με for loop για να μπαίνουν αυτόματα όλες οι τιμές της λίστας metrhshes
         Entries.clear();
         float t1;
-        for (int i = 0; i < metrhshes.size(); i++) {
+        for (int i =0; i < metrhshes.size(); i++) {
             t1 = (float) metrhshes.get(i).getSumKilovatora();
             Entries.add(new BarEntry(t1, i));
         }
@@ -187,80 +187,93 @@ public class MainActivity extends AppCompatActivity {
 //            gourounakiaImage.setImageResource(R.drawable.piggy);
 //
 
-        //Στοιχεία για γουρουνάκια
-
-        gourounakiaText = (TextView) findViewById(R.id.SynoloPontwn);
-        gourounakiaText.setText(countGourounakia + "");
-
-        //Στοιχεία για την συνολική εξοικονόμηση
-
-        ExoikonomhshText = (TextView) findViewById(R.id.MeiwshEktimhsh);
 
 
-        if (sumOfSavings > 0) {
-            ExoikonomhshText.setText(CostEstimate.round(sumOfSavings, 2) + "\u20ac");
-        } else {
-            ExoikonomhshText.setText("0 " + "\u20ac");
+
+        // Στοιχεία Δοκιμαστικής Περιόδου
+        if (metrhshes.size()>3){
+
+            TextView averageOf3kwh = (TextView) findViewById(R.id.MOKatanalwshsBase);
+            double averO3 = getAverageConsumptionOf3DayInit(metrhshes)+getAverageConsumptionOf3NightInit(metrhshes);
+            double averageOf3 = CostEstimate.round((averO3),2);
+            averageOf3kwh.setText(averageOf3+" KWh");
+
+            TextView consumptionOf3 =(TextView) findViewById(R.id.MeanCostBase);
+            double consumptionOf3Cost = (CostEstimate.calculateCostDay(getAverageConsumptionOf3DayInit(metrhshes),1)+CostEstimate.calculateCostNight(getAverageConsumptionOf3NightInit(metrhshes),1))/120;
+            consumptionOf3.setText(CostEstimate.round(consumptionOf3Cost,2)+" \u20ac");
+
+            TextView BillOf3 =(TextView) findViewById(R.id.CostProjectionBase);
+            double consumptionOf3Bill = (CostEstimate.calculateCostDay(getAverageConsumptionOf3DayInit(metrhshes),1)+CostEstimate.calculateCostNight(getAverageConsumptionOf3NightInit(metrhshes),1));
+            BillOf3.setText(CostEstimate.round(consumptionOf3Bill,2)+" \u20ac");
+
+
+
+            //Γενικά στοιχεία
+            if (metrhshes.size()>5){
+
+                gourounakiaText = (TextView) findViewById(R.id.SynoloPontwn);
+                gourounakiaText.setText(countGourounakia + "");
+
+                //Στοιχεία για την συνολική εξοικονόμηση
+
+                ExoikonomhshText = (TextView) findViewById(R.id.MeiwshEktimhsh);
+
+
+                if (sumOfSavings > 0) {
+                    ExoikonomhshText.setText(CostEstimate.round(sumOfSavings, 2) + "\u20ac");
+                } else {
+                    ExoikonomhshText.setText("0 " + "\u20ac");
+                }
+
+                //Days Left Text View
+
+
+                DaysLeft = (TextView) findViewById(R.id.MeresPouApomenoyn);
+                int meres = 14 - metrhshes.size();
+                DaysLeft.setText("" + meres);
+
+                MOKatanalwsh = (TextView) findViewById(R.id.MOKatanalwshs);
+
+                MOKatanalwsh.setText(CostEstimate.round(getAverageConsumption(metrhshes), 2) + " KWh");
+
+                LogariasmosE = (TextView) findViewById(R.id.LogariasmosEktimhsh);
+
+                Double kwhEwsTwraDay = wholeValuesMetrhseis.get(metrhshes.size()).getDayKilovatora() - wholeValuesMetrhseis.get(0).getDayKilovatora();
+
+                Double kwhEwsTwraNight = wholeValuesMetrhseis.get(metrhshes.size()).getNightKilovatora() - wholeValuesMetrhseis.get(0).getNightKilovatora();
+
+                Double costEwsTwraDay = CostEstimate.calculateCostDay(kwhEwsTwraDay, metrhshes.size()) / 120 * metrhshes.size();
+
+                Double costEwsTwraNight = CostEstimate.calculateCostNight(kwhEwsTwraNight, metrhshes.size()) / 120 * metrhshes.size();
+
+                Double xrewshEwsTwra = costEwsTwraDay + costEwsTwraNight;
+
+                XrewshEwsTwra = (TextView) findViewById(R.id.XrewshEwsTwra);
+
+                XrewshEwsTwra.setText(CostEstimate.round(xrewshEwsTwra, 2) + " \u20ac");
+
+
+                Double logariasmosE = CostEstimate.calculateCostDay(kwhEwsTwraDay, metrhshes.size())+CostEstimate.calculateCostNight(kwhEwsTwraNight, metrhshes.size());
+
+                LogariasmosE.setText(CostEstimate.round(logariasmosE,2)+" \u20ac");
+
+                TextView MeiwshEktimhsh =(TextView) findViewById(R.id.MeiwshEktimhsh);
+
+                double meiwshEkt = CostEstimate.round(consumptionOf3Bill,2)-CostEstimate.round(logariasmosE,2);
+
+                if (meiwshEkt>0 ) {
+                    MeiwshEktimhsh.setText(meiwshEkt + " \u20ac");
+                }
+                else{
+                    MeiwshEktimhsh.setText(0 + " \u20ac");
+                }
+            }
         }
 
-        //Days Left Text View
 
 
-        DaysLeft = (TextView) findViewById(R.id.MeresPouApomenoyn);
-        int meres = 14 - metrhshes.size();
-        DaysLeft.setText("" + meres);
-
-        if(metrhshes.size()>2){
-        MOKatanalwsh = (TextView) findViewById(R.id.MOKatanalwshs);
-
-        MOKatanalwsh.setText(CostEstimate.round(getAverageConsumption(metrhshes), 2) + " KWh");
-
-        LogariasmosE = (TextView) findViewById(R.id.LogariasmosEktimhsh);
-
-        Double kwhEwsTwraDay = wholeValuesMetrhseis.get(metrhshes.size()).getDayKilovatora() - wholeValuesMetrhseis.get(0).getDayKilovatora();
-
-        Double kwhEwsTwraNight = wholeValuesMetrhseis.get(metrhshes.size()).getNightKilovatora() - wholeValuesMetrhseis.get(0).getNightKilovatora();
-
-        Double costEwsTwraDay = CostEstimate.calculateCostDay(kwhEwsTwraDay, metrhshes.size()) / 120 * metrhshes.size();
-
-        Double costEwsTwraNight = CostEstimate.calculateCostNight(kwhEwsTwraNight, metrhshes.size()) / 120 * metrhshes.size();
-
-        Double xrewshEwsTwra = costEwsTwraDay + costEwsTwraNight;
-
-        XrewshEwsTwra = (TextView) findViewById(R.id.XrewshEwsTwra);
-
-        XrewshEwsTwra.setText(CostEstimate.round(xrewshEwsTwra, 2) + " \u20ac");
-
-        Double logariasmosE = CostEstimate.calculateCostDay(kwhEwsTwraDay, metrhshes.size())+CostEstimate.calculateCostNight(kwhEwsTwraNight, metrhshes.size());
-
-        LogariasmosE.setText(CostEstimate.round(logariasmosE,2)+" \u20ac");
-
-        TextView averageOf3kwh = (TextView) findViewById(R.id.MOKatanalwshsBase);
-        double averO3 = getAverageConsumptionOf3DayInit(metrhshes)+getAverageConsumptionOf3NightInit(metrhshes);
-        double averageOf3 = CostEstimate.round((averO3),2);
-        averageOf3kwh.setText(averageOf3+" KWh");
 
 
-        TextView consumptionOf3 =(TextView) findViewById(R.id.MeanCostBase);
-        double consumptionOf3Cost = (CostEstimate.calculateCostDay(getAverageConsumptionOf3DayInit(metrhshes),1)+CostEstimate.calculateCostNight(getAverageConsumptionOf3NightInit(metrhshes),1))/120;
-        consumptionOf3.setText(CostEstimate.round(consumptionOf3Cost,2)+" \u20ac");
-
-        TextView BillOf3 =(TextView) findViewById(R.id.CostProjectionBase);
-        double consumptionOf3Bill = (CostEstimate.calculateCostDay(getAverageConsumptionOf3DayInit(metrhshes),1)+CostEstimate.calculateCostNight(getAverageConsumptionOf3NightInit(metrhshes),1));
-        BillOf3.setText(CostEstimate.round(consumptionOf3Bill,2)+" \u20ac");
-
-
-        TextView MeiwshEktimhsh =(TextView) findViewById(R.id.MeiwshEktimhsh);
-
-        double meiwshEkt = CostEstimate.round(consumptionOf3Bill,2)-CostEstimate.round(logariasmosE,2);
-
-        if (meiwshEkt>0 ) {
-            MeiwshEktimhsh.setText(meiwshEkt + " \u20ac");
-        }
-        else{
-            MeiwshEktimhsh.setText(0 + " \u20ac");
-        }
-    }
     }
 
 
@@ -780,21 +793,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkLayout(int c) {
-        if (c >= 2){
+        if (c >= 4){
             removeInstructionsLinearLayout();
         }
-        if (c <= 2){
+        if (c < 4){
+            removeDokimastikhPeriodosBox();
+        }
+
+        if (c < 6){
             removeGraphLinearLayout();
+            removeGeneralInfoBoxLinearLayout();
         }
         if (c >= 1){
             removeDayNightInvoiceLegends();
         }
-        if (c <= 1){
+        if (c <= 5){
             removeMeasurementsLegend();
         } else {
             addMeasurementsLegend();
         }
-        if (c >= 3){
+        if (c >= 6){
             showGraphs();
         }
     }
