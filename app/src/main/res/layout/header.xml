@@ -216,6 +216,79 @@
 
     <!--</RelativeLayout>-->
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Δοκιμαστική Περίοδος"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:padding="12dp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:background="#FFFFFF"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Μέση Κατανάλωση "
+
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Μέση Χρέωση Ημέρας"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Εκτίμηση Χρέωσης Τετραμήνου"/>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Μέση Κατανάλωση"
+                    android:id="@+id/MOKatanalwshsBase"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Μέση Χρέωση Ημέρας"
+                    android:id="@+id/MeanCostBase"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Εκτίμηση Χρέωσης Τετραμήνου"
+                    android:id="@+id/CostProjectionBase"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -242,6 +315,16 @@
                 android:orientation="vertical"
                 android:layout_weight="1"
                 >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ομάδα/Κατάταξη"
+                    android:id="@+id/Omada.Katataksh"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Σύνολο Πόντων"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -249,7 +332,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Μέσος Όρος Κατανάλωσης"
+                    android:text="Μέση Κατανάλωση "
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -258,39 +341,45 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Λογαριασμός  (Εκτίμηση)"/>
+                    android:text="Χρέωση Τετραμήνου"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Μείωση (Εκτίμηση)"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Σύνολο Πόντων"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ομάδα/Κατάταξη"
-                    android:id="@+id/Omada.Katataksh"/>
+
 
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_weight="1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ομάδα/Κατάταξη"
+                    android:id="@+id/Omada.KatatakshInput"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Σύνολο Πόντων"
+                    android:id="@+id/SynoloPontwn"
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Μέρες που Απομένουν"
                     android:id="@+id/MeresPouApomenoyn"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Μέσος Όρος Κατανάλωσης"
+                    android:text="Μέση Κατανάλωση "
                     android:id="@+id/MOKatanalwshs"
                     />
                 <TextView
@@ -301,7 +390,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Λογαριασμός  (Εκτίμηση)"
+                    android:text="Χρέωση Τετραμήνου"
                     android:id="@+id/LogariasmosEktimhsh"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -309,19 +398,6 @@
                     android:text="Μείωση (Εκτίμηση)"
                     android:id="@+id/MeiwshEktimhsh"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Σύνολο Πόντων"
-                    android:id="@+id/SynoloPontwn"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ομάδα/Κατάταξη"
-                    android:id="@+id/Omada.KatatakshInput"
-                    />
-;l
             </LinearLayout>
 
         </LinearLayout>

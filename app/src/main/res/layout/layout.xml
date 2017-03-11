@@ -5,80 +5,94 @@
     android:layout_height="wrap_content"
     android:background="#FFFFFF"
     android:padding="16dp"
+    android:id="@+id/ArrayAdapterGeneral"
+    android:orientation="vertical"
     >
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/ArrayAdapterMainLayout">
 
         <TextView
         android:text="18 Νοεμβρίου 2016"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/Date"
+        android:id="@+id/ArrayAdapterDate"
         android:textSize="16sp"
         android:textStyle="bold"
         android:layout_alignParentTop="true"
+        android:paddingBottom="8dp"
          />
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/StandardBoxArrayAdapter"
+        android:paddingLeft="8dp"
+            android:paddingBottom="5dp"
+        >
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:id="@+id/StandardBoxInfo"
+            android:layout_below="@id/ArrayAdapterDate"
+            android:orientation="vertical"
+            android:layout_weight="1">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/StandardBoxKwh"
+                android:text="Κατανάλωση"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/StandardBoxCost"
+                android:text="Ημερήσια Χρέωση"/>
+
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/StandardBoxNums"
+            android:layout_below="@id/ArrayAdapterDate"
+            android:layout_toRightOf="@id/StandardBoxInfo"
+            android:orientation="vertical"
+            android:layout_weight="2"
             >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/UsualBoxKwhN"
+                android:text="90 Kwh"
+                />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/linearLayout"
-        android:layout_below="@id/Date"
-        android:orientation="vertical"
-        android:layout_weight="1">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/Kwh"
-            android:text="Κατανάλωση"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/Cost"
-            android:text="Ημερήσια Χρέωση"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/UsualBoxCostN"
+                android:text="1 ευρώ"/>
 
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/linearLayout2"
-        android:layout_below="@id/Date"
-        android:layout_toRightOf="@id/linearLayout"
-        android:orientation="vertical"
-        android:layout_weight="2"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/KwhN"
-            android:text="90 Kwh"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/CostN"
-            android:text="1 ευρώ"/>
-
-
     </LinearLayout>
 
-      </LinearLayout>
-
-
-    </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -90,11 +104,37 @@
             android:id="@+id/image"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
+
 
             />
 
     </RelativeLayout>
+
 </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="8dp"
+        android:id="@+id/ExtraBox"
+
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="123445667888"
+            android:textColor="#FFFFFF"
+            android:id="@+id/ExtraBoxText"
+            android:background="#B2EBF2"
+            android:padding="8dp"
+
+
+            />
+
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+
