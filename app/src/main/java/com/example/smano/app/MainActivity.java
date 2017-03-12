@@ -289,16 +289,22 @@ public class MainActivity extends AppCompatActivity {
             teamNote = "A";
             Teams.setText("Ανήκετε στην ομάδα " + teamNote);
             OmadaKatanalwsh = (TextView) findViewById(R.id.Omada_Katataksh);
-            OmadaKatanalwsh.setText("Ομάδα");
+            if (OmadaKatanalwsh != null) {
+                OmadaKatanalwsh.setText("Ομάδα");
+            }
             OmadaKatanalwshInput = (TextView) findViewById(R.id.Omada_KatatakshInput);
-            OmadaKatanalwshInput.setText(teamNote);
+            if (OmadaKatanalwshInput != null) {
+                OmadaKatanalwshInput.setText(teamNote);
+            }
         }
         if (team == 2) {
             teamNote = "B";
             OmadaKatanalwsh = (TextView) findViewById(R.id.Omada_Katataksh);
-            OmadaKatanalwsh.setText("Κατάταξη");
+            if (OmadaKatanalwsh != null) {
+                OmadaKatanalwsh.setText("Κατάταξη");
+            }
             OmadaKatanalwshInput = (TextView) findViewById(R.id.Omada_KatatakshInput);
-            if (ranking != 0) {
+            if (ranking != 0 && OmadaKatanalwshInput != null) {
                 OmadaKatanalwshInput.setText(ranking + "η θέση");
             }
             //Katataksh
@@ -541,9 +547,9 @@ public class MainActivity extends AppCompatActivity {
                         }
                         createDisplay(metrhshes);
                         checkForMeasurementBoxRemoval(day);
+                        displayTeamsText();
                         checkLayout(counter);
                         getRanking();
-                        displayTeamsText();
                         dialog.hide();
                         uploadComparableVariable(countGourounakia);
                     }
