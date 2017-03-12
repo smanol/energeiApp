@@ -536,19 +536,12 @@ public class MainActivity extends AppCompatActivity {
 
                             counter++;
                         }
-                        System.out.println("step1");
                         createDisplay(metrhshes);
-                        System.out.println("step2");
                         checkForMeasurementBoxRemoval(day);
-                        System.out.println("step3");
                         displayTeamsText();
-                        System.out.println("step4");
                         checkLayout(counter);
-                        System.out.println("step5");
                         getRanking();
-                        System.out.println("step6");
                         dialog.hide();
-                        System.out.println("step7");
                         uploadComparableVariable(countGourounakia);
                     }
 
