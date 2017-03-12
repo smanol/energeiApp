@@ -3,7 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/Graphs"
     >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/KwhGraph">
+
+
 <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -31,6 +39,13 @@
 </com.github.mikephil.charting.charts.BarChart>
 
 </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/CopmareGraph">
 
 <LinearLayout
     android:layout_width="match_parent"
@@ -44,6 +59,14 @@
         android:textSize="20sp"
         android:textStyle="bold"/>
 
+    <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Ανήκετε στην ομάδα "
+    android:id="@+id/TheTeamYouBelong"
+
+
+    />
 
 
 
@@ -69,16 +92,11 @@
 
     </com.github.mikephil.charting.charts.BarChart>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ανήκετε στην ομάδα "
-            android:id="@+id/TheTeamYouBelong"/>
-
     </LinearLayout>
 
 
 
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"

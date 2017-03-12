@@ -27,7 +27,6 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -198,23 +197,23 @@ public class MainActivity extends AppCompatActivity {
         // Στοιχεία Δοκιμαστικής Περιόδου
         if (metrhshes.size()>3){
 
-            TextView averageOf3kwh = (TextView) findViewById(R.id.MOKatanalwshsBase);
+//            TextView averageOf3kwh = (TextView) findViewById(R.id.MOKatanalwshsBase);
             double averO3 = getAverageConsumptionOf3DayInit(metrhshes)+getAverageConsumptionOf3NightInit(metrhshes);
             double averageOf3 = CostEstimate.round((averO3),2);
-            averageOf3kwh.setText(averageOf3+" KWh");
+//            averageOf3kwh.setText(averageOf3+" KWh");
 
-            TextView consumptionOf3 =(TextView) findViewById(R.id.MeanCostBase);
+//            TextView consumptionOf3 =(TextView) findViewById(R.id.MeanCostBase);
             double consumptionOf3Cost = (CostEstimate.calculateCostDay(getAverageConsumptionOf3DayInit(metrhshes),1)+CostEstimate.calculateCostNight(getAverageConsumptionOf3NightInit(metrhshes),1))/120;
-            consumptionOf3.setText(CostEstimate.round(consumptionOf3Cost,2)+" \u20ac");
+//            consumptionOf3.setText(CostEstimate.round(consumptionOf3Cost,2)+" \u20ac");
 
-            TextView BillOf3 =(TextView) findViewById(R.id.CostProjectionBase);
+//            TextView BillOf3 =(TextView) findViewById(R.id.CostProjectionBase);
             double consumptionOf3Bill = (CostEstimate.calculateCostDay(getAverageConsumptionOf3DayInit(metrhshes),1)+CostEstimate.calculateCostNight(getAverageConsumptionOf3NightInit(metrhshes),1));
-            BillOf3.setText(CostEstimate.round(consumptionOf3Bill,2)+" \u20ac");
+//            BillOf3.setText(CostEstimate.round(consumptionOf3Bill,2)+" \u20ac");
 
 
 
             //Γενικά στοιχεία
-            if (metrhshes.size()>5){
+
 
                 gourounakiaText = (TextView) findViewById(R.id.SynoloPontwn);
                 gourounakiaText.setText(countGourounakia + "");
@@ -271,7 +270,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else{
                     MeiwshEktimhsh.setText(0 + " \u20ac");
-                }
             }
         }
 
@@ -713,13 +711,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showGraphs() {
-        footer.setVisibility(View.VISIBLE);
+    private void removeGraphKwh() {
+        LinearLayout parent = (LinearLayout) findViewById(R.id.Graphs);
+        LinearLayout child = (LinearLayout) findViewById(R.id.KwhGraph);
+        parent.removeView(child);
+
     }
 
-    private void removeGraphLinearLayout() {
-        //lv.removeFooterView(footer);
-        footer.setVisibility(View.GONE);
+    private void removeGraphCompare() {
+        LinearLayout parent = (LinearLayout) findViewById(R.id.Graphs);
+        LinearLayout child = (LinearLayout) findViewById(R.id.CopmareGraph);
+        parent.removeView(child);
     }
 
     private void removeMeasurementsLegend() {
@@ -773,10 +775,10 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout child = (LinearLayout) findViewById(R.id.GenikaInfoBox);
         parent.removeView(child);}
 
-    private void removeDokimastikhPeriodosBox() {
-        LinearLayout parent = (LinearLayout) findViewById(R.id.mainLinearLayout);
-        LinearLayout child = (LinearLayout) findViewById(R.id.DokimastikhPeriodosBox);
-        parent.removeView(child);}
+//    private void removeDokimastikhPeriodosBox() {
+//        LinearLayout parent = (LinearLayout) findViewById(R.id.mainLinearLayout);
+//        LinearLayout child = (LinearLayout) findViewById(R.id.DokimastikhPeriodosBox);
+//        parent.removeView(child);}
 
 
     private void removeDayNightMeasurementBoxLinearLayout() {
@@ -809,27 +811,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkLayout(int c) {
-        if (c >= 4){
+        if (c >= 2){
             removeInstructionsLinearLayout();
         }
-        if (c < 4){
-            removeDokimastikhPeriodosBox();
-        }
+//        if (c < 14){
+//            removeDokimastikhPeriodosBox();
+//        }
 
-        if (c < 6){
-            removeGraphLinearLayout();
+        if (c <= 4){
+
             removeGeneralInfoBoxLinearLayout();
         }
         if (c >= 1){
             removeDayNightInvoiceLegends();
         }
-        if (c <= 5){
+        if (c < 2){
             removeMeasurementsLegend();
         } else {
             addMeasurementsLegend();
         }
-        if (c >= 6){
-            showGraphs();
+        if (c < 3){
+
+            removeGraphCompare();
+        }
+        if (c<4){
+            removeGraphKwh();
         }
     }
 
