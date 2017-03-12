@@ -26,6 +26,7 @@ public class Metrhsh {
         this.av3N=averageOf3Night;
 
 
+
         if (dayKilovatora + nightKilovatora < average ) {
             if (getSumKilovatora()<= getAverageof3()& getSumKilovatora()> 0.9 * getAverageof3()) {
                 gourounakia++;

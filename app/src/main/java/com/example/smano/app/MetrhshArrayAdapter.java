@@ -14,6 +14,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static com.example.smano.app.R.id.ArrayAdapterGeneral;
+
 /**
  * Created by smano on 1/11/2016.
  */
@@ -44,9 +46,16 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
         View view = inflater.inflate(R.layout.layout, null);
 
 
+            //Τελευταία και φρέσκια
+
+            if(position == 0 ){
+                LinearLayout General = (LinearLayout) view.findViewById(R.id.ArrayAdapterGeneral);
+                General.setBackgroundColor(Color.parseColor("#00C853"));
+            }
         // Date Configuration
         TextView hmeromhnia = (TextView) view.findViewById(R.id.ArrayAdapterDate);
         String hmeromhnias = metrhsh.getDay();
+
         hmeromhnia.setText(hmeromhnias);
 
 
@@ -66,10 +75,10 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
             if (metrhsh.getAverageof3()> metrhsh.getSumKilovatora()&metrhshes.size()>3){
                 TextView percentageText = (TextView) view.findViewById(R.id.ExtraBoxText);
                 percentageText.setText("Συγχαρητήρια μειώσατε την κατανάλωση σας σε ποσοστό "+percentageValue+"%."+"\nΑν καταναλώνατε κάθε μέρα όσο σήμερα ο λογαριασμός τετραμήνου θα ήταν "+ totalBillCost +"€ και θα εξοικονομούσατε "+ difference+"€." );
-
+                percentageText.setBackgroundColor((Color.parseColor("#0091EA")));
             }
         else {
-                LinearLayout parent1 = (LinearLayout) view.findViewById(R.id.ArrayAdapterGeneral);
+                LinearLayout parent1 = (LinearLayout) view.findViewById(ArrayAdapterGeneral);
                 LinearLayout child1 = (LinearLayout) view.findViewById(R.id.ExtraBox);
 
                 parent1.removeView(child1);
