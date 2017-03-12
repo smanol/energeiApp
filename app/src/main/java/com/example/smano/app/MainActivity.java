@@ -172,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
         barChar.setData(theData);
         barChar.notifyDataSetChanged();
         barChar.invalidate();
+        barChar.setDescription("Γράφημα Καναναλώσεων");
 
         //διάφορες άλλες επιλογές
         barChar.setDragEnabled(true);
@@ -282,19 +283,28 @@ public class MainActivity extends AppCompatActivity {
 
     private void displayTeamsText() {
 
-        TextView footerTeamNote =  (TextView) findViewById(R.id.TheTeamYouBelong);
+        Teams =  (TextView) findViewById(R.id.TheTeamYouBelong);
 
 
         String teamNote = "?";
 
         if (team == 1) {
             teamNote = "A";
-            Teams.setText("Ανήκετε στην ομάδα " + teamNote);
+
             OmadaKatanalwsh = (TextView) findViewById(R.id.Omada_Katataksh);
             if (OmadaKatanalwsh != null) {
                 OmadaKatanalwsh.setText("Ομάδα");
 
+
             }
+            if (Teams !=  null)
+            {
+                Teams.setText("Ανήκετε στην ομάδα " + teamNote);
+            }
+
+
+
+
             OmadaKatanalwshInput = (TextView) findViewById(R.id.Omada_KatatakshInput);
             if (OmadaKatanalwshInput != null) {
                 OmadaKatanalwshInput.setText(teamNote);
@@ -313,6 +323,11 @@ public class MainActivity extends AppCompatActivity {
                 OmadaKatanalwshInput.setText(ranking + "η θέση");
             }
             //Katataksh
+            if (Teams !=  null)
+            {
+                Teams.setText("Είστε στη "+ ranking + "η θέση.");
+            }
+
         }
     }
 
@@ -320,16 +335,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void createBlockBarchart(float block1, float block2) {
         ArrayList<String> theDate = new ArrayList<>();
-        theDate.add("Ομάδα Α");
-        theDate.add("Ομάδα Β");
+        if (team==1) {
+            theDate.add("Ομάδα Α");
+            theDate.add("Ομάδα Β");
+        }
+        else
+        {
+            theDate.add("Εσείς");
+            theDate.add("Μ.Ο. Συμπαικτών");
+        }
+
         ArrayList<BarEntry> Entries2 = new ArrayList<>();
         Entries2.add(new BarEntry(block1, 0));
         Entries2.add(new BarEntry(block2, 1));
-        BarDataSet barDataSet2 = new BarDataSet(Entries2, "KWh");
+        BarDataSet barDataSet2 = new BarDataSet(Entries2, "Πόντοι");
         BarData theData2 = new BarData(theDate, barDataSet2);
         barChart.setData(theData2);
         barChart.setNoDataText("Description that you want");
         barChart.getAxisLeft().setStartAtZero(true);
+        barChart.setDescription("Συγκριτική επίδοση");
     }
 
     private ArrayList<Metrhsh> transformArraylistsDatesToWords(ArrayList<Metrhsh> metrhshes) {
@@ -836,7 +860,7 @@ public class MainActivity extends AppCompatActivity {
 //            removeDokimastikhPeriodosBox();
 //        }
 
-        if (c <= 4){
+        if (c < 4){
 
             removeGeneralInfoBoxLinearLayout();
         }
