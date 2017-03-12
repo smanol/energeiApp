@@ -281,7 +281,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void displayTeamsText() {
-        Teams = (TextView) footer.findViewById(R.id.TheTeamYouBelong);
+
+        TextView footerTeamNote =  (TextView) findViewById(R.id.TheTeamYouBelong);
+
 
         String teamNote = "?";
 
@@ -291,13 +293,16 @@ public class MainActivity extends AppCompatActivity {
             OmadaKatanalwsh = (TextView) findViewById(R.id.Omada_Katataksh);
             if (OmadaKatanalwsh != null) {
                 OmadaKatanalwsh.setText("Ομάδα");
+
             }
             OmadaKatanalwshInput = (TextView) findViewById(R.id.Omada_KatatakshInput);
             if (OmadaKatanalwshInput != null) {
                 OmadaKatanalwshInput.setText(teamNote);
+
             }
+
         }
-        if (team == 2) {
+        if (team == 2 ) {
             teamNote = "B";
             OmadaKatanalwsh = (TextView) findViewById(R.id.Omada_Katataksh);
             if (OmadaKatanalwsh != null) {
