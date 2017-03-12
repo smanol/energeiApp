@@ -85,7 +85,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView DaysLeft;
     private long countOfUsers = 0;
     private TextView moBase;
-    private int ranking;
+    private int ranking = 0;
+
+    float team1 = 0.0f;
+    float team2 = 0.0f;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -296,12 +300,11 @@ public class MainActivity extends AppCompatActivity {
             OmadaKatanalwsh = (TextView) findViewById(R.id.Omada_Katataksh);
             OmadaKatanalwsh.setText("Κατάταξη");
             OmadaKatanalwshInput = (TextView) findViewById(R.id.Omada_KatatakshInput);
-            OmadaKatanalwshInput.setText(teamNote);
+            if (ranking != 0) {
+                OmadaKatanalwshInput.setText(ranking + "η θέση");
+            }
             //Katataksh
         }
-
-
-
     }
 
 
@@ -423,7 +426,6 @@ public class MainActivity extends AppCompatActivity {
                         if ((t = dataSnapshot.getValue()) != null){
                             team = Integer.parseInt(t.toString());
 
-                            displayTeamsText();
 
                             if (valueEventListenerForBlocks == null) {
                                 valueEventListenerForBlocks = new ValueEventListener() {
@@ -431,12 +433,10 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         Object t1 = dataSnapshot.child("Team1").getValue();
-                                        float team1 = 0.0f;
                                         if (t1 != null) {
                                             team1 = Float.parseFloat(t1.toString());
                                         }
                                         Object t2 = dataSnapshot.child("Team2").getValue();
-                                        float team2 = 0.0f;
                                         if (t2 != null) {
                                             team2 = Float.parseFloat(t2.toString());
                                         }
@@ -444,10 +444,6 @@ public class MainActivity extends AppCompatActivity {
                                             createBlockBarchart(team1, team2);
                                         } else if (team == 2) {
                                             listenForCountOfUsers();
-                                            if (countOfUsers != 0) {
-                                                float averagePigsPerUser = (team1 + team2) / countOfUsers ;
-                                                createBlockBarchart(countGourounakia, averagePigsPerUser);
-                                            }
                                         }
                                     }
 
@@ -548,9 +544,10 @@ public class MainActivity extends AppCompatActivity {
                         createDisplay(metrhshes);
                         checkForMeasurementBoxRemoval(day);
                         checkLayout(counter);
+                        getRanking();
+                        displayTeamsText();
                         dialog.hide();
                         uploadComparableVariable(countGourounakia);
-                        getRanking();
                     }
 
                     @Override
@@ -565,32 +562,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void listenForCountOfUsers() {
-        myDB.child("Users").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                countOfUsers = dataSnapshot.getChildrenCount();
-            }
+        myDB.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
+           @Override
+           public void onDataChange(DataSnapshot dataSnapshot) {
+               countOfUsers = dataSnapshot.getChildrenCount();
+               float averagePigsPerUser = (team1 + team2) / countOfUsers ;
+               createBlockBarchart(countGourounakia, averagePigsPerUser);
+           }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+           @Override
+           public void onCancelled(DatabaseError databaseError) {
 
-            }
+           }
+       }
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        );
     }
 
     private void uploadComparableVariable(int countGourounakia) {
@@ -665,6 +651,7 @@ public class MainActivity extends AppCompatActivity {
                        ;
                    }
                 }
+                displayTeamsText();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {

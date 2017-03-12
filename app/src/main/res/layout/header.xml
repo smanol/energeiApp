@@ -322,7 +322,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Ομάδα/Κατάταξη"
-                    android:id="@+id/Omada.Katataksh"/>
+                    android:id="@+id/Omada_Katataksh"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -363,7 +363,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Ομάδα/Κατάταξη"
-                    android:id="@+id/Omada.KatatakshInput"
+                    android:id="@+id/Omada_KatatakshInput"
                     />
                 <TextView
                     android:layout_width="wrap_content"
