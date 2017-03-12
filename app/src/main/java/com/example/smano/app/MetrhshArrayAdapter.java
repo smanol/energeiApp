@@ -49,13 +49,14 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
 
         if(position == 0 && DateUtils.isToday(metrhsh.getDay()) ){
             LinearLayout General = (LinearLayout) view.findViewById(R.id.ArrayAdapterGeneral);
-            General.setBackgroundColor(Color.parseColor("#00C853"));
+            General.setBackgroundColor(Color.parseColor("#FFF59D"));
         }
         // Date Configuration
         TextView hmeromhnia = (TextView) view.findViewById(R.id.ArrayAdapterDate);
         String hmeromhnias = metrhsh.getFullDay();
 
         hmeromhnia.setText(hmeromhnias);
+
 
         //set price and rental attributes
         //τώρα μπορεί να κάνει και πρόσθεση
@@ -69,15 +70,21 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
             metrhsh.getAverageof3();
         double difference =  CostEstimate.round(xrewshTetramhnoyAverageOf3 -  totalBillCost,2);
 
-        if (metrhsh.getAverageof3()> metrhsh.getSumKilovatora()&metrhshes.size()>3){
-            TextView percentageText = (TextView) view.findViewById(R.id.ExtraBoxText);
-            percentageText.setText("Συγχαρητήρια μειώσατε την κατανάλωση σας σε ποσοστό "+percentageValue+"%."+"\nΑν καταναλώνατε κάθε μέρα όσο σήμερα ο λογαριασμός τετραμήνου θα ήταν "+ totalBillCost +"€ και θα εξοικονομούσατε "+ difference+"€." );
-            percentageText.setBackgroundColor((Color.parseColor("#0091EA")));
-        } else {
-            LinearLayout parent1 = (LinearLayout) view.findViewById(ArrayAdapterGeneral);
-            LinearLayout child1 = (LinearLayout) view.findViewById(R.id.ExtraBox);
-            parent1.removeView(child1);
-        }
+
+            if (metrhsh.getAverageof3()> metrhsh.getSumKilovatora()&metrhshes.size()>3){
+                TextView percentageText = (TextView) view.findViewById(R.id.ExtraBoxText);
+                percentageText.setText("Συγχαρητήρια μειώσατε την κατανάλωσή σας σε ποσοστό "+percentageValue+"%."+"\nΑν καταναλώνατε κάθε μέρα όσο σήμερα ο λογαριασμός τετραμήνου θα ήταν "+ totalBillCost +"€ και θα εξοικονομούσατε "+ difference+"€." );
+                percentageText.setBackgroundColor((Color.parseColor("#FFC107")));
+            }
+        else {
+                LinearLayout parent1 = (LinearLayout) view.findViewById(ArrayAdapterGeneral);
+                LinearLayout child1 = (LinearLayout) view.findViewById(R.id.ExtraBox);
+
+                parent1.removeView(child1);
+
+
+            }
+
 
         TextView kwh = (TextView) view.findViewById(R.id.UsualBoxKwhN);
         kwh.setText(metrhsh.getSumKilovatora()+ "kWh");

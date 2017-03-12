@@ -11,9 +11,9 @@ public class CostEstimate {
     public static double calculateCostDay(Double kilovat,int days){
 
         double a,b,c,d,e,f,g,h,i,j,k,l ;
-        double meresDimhnou = 120.0 / days;
+        double meresDimhnou = 120.0 * days;
         final double meresEtous = 365.0*days;
-        double anhgmenhKatanalwshMhna = kilovat * meresDimhnou  ;
+        double anhgmenhKatanalwshMhna = kilovat * meresDimhnou /days  ;
 
 
         double pagio = 1.52;
@@ -153,9 +153,9 @@ public class CostEstimate {
         //Βοηθητικές Μεταβλητές
 
         double an,bn,cn,dn,en,fn,hn,in,jn;
-        double meresDimhnou= 120/days;
+        double meresDimhnou= 120;
         // Ανηγμένη Κατανάλωση Δίμηνου
-        double anhgmenhKatanalwshDimhnouNight = kilovatorNight*meresDimhnou ;
+        double anhgmenhKatanalwshDimhnouNight = kilovatorNight*meresDimhnou /days;
         // Πάγιο Νύχτα
         double pagioNight = 2.00;
         an=pagioNight;

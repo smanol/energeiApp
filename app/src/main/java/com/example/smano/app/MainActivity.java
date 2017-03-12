@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         barChar.setData(theData);
         barChar.notifyDataSetChanged();
         barChar.invalidate();
-        barChar.setDescription("Γράφημα Καναναλώσεων");
+        barChar.setDescription("");
 
         //διάφορες άλλες επιλογές
         barChar.setDragEnabled(true);
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Στοιχεία Δοκιμαστικής Περιόδου
-        if (metrhshes.size()>3){
+        if (metrhshes.size()>=3){
 
 //            TextView averageOf3kwh = (TextView) findViewById(R.id.MOKatanalwshsBase);
             double averO3 = getAverageConsumptionOf3DayInit(metrhshes)+getAverageConsumptionOf3NightInit(metrhshes);
@@ -220,14 +220,6 @@ public class MainActivity extends AppCompatActivity {
 
                 //Στοιχεία για την συνολική εξοικονόμηση
 
-                ExoikonomhshText = (TextView) findViewById(R.id.MeiwshEktimhsh);
-
-
-                if (sumOfSavings > 0) {
-                    ExoikonomhshText.setText(CostEstimate.round(sumOfSavings, 2) + "\u20ac");
-                } else {
-                    ExoikonomhshText.setText("0 " + "\u20ac");
-                }
 
                 //Days Left Text View
 
@@ -263,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
 
                 TextView MeiwshEktimhsh =(TextView) findViewById(R.id.MeiwshEktimhsh);
 
-                double meiwshEkt = CostEstimate.round(consumptionOf3Bill,2)-CostEstimate.round(logariasmosE,2);
+                double meiwshEkt = CostEstimate.round(consumptionOf3Bill-logariasmosE,2);
 
                 if (meiwshEkt>0 ) {
                     MeiwshEktimhsh.setText(meiwshEkt + " \u20ac");
@@ -352,7 +344,8 @@ public class MainActivity extends AppCompatActivity {
         barChart.setData(theData2);
         barChart.setNoDataText("Description that you want");
         barChart.getAxisLeft().setStartAtZero(true);
-        barChart.setDescription("Συγκριτική επίδοση");
+        barChart.setDescription("");
+
     }
 
     private String transformDateToDayMonth(String inputDate) {
