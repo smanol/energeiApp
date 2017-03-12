@@ -380,18 +380,7 @@ public class MainActivity extends AppCompatActivity {
         return targetFormat.format(date);
     }
 
-    private String transformDateToWordsForCheck(String inputDate) {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        Date date;
-        try {
-            date = df.parse(inputDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
-        DateFormat targetFormat = new SimpleDateFormat("dd MMMM", new Locale("el", "GR"));
-        return targetFormat.format(date);
-    }
+
 
     private String transformDateToDayMonth(String inputDate) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -830,25 +819,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkForMeasurementBoxRemoval(String day) {
-        if (!day.isEmpty()) {
-            //Metrhsh lastItem = metrhshes.get(metrhshes.size()-1);
-            //String lastDatabaseDate = lastItem.getDay();
-            String today = new SimpleDateFormat("dd MMMM", new Locale("el", "GR")).format(new Date());
-            String formattedDay = "";
-            try {
-                formattedDay = transformDateToWordsForCheck(day);
-            } catch (Exception e) {
-                return;
-            }
-            if (formattedDay != null && formattedDay.equals(today)) {
-                removeInputLegend();
-                removeDayOnlyMeasurementBoxLinearLayout();
-                removeDayNightMeasurementBoxLinearLayout();
-            } else if (hasNightMeasurements == 1) {
-                removeDayNightMeasurementBoxLinearLayout();      // remove Night MeasurementBox if the first entry is for Day-Only Measurement
-            } else if (hasNightMeasurements == 2) {
-                removeDayOnlyMeasurementBoxLinearLayout();       // remove Day-Only MeasurementBox if the first entry is for DayNight Measurement
-            }
+        if (DateUtils.isToday (day)) {
+            removeInputLegend();
+            removeDayOnlyMeasurementBoxLinearLayout();
+            removeDayNightMeasurementBoxLinearLayout();
+        } else if (hasNightMeasurements == 1) {
+            removeDayNightMeasurementBoxLinearLayout();      // remove Night MeasurementBox if the first entry is for Day-Only Measurement
+        } else if (hasNightMeasurements == 2) {
+            removeDayOnlyMeasurementBoxLinearLayout();       // remove Day-Only MeasurementBox if the first entry is for DayNight Measurement
         }
     }
 

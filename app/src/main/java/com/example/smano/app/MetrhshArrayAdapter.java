@@ -48,7 +48,7 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
 
             //Τελευταία και φρέσκια
 
-            if(position == 0 ){
+            if(position == 0 && DateUtils.isToday(metrhshes.get(position).getDay()) ){
                 LinearLayout General = (LinearLayout) view.findViewById(R.id.ArrayAdapterGeneral);
                 General.setBackgroundColor(Color.parseColor("#00C853"));
             }
