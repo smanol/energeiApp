@@ -44,4 +44,17 @@ public class DateUtils {
         DateFormat targetFormat = new SimpleDateFormat("dd MMMM", new Locale("el", "GR"));
         return targetFormat.format(date);
     }
+
+    public static String transformDateToWords(String inputDate) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        try {
+            date = df.parse(inputDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+        DateFormat targetFormat = new SimpleDateFormat("EEEE d MMMM", new Locale("el", "GR"));
+        return targetFormat.format(date);
+    }
 }

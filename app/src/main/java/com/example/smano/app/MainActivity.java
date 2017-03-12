@@ -181,8 +181,7 @@ public class MainActivity extends AppCompatActivity {
         barChar.getAxisLeft().setStartAtZero(true);
         barChar.setNoDataText("Description that you want");
 
-        ArrayList<Metrhsh> metrhshesForAdapter = transformArraylistsDatesToWords(metrhshes);
-        metrhshArrayAdapter = new MetrhshArrayAdapter(this, 0, metrhshesForAdapter);
+        metrhshArrayAdapter = new MetrhshArrayAdapter(this, 0, metrhshes);
         lv.setAdapter(metrhshArrayAdapter);
 
 
@@ -355,32 +354,6 @@ public class MainActivity extends AppCompatActivity {
         barChart.getAxisLeft().setStartAtZero(true);
         barChart.setDescription("Συγκριτική επίδοση");
     }
-
-    private ArrayList<Metrhsh> transformArraylistsDatesToWords(ArrayList<Metrhsh> metrhshes) {
-        String newDate;
-        for (int i = 0; i < metrhshes.size(); i++) {
-            newDate = transformDateToWords(metrhshes.get(i).getDay());
-            if (newDate != null) {
-                metrhshes.get(i).setDay(newDate);
-            }
-        }
-        return metrhshes;
-    }
-
-    private String transformDateToWords(String inputDate) {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        Date date;
-        try {
-            date = df.parse(inputDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
-        DateFormat targetFormat = new SimpleDateFormat("EEEE d MMMM", new Locale("el", "GR"));
-        return targetFormat.format(date);
-    }
-
-
 
     private String transformDateToDayMonth(String inputDate) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");

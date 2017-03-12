@@ -36,7 +36,7 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
     }
 
         //called when rendering the list
-        public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
 
         //get the property we are displaying
         Metrhsh metrhsh = metrhshes.get(position);
@@ -45,19 +45,17 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.layout, null);
 
+        //Τελευταία και φρέσκια
 
-            //Τελευταία και φρέσκια
-
-            if(position == 0 && DateUtils.isToday(metrhshes.get(position).getDay()) ){
-                LinearLayout General = (LinearLayout) view.findViewById(R.id.ArrayAdapterGeneral);
-                General.setBackgroundColor(Color.parseColor("#00C853"));
-            }
+        if(position == 0 && DateUtils.isToday(metrhsh.getDay()) ){
+            LinearLayout General = (LinearLayout) view.findViewById(R.id.ArrayAdapterGeneral);
+            General.setBackgroundColor(Color.parseColor("#00C853"));
+        }
         // Date Configuration
         TextView hmeromhnia = (TextView) view.findViewById(R.id.ArrayAdapterDate);
-        String hmeromhnias = metrhsh.getDay();
+        String hmeromhnias = metrhsh.getFullDay();
 
         hmeromhnia.setText(hmeromhnias);
-
 
         //set price and rental attributes
         //τώρα μπορεί να κάνει και πρόσθεση
@@ -71,21 +69,15 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
             metrhsh.getAverageof3();
         double difference =  CostEstimate.round(xrewshTetramhnoyAverageOf3 -  totalBillCost,2);
 
-
-            if (metrhsh.getAverageof3()> metrhsh.getSumKilovatora()&metrhshes.size()>3){
-                TextView percentageText = (TextView) view.findViewById(R.id.ExtraBoxText);
-                percentageText.setText("Συγχαρητήρια μειώσατε την κατανάλωση σας σε ποσοστό "+percentageValue+"%."+"\nΑν καταναλώνατε κάθε μέρα όσο σήμερα ο λογαριασμός τετραμήνου θα ήταν "+ totalBillCost +"€ και θα εξοικονομούσατε "+ difference+"€." );
-                percentageText.setBackgroundColor((Color.parseColor("#0091EA")));
-            }
-        else {
-                LinearLayout parent1 = (LinearLayout) view.findViewById(ArrayAdapterGeneral);
-                LinearLayout child1 = (LinearLayout) view.findViewById(R.id.ExtraBox);
-
-                parent1.removeView(child1);
-
-
-            }
-
+        if (metrhsh.getAverageof3()> metrhsh.getSumKilovatora()&metrhshes.size()>3){
+            TextView percentageText = (TextView) view.findViewById(R.id.ExtraBoxText);
+            percentageText.setText("Συγχαρητήρια μειώσατε την κατανάλωση σας σε ποσοστό "+percentageValue+"%."+"\nΑν καταναλώνατε κάθε μέρα όσο σήμερα ο λογαριασμός τετραμήνου θα ήταν "+ totalBillCost +"€ και θα εξοικονομούσατε "+ difference+"€." );
+            percentageText.setBackgroundColor((Color.parseColor("#0091EA")));
+        } else {
+            LinearLayout parent1 = (LinearLayout) view.findViewById(ArrayAdapterGeneral);
+            LinearLayout child1 = (LinearLayout) view.findViewById(R.id.ExtraBox);
+            parent1.removeView(child1);
+        }
 
         TextView kwh = (TextView) view.findViewById(R.id.UsualBoxKwhN);
         kwh.setText(metrhsh.getSumKilovatora()+ "kWh");
@@ -95,22 +87,21 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
         cost.setText(costOfDay +" " +"\u20ac");
 
 
-            //ImageView Configuration
-            ImageView image = (ImageView) view.findViewById(R.id.image);
+        //ImageView Configuration
+        ImageView image = (ImageView) view.findViewById(R.id.image);
 
 
-            if (metrhsh.getSumKilovatora()< metrhsh.getAverageof3()& metrhsh.getSumKilovatora()> 0.9 * metrhsh.getAverageof3()&metrhshes.size()>3) {
-                image.setImageResource(R.drawable.piggy1);
-                cost.setTextColor(Color.parseColor("#1E88E5"));
+        if (metrhsh.getSumKilovatora()< metrhsh.getAverageof3()& metrhsh.getSumKilovatora()> 0.9 * metrhsh.getAverageof3()&metrhshes.size()>3) {
+            image.setImageResource(R.drawable.piggy1);
+            cost.setTextColor(Color.parseColor("#1E88E5"));
 
-            }
-            else if (metrhsh.getSumKilovatora()< 0.9 * metrhsh.getAverageof3()& metrhsh.getSumKilovatora()> 0.8 * metrhsh.getAverageof3()&metrhshes.size()>3) {
-                image.setImageResource(R.drawable.piggy2);
-                cost.setTextColor(Color.parseColor("#00BCD4"));
-            }
-            else if (metrhsh.getSumKilovatora()< 0.8 * metrhsh.getAverageof3()&metrhshes.size()>3) {
-                image.setImageResource(R.drawable.piggy3);
-                cost.setTextColor(Color.parseColor("#00C853"));}
+        } else if (metrhsh.getSumKilovatora()< 0.9 * metrhsh.getAverageof3()& metrhsh.getSumKilovatora()> 0.8 * metrhsh.getAverageof3()&metrhshes.size()>3) {
+            image.setImageResource(R.drawable.piggy2);
+            cost.setTextColor(Color.parseColor("#00BCD4"));
+        } else if (metrhsh.getSumKilovatora()< 0.8 * metrhsh.getAverageof3()&metrhshes.size()>3) {
+            image.setImageResource(R.drawable.piggy3);
+            cost.setTextColor(Color.parseColor("#00C853"));
+        }
 //        TextView lowerBill = (TextView) view.findViewById(R.id.Bill);
 //
 //        if ( metrhsh.getSavings()>0)
@@ -120,7 +111,6 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
 //        }
 //
 //        //get the image associated with this property
-             return view;
-
+        return view;
     }
 }

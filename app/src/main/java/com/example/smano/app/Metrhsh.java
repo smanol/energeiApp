@@ -14,6 +14,7 @@ public class Metrhsh {
     private double av3N;
     int gourounakia=0;
     double savings = 0;
+    private String fullDay;
 
 
     public Metrhsh(String day, double dayKilovatora, double nightKilovatora, double average, double averageOf3,double averageOf3Day,double averageOf3Night) {
@@ -24,7 +25,7 @@ public class Metrhsh {
         kilo.setNightKilovatora(nightKilovatora);
         this.av3D=averageOf3Day;
         this.av3N=averageOf3Night;
-
+        this.fullDay = DateUtils.transformDateToWords(day);
 
 
         if (dayKilovatora + nightKilovatora < average ) {
@@ -47,6 +48,7 @@ public class Metrhsh {
         this.day = day;
         kilo.setDayKilovatora(dayKilovatora);
         kilo.setNightKilovatora(nightKilovatora);
+        this.fullDay = DateUtils.transformDateToWords(day);
     }
 
     public int getGourounakia() {return gourounakia;}
@@ -76,6 +78,9 @@ public class Metrhsh {
         return day;
     }
 
+    public String getFullDay() {
+        return fullDay;
+    }
 
 
     public void setDay(String day) {
