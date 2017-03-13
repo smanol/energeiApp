@@ -13,7 +13,7 @@
         android:orientation="vertical"
 
         tools:context="com.example.smano.app.MainActivity"
-        android:background="#E0E0E0"
+        android:background="#00BCD4"
         >
 
 

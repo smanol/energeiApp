@@ -21,7 +21,7 @@
         android:padding="10dp"
         android:text="Εισάγετε τη σημερινή μέτρηση: "
         android:textSize="20sp"
-        android:background="#4DB6AC"
+        android:background="#80DEEA"
         android:id="@+id/eisageteThShmerinh"
         />
 
@@ -31,7 +31,7 @@
         android:padding="10dp"
         android:text="Για γενικό οικιακό τιμολόγιο: "
         android:textSize="20sp"
-        android:background="#80CBC4"
+        android:background="#B2EBF2"
         android:id="@+id/exeteGeniko"
 
         />
@@ -39,7 +39,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#80CBC4"
+        android:background="#B2EBF2"
         android:orientation="vertical"
         android:id="@+id/measurementBox"
         >
@@ -65,6 +65,7 @@
             android:padding="10dp"
             android:layout_weight="4"
 
+
             />
 
 
@@ -85,7 +86,7 @@
         android:padding="10dp"
         android:text=" Ή για Νυχτερινό Τιμολόγιο: "
         android:textSize="20sp"
-        android:background="#80CBC4"
+        android:background="#B2EBF2"
         android:id="@+id/exeteNyxterino"
 
         />
@@ -93,7 +94,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#80CBC4"
+        android:background="#B2EBF2"
         android:orientation="vertical"
         android:id="@+id/measurementBoxNight"
         >
