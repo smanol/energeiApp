@@ -11,7 +11,7 @@ public class CostEstimate {
     public static double calculateCostDay(Double kilovat,int days){
 
         double a,b,c,d,e,f,g,h,i,j,k,l ;
-        double meresDimhnou = 120.0 * days;
+        double meresDimhnou = 120.0;
         final double meresEtous = 365.0*days;
         double anhgmenhKatanalwshMhna = kilovat * meresDimhnou /days  ;
 

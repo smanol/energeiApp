@@ -101,8 +101,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="ΕνέργειApp - 2017"
-        android:layout_gravity="center"
-        android:gravity="center|bottom"
+
+        android:gravity="center"
         android:padding="8dp"
         />
 

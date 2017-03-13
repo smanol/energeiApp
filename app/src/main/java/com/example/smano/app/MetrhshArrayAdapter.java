@@ -87,7 +87,7 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
 
 
         TextView kwh = (TextView) view.findViewById(R.id.UsualBoxKwhN);
-        kwh.setText(metrhsh.getSumKilovatora()+ "kWh");
+        kwh.setText(CostEstimate.round(metrhsh.getSumKilovatora(),2)+ "kWh");
 
 
         TextView cost = (TextView) view.findViewById(R.id.UsualBoxCostN);

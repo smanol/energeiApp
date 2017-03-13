@@ -735,7 +735,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void removeInstructionsLinearLayout() {
         LinearLayout parent = (LinearLayout) findViewById(R.id.mainLinearLayout);
-        TextView child = (TextView) findViewById(R.id.eisagwgiko);
+        LinearLayout child = (LinearLayout) findViewById(R.id.eisagwgiko);
         parent.removeView(child);
     }
 

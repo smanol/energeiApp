@@ -4,15 +4,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/mainLinearLayout">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/eisagwgiko"
+        android:orientation="vertical">
+
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:id="@+id/eisagwgiko"
-        android:text="Καλώς ήρθατε στην εφαρμογή ΕνέργειApp! Για δύο εβδομάδες θα παρακολουθήσουμε την οικιακή κατανάλωση ρεύματος. Απαραίτητη είναι η καθημερινή εισαγωγή στο κατάλληλο πλαίσιο της ένδειξης του ρολογιού της ΔΕΗ. Αν έχετε γενικό οικιακό τιμολόγιο εισάγετε την ένδειξη του μετρητή στο πλαίσιο γενικού οικιακού τιμολογίου με τη μονή θέση εισαγωγής. Αν έχετε νυχτερινό νυχτερινό τιμολόγιο εισάγετε την μέτρηση στο πλαίσιο νυχτερινού με τις με τις δύο θέσεις εισαγωγής, για τη κανονική και την μειωμένη τιμολόγηση. Στη συνέχεια η διαφορά στην κατανάλωση και το εκτιμώμενο κόστος θα υπολογίζεται αυτόματα. Τα πρώτα δεδομένα θα είναι διαθέσιμα μετά τη δεύτερη καταχώρηση."
+
+        android:textSize="20sp"
+        android:text="Καλώς ήρθατε στην εφαρμογή ΕνέργειApp!\n\nΓια δύο εβδομάδες θα παρακολουθήσουμε την οικιακή κατανάλωση ρεύματος.\n\nΠως λειτουργει;\nΕισάγετε καθημερινα στο κατάλληλο πλαίσιο την ένδειξη του ρολογιού της ΔΕΗ! \n\nΑν έχετε γενικό οικιακό τιμολόγιο εισάγετε την ένδειξη του μετρητή στο πλαίσιο γενικού οικιακού τιμολογίου με τη μονή θέση εισαγωγής. \nΑν έχετε νυχτερινό τιμολόγιο εισάγετε την μέτρηση στο πλαίσιο νυχτερινού με τις με τις δύο θέσεις εισαγωγής, για τη κανονική και την μειωμένη τιμολόγηση.\n\nΣτη συνέχεια η διαφορά στην κατανάλωση και το εκτιμώμενο κόστος θα υπολογίζεται αυτόματα.\nΤα πρώτα δεδομένα θα είναι διαθέσιμα μετά τη δεύτερη καταχώρηση. \n\nΚαλή αρχή!"
         />
 
 
+</LinearLayout>
 
 
     <TextView
@@ -306,6 +315,7 @@
             android:textStyle="bold"
             android:padding="12dp"
             />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -324,32 +334,39 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Ομάδα/Κατάταξη"
-                    android:id="@+id/Omada_Katataksh"/>
+                    android:id="@+id/Omada_Katataksh"
+                    android:textSize="16sp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Σύνολο Πόντων"/>
+                    android:text="Σύνολο Πόντων"
+                    android:textSize="16sp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Μέρες που απομένουν"/>
+                    android:text="Μέρες που απομένουν"
+                    android:textSize="16sp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Μέση Κατανάλωση "
+                    android:textSize="16sp"
                     />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Χρέωση Έως Τώρα"/>
+                    android:text="Χρέωση Έως Τώρα"
+                    android:textSize="16sp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Χρέωση Τετραμήνου"/>
+                    android:text="Χρέωση Τετραμήνου"
+                    android:textSize="16sp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Εξοικονόμηση Τετραμήνου"/>
+                    android:text="Εξοικονόμηση Τετραμήνου"
+                    android:textSize="16sp"/>
 
 
 
@@ -366,41 +383,49 @@
                     android:layout_height="wrap_content"
                     android:text="Ομάδα/Κατάταξη"
                     android:id="@+id/Omada_KatatakshInput"
+                    android:textSize="16sp"
                     />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Σύνολο Πόντων"
                     android:id="@+id/SynoloPontwn"
+                    android:textSize="16sp"
                     />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Μέρες που Απομένουν"
-                    android:id="@+id/MeresPouApomenoyn"/>
+                    android:id="@+id/MeresPouApomenoyn"
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Μέση Κατανάλωση "
                     android:id="@+id/MOKatanalwshs"
+                    android:textSize="16sp"
                     />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Χρέωση Έως Τώρα"
-                    android:id="@+id/XrewshEwsTwra"/>
+                    android:id="@+id/XrewshEwsTwra"
+                    android:textSize="16sp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Χρέωση Τετραμήνου"
-                    android:id="@+id/LogariasmosEktimhsh"/>
+                    android:id="@+id/LogariasmosEktimhsh"
+                    android:textSize="16sp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Μείωση (Εκτίμηση)"
-                    android:id="@+id/MeiwshEktimhsh"/>
+                    android:id="@+id/MeiwshEktimhsh"
+                    android:textSize="16sp"/>
+
 
             </LinearLayout>
 
@@ -428,7 +453,7 @@
             android:text="Καταγεγραμμένες Μετρήσεις"
             android:textSize="20sp"
             android:id="@+id/measurementsLegend"
-android:textStyle="bold"
+             android:textStyle="bold"
 
             />
 
