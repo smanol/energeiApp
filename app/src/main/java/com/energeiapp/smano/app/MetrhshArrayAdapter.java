@@ -61,7 +61,7 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
         //set price and rental attributes
         //τώρα μπορεί να κάνει και πρόσθεση
 
-        double totalBillCost = CostEstimate.calculateCostDay(metrhsh.getDayKilovatora(),1) + CostEstimate.calculateCostNight(metrhsh.getNightKilovatora(),1);
+        double totalBillCost = CostEstimate.round(CostEstimate.calculateCostDay(metrhsh.getDayKilovatora(),1) + CostEstimate.calculateCostNight(metrhsh.getNightKilovatora(),1),2);
         double costOfDay = CostEstimate.round(totalBillCost/120D, 2);
         double percentage = (metrhsh.getAverageof3()- metrhsh.getSumKilovatora())/metrhsh.getAverageof3()*100;
         double percentageValue = (CostEstimate.round(percentage,1));
