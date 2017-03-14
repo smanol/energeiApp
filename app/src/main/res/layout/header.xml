@@ -150,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
                 android:id="@+id/editTextNight"
-                android:hint=" Νυχτερινή"
+                android:hint="Νυχτερινή"
                 android:padding="10dp"
                 android:layout_weight="5"
                 android:textSize="20dp"
