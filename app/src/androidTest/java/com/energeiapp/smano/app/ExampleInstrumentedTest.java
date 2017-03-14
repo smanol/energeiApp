@@ -1,4 +1,4 @@
-package com.example.smano.app;
+package com.energeiapp.smano.app;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

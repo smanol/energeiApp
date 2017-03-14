@@ -1,4 +1,4 @@
-package com.example.smano.app;
+package com.energeiapp.smano.app;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

@@ -1,4 +1,4 @@
-package com.example.smano.app;
+package com.energeiapp.smano.app;
 
 /**
  * Created by Georgios.Manoliadis on 21/12/2016.

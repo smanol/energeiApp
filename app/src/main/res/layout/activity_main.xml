@@ -12,7 +12,7 @@
         android:fillViewport="true"
         android:orientation="vertical"
 
-        tools:context="com.example.smano.app.MainActivity"
+        tools:context="com.energeiapp.smano.app.MainActivity"
         android:background="#00BCD4"
         >
 

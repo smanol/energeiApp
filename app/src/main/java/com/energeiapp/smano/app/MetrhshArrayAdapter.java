@@ -1,4 +1,4 @@
-package com.example.smano.app;
+package com.energeiapp.smano.app;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,7 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static com.example.smano.app.R.id.ArrayAdapterGeneral;
+import static com.energeiapp.smano.app.R.id.ArrayAdapterGeneral;
 
 /**
  * Created by smano on 1/11/2016.
