@@ -2,7 +2,6 @@ package com.energeiapp.smano.app;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -195,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Στοιχεία Δοκιμαστικής Περιόδου
-        if (metrhshes.size()>=3){
+        if (metrhshes.size()>3){
 
 //            TextView averageOf3kwh = (TextView) findViewById(R.id.MOKatanalwshsBase);
             double averO3 = getAverageConsumptionOf3DayInit(metrhshes)+getAverageConsumptionOf3NightInit(metrhshes);
@@ -398,11 +397,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void attachDatabaseReadListener() {
 
-        final ProgressDialog dialog=new ProgressDialog(this);
-        dialog.setMessage("Παρακαλώ Περιμένετε...");
-        dialog.setCancelable(false);
-        dialog.setInverseBackgroundForced(false);
-        dialog.show();
+        Toast.makeText(MainActivity.this, "Παρακαλώ περιμένετε... ", Toast.LENGTH_SHORT).show();
+
+//        final ProgressDialog dialog=new ProgressDialog(this);
+//        dialog.setMessage("Παρακαλώ Περιμένετε...");
+//        dialog.setCancelable(false);
+//        dialog.setInverseBackgroundForced(false);
+//        dialog.show();
 
         if (username != null && !ANONYMOUS.equals(username)) {
             if (valueEventListenerTeam == null) {
@@ -475,6 +476,7 @@ public class MainActivity extends AppCompatActivity {
                         sumOfSavings=0;
                         for (com.google.firebase.database.DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                             day = postSnapshot.getKey();
+                            int countg=0;
                             try {
                                 dayKilovatora = -1;
                                 nightKilovatora = -1;
@@ -503,9 +505,13 @@ public class MainActivity extends AppCompatActivity {
                                 }
 
 
-                                countGourounakia += met.getGourounakia();
-                                sumOfSavings += met.getSavings();
-                            }
+                                if (counter>3) {
+
+                                    countGourounakia += met.getGourounakia();
+                                    sumOfSavings += met.getSavings();
+                                }
+
+                                }
                             if (dayKilovatora != -1) {
                                 previousDay = dayKilovatora;
                                 hasNightMeasurements = 1;
@@ -529,12 +535,15 @@ public class MainActivity extends AppCompatActivity {
 
                             counter++;
                         }
+
+                        //dialog.hide();
                         createDisplay(metrhshes);
+
                         checkForMeasurementBoxRemoval(day);
                         displayTeamsText();
                         checkLayout(counter);
                         getRanking();
-                        dialog.hide();
+
                         uploadComparableVariable(countGourounakia);
                     }
 
@@ -656,7 +665,7 @@ public class MainActivity extends AppCompatActivity {
         if (button != null) {
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    makeNotification();
+
                     String EMPTY_TEXT_BOX = "Δεν είναι δυνατή η αποστολή της μέτρησης. Παρακαλώ εισάγετε έγκυρη τιμή στο κουτί μέτρησεων.";
                     String measurement = editText.getText().toString();
                     if (StringUtils.isBlank(measurement)) {
@@ -667,6 +676,7 @@ public class MainActivity extends AppCompatActivity {
                             String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
                             myDB.child("Users").child(username).child("Measurements").child(date).child("Day").setValue(measurement);
                             removeDayOnlyMeasurementBoxLinearLayout();
+                            makeNotification();
                         }
                     }
                 }
@@ -681,7 +691,7 @@ public class MainActivity extends AppCompatActivity {
         if (button != null) {
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    makeNotification();
+
                     String EMPTY_TEXT_BOX = "Δεν είναι δυνατή η αποστολή της μέτρησης. Παρακαλώ εισάγετε έγκυρες τιμές στο κουτί μέτρησεων.";
                     String measurementDay = editTextDay.getText().toString();
                     String measurementNight = editTextNight.getText().toString();
@@ -690,10 +700,12 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         boolean bool = checkInvalidMeasurement(measurementDay, measurementNight);
                         if (bool) {
+
                             String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
                             myDB.child("Users").child(username).child("Measurements").child(date).child("Day").setValue(measurementDay);
                             myDB.child("Users").child(username).child("Measurements").child(date).child("Night").setValue(measurementNight);
                             removeDayNightMeasurementBoxLinearLayout();
+                            makeNotification();
                         }
                     }
                 }
@@ -809,11 +821,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             addMeasurementsLegend();
         }
-        if (c < 3){
+        if (c < 5){
 
             removeGraphCompare();
         }
-        if (c<4){
+        if (c < 3){
             removeGraphKwh();
         }
     }
@@ -821,10 +833,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     private boolean checkInvalidMeasurement(String measurementDay, String measurementNight) {
-        final String largerThan40Message = "Η μέτρηση είναι πολυ μεγάλη αναλογικά με τις προηγούμενες τιμές που έχετε εισάγει.";
+        final String largerThan300Message = "Η μέτρηση είναι πολυ μεγάλη αναλογικά με τις προηγούμενες τιμές που έχετε εισάγει.";
         final String smallerThanPreviousMessage = "Η μέτρηση που εισάγατε είναι μικρότερη απο την τελευταία μέτρηση που εισάγατε.";
         final String correctMessage = "Η μέτρηση που εισάγατε καταχωρήθηκε επιτυχώς.";
-        final double MAX_ALLOWED_KILOVAT_PER_DAY = 40;
+        final double MAX_ALLOWED_KILOVAT_PER_DAY = 200;
 
         if (wholeValuesMetrhseis.size() > 0) {
             double lastDatabaseValue = wholeValuesMetrhseis.get(wholeValuesMetrhseis.size() - 1).getDayKilovatora();
@@ -835,11 +847,11 @@ public class MainActivity extends AppCompatActivity {
             double measureNight = Double.parseDouble(measurementNight);
             if (measureNight != 0) {
                 double lastDatabaseValueNight = wholeValuesMetrhseis.get(wholeValuesMetrhseis.size() - 1).getNightKilovatora();
-                diffNight = measure - lastDatabaseValueNight;
+                diffNight = measureNight - lastDatabaseValueNight;
             }
 
             if (diff > MAX_ALLOWED_KILOVAT_PER_DAY || diffNight > MAX_ALLOWED_KILOVAT_PER_DAY) {
-                popupMessage(largerThan40Message);
+                popupMessage(largerThan300Message);
                 return false;
             } else if (diff < 0 || diffNight < 0) {
                 popupMessage(smallerThanPreviousMessage);
@@ -1086,13 +1098,13 @@ public class MainActivity extends AppCompatActivity {
     public void makeNotification(){
 
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, 2);
+        calendar.add(Calendar.MINUTE, 5);
 
         Intent intent = new Intent(getApplicationContext(), NotifyService.class);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmManager.INTERVAL_DAY , pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmManager.INTERVAL_FIFTEEN_MINUTES , pendingIntent);
     }
 }

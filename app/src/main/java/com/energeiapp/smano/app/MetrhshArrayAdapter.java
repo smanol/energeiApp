@@ -71,10 +71,12 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
         double difference =  CostEstimate.round(xrewshTetramhnoyAverageOf3 -  totalBillCost,2);
 
 
-            if (metrhsh.getAverageof3()> metrhsh.getSumKilovatora()&metrhshes.size()>3){
-                TextView percentageText = (TextView) view.findViewById(R.id.ExtraBoxText);
-                percentageText.setText("Συγχαρητήρια μειώσατε την κατανάλωσή σας σε ποσοστό "+percentageValue+"%."+"\nΑν καταναλώνατε κάθε μέρα όσο σήμερα ο λογαριασμός τετραμήνου θα ήταν "+ totalBillCost +"€ και θα εξοικονομούσατε "+ difference+"€." );
-                percentageText.setBackgroundColor((Color.parseColor("#FFC107")));
+            if (metrhsh.getAverageof3()> metrhsh.getSumKilovatora() && position<metrhshes.size()-3){
+
+                    TextView percentageText = (TextView) view.findViewById(R.id.ExtraBoxText);
+                    percentageText.setText("Συγχαρητήρια μειώσατε την κατανάλωσή σας σε ποσοστό " + percentageValue + "%." + "\nΑν καταναλώνατε κάθε μέρα όσο σήμερα ο λογαριασμός τετραμήνου θα ήταν " + totalBillCost + "€ και θα εξοικονομούσατε " + difference + "€.");
+                    percentageText.setBackgroundColor((Color.parseColor("#FFC107")));
+
             }
         else {
                 LinearLayout parent1 = (LinearLayout) view.findViewById(ArrayAdapterGeneral);
@@ -98,14 +100,14 @@ class MetrhshArrayAdapter extends ArrayAdapter<Metrhsh> {
         ImageView image = (ImageView) view.findViewById(R.id.image);
 
 
-        if (metrhsh.getSumKilovatora()< metrhsh.getAverageof3()& metrhsh.getSumKilovatora()> 0.9 * metrhsh.getAverageof3()&metrhshes.size()>3) {
+        if (metrhsh.getSumKilovatora()< metrhsh.getAverageof3()& metrhsh.getSumKilovatora()> 0.9 * metrhsh.getAverageof3()&& position<metrhshes.size()-3) {
             image.setImageResource(R.drawable.piggy1);
             cost.setTextColor(Color.parseColor("#1E88E5"));
 
-        } else if (metrhsh.getSumKilovatora()< 0.9 * metrhsh.getAverageof3()& metrhsh.getSumKilovatora()> 0.8 * metrhsh.getAverageof3()&metrhshes.size()>3) {
+        } else if (metrhsh.getSumKilovatora()< 0.9 * metrhsh.getAverageof3()& metrhsh.getSumKilovatora()> 0.8 * metrhsh.getAverageof3()&& position<metrhshes.size()-3) {
             image.setImageResource(R.drawable.piggy2);
             cost.setTextColor(Color.parseColor("#00BCD4"));
-        } else if (metrhsh.getSumKilovatora()< 0.8 * metrhsh.getAverageof3()&metrhshes.size()>3) {
+        } else if (metrhsh.getSumKilovatora()< 0.8 * metrhsh.getAverageof3() && position<metrhshes.size()-3) {
             image.setImageResource(R.drawable.piggy3);
             cost.setTextColor(Color.parseColor("#00C853"));
         }
