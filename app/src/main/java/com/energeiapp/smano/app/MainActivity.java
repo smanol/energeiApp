@@ -214,60 +214,61 @@ public class MainActivity extends AppCompatActivity {
             //Γενικά στοιχεία
 
 
-                gourounakiaText = (TextView) findViewById(R.id.SynoloPontwn);
+            gourounakiaText = (TextView) findViewById(R.id.SynoloPontwn);
+            if (gourounakiaText != null) {
                 gourounakiaText.setText(countGourounakia + "");
+            }
 
-                //Στοιχεία για την συνολική εξοικονόμηση
-
-
-                //Days Left Text View
+            //Στοιχεία για την συνολική εξοικονόμηση
 
 
-                DaysLeft = (TextView) findViewById(R.id.MeresPouApomenoyn);
-                int meres = 14 - metrhshes.size();
+            //Days Left Text View
+
+
+            DaysLeft = (TextView) findViewById(R.id.MeresPouApomenoyn);
+            int meres = 14 - metrhshes.size();
+            if (DaysLeft != null) {
                 DaysLeft.setText("" + meres);
+            }
 
-                MOKatanalwsh = (TextView) findViewById(R.id.MOKatanalwshs);
-
+            MOKatanalwsh = (TextView) findViewById(R.id.MOKatanalwshs);
+            if (MOKatanalwsh != null) {
                 MOKatanalwsh.setText(CostEstimate.round(getAverageConsumption(metrhshes), 2) + " KWh");
+            }
 
-                LogariasmosE = (TextView) findViewById(R.id.LogariasmosEktimhsh);
+            LogariasmosE = (TextView) findViewById(R.id.LogariasmosEktimhsh);
 
-                Double kwhEwsTwraDay = wholeValuesMetrhseis.get(metrhshes.size()).getDayKilovatora() - wholeValuesMetrhseis.get(0).getDayKilovatora();
+            Double kwhEwsTwraDay = wholeValuesMetrhseis.get(metrhshes.size()).getDayKilovatora() - wholeValuesMetrhseis.get(0).getDayKilovatora();
 
-                Double kwhEwsTwraNight = wholeValuesMetrhseis.get(metrhshes.size()).getNightKilovatora() - wholeValuesMetrhseis.get(0).getNightKilovatora();
+            Double kwhEwsTwraNight = wholeValuesMetrhseis.get(metrhshes.size()).getNightKilovatora() - wholeValuesMetrhseis.get(0).getNightKilovatora();
 
-                Double costEwsTwraDay = CostEstimate.calculateCostDay(kwhEwsTwraDay, metrhshes.size()) / 120 * metrhshes.size();
+            Double costEwsTwraDay = CostEstimate.calculateCostDay(kwhEwsTwraDay, metrhshes.size()) / 120 * metrhshes.size();
 
-                Double costEwsTwraNight = CostEstimate.calculateCostNight(kwhEwsTwraNight, metrhshes.size()) / 120 * metrhshes.size();
+            Double costEwsTwraNight = CostEstimate.calculateCostNight(kwhEwsTwraNight, metrhshes.size()) / 120 * metrhshes.size();
 
-                Double xrewshEwsTwra = costEwsTwraDay + costEwsTwraNight;
+            Double xrewshEwsTwra = costEwsTwraDay + costEwsTwraNight;
 
-                XrewshEwsTwra = (TextView) findViewById(R.id.XrewshEwsTwra);
-
+            XrewshEwsTwra = (TextView) findViewById(R.id.XrewshEwsTwra);
+            if (XrewshEwsTwra != null) {
                 XrewshEwsTwra.setText(CostEstimate.round(xrewshEwsTwra, 2) + " \u20ac");
+            }
 
+            Double logariasmosE = CostEstimate.calculateCostDay(kwhEwsTwraDay, metrhshes.size()) + CostEstimate.calculateCostNight(kwhEwsTwraNight, metrhshes.size());
+            if (LogariasmosE != null) {
+                LogariasmosE.setText(CostEstimate.round(logariasmosE, 2) + " \u20ac");
+            }
 
-                Double logariasmosE = CostEstimate.calculateCostDay(kwhEwsTwraDay, metrhshes.size())+CostEstimate.calculateCostNight(kwhEwsTwraNight, metrhshes.size());
+            TextView MeiwshEktimhsh = (TextView) findViewById(R.id.MeiwshEktimhsh);
 
-                LogariasmosE.setText(CostEstimate.round(logariasmosE,2)+" \u20ac");
-
-                TextView MeiwshEktimhsh =(TextView) findViewById(R.id.MeiwshEktimhsh);
-
-                double meiwshEkt = CostEstimate.round(consumptionOf3Bill-logariasmosE,2);
-
-                if (meiwshEkt>0 ) {
+            double meiwshEkt = CostEstimate.round(consumptionOf3Bill - logariasmosE, 2);
+            if (MeiwshEktimhsh != null) {
+                if (meiwshEkt > 0) {
                     MeiwshEktimhsh.setText(meiwshEkt + " \u20ac");
-                }
-                else{
+                } else {
                     MeiwshEktimhsh.setText(0 + " \u20ac");
+                }
             }
         }
-
-
-
-
-
     }
 
 
@@ -673,10 +674,10 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         boolean bool = checkInvalidMeasurement(measurement, "0");
                         if (bool) {
+                            makeNotification();
                             String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
                             myDB.child("Users").child(username).child("Measurements").child(date).child("Day").setValue(measurement);
                             removeDayOnlyMeasurementBoxLinearLayout();
-                            makeNotification();
                         }
                     }
                 }
@@ -700,12 +701,11 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         boolean bool = checkInvalidMeasurement(measurementDay, measurementNight);
                         if (bool) {
-
+                            makeNotification();
                             String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
                             myDB.child("Users").child(username).child("Measurements").child(date).child("Day").setValue(measurementDay);
                             myDB.child("Users").child(username).child("Measurements").child(date).child("Night").setValue(measurementNight);
                             removeDayNightMeasurementBoxLinearLayout();
-                            makeNotification();
                         }
                     }
                 }
