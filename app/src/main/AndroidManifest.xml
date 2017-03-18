@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.energeiapp.smano.app"
     android:versionCode="8"
     android:versionName="BETA">
@@ -7,6 +8,15 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
     <uses-permission android:name="android.permissin.VIBRATE"/>
+
+    <uses-sdk
+        tools:overrideLibrary="com.firebase.ui.auth, com.facebook, android.support.customtabs,
+        com.twitter.sdk.android, com.twitter.sdk.android.tweetcomposer,
+        com.twitter.sdk.android.tweetui,
+        com.twitter.sdk.android.core"
+        />
+
+
 
     <application
         android:allowBackup="true"
